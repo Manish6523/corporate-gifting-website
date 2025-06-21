@@ -91,7 +91,9 @@ const cartSlice = createSlice({
         calculateTotal(state);
       }
     },
-    calculate_total: (state) => calculateTotal(state),
+    calculate_total: (state) => {
+      calculateTotal(state);
+    },
   },
 });
 
