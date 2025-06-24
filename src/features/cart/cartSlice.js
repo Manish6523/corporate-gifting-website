@@ -1,13 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import toast from "react-hot-toast";
 
-const initialState = {
-  cart: [],
-  price: { subtotal: 0, gst: 0, total: 0 },
-  isshown: false,
-  quantity: 0,
-};
-
+// ------------------------------ Utility Functions ------------------------------
 function calculateTotal(state) {
   const subtotal = state.cart.reduce(
     (sum, item) => sum + parseFloat(item.price),
@@ -16,15 +10,25 @@ function calculateTotal(state) {
   const gst = subtotal * 0.08;
   const total = subtotal + gst;
 
-  state.price.subtotal = +subtotal.toFixed(2);
-  state.price.gst = +gst.toFixed(2);
-  state.price.total = +total.toFixed(2);
+  state.priceData.subtotal = +subtotal.toFixed(2);
+  state.priceData.gst = +gst.toFixed(2);
+  state.priceData.total = +total.toFixed(2);
 }
+
+// ------------------------------ Initial State ------------------------------
+const initialState = {
+  cart: [],
+  session: JSON.parse(localStorage.getItem("session")) || null,
+  priceData: { subtotal: 0, gst: 0, total: 0 },
+  isshown: false,
+  quantity: 0,
+};
 
 const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
+    // ------------------------------ Cart Management ------------------------------
     toggleCart: (state) => {
       state.isshown = !state.isshown;
     },
@@ -94,6 +98,17 @@ const cartSlice = createSlice({
     calculate_total: (state) => {
       calculateTotal(state);
     },
+    setCart: (state, action) => {
+      state.cart = action.payload;
+      calculateTotal(state);
+    },
+
+    // ------------------------------ Authenticaton ------------------------------
+    setSession: (state, action) => {
+      localStorage.setItem("session", JSON.stringify(action.payload));
+      state.session = action.payload;
+      console.log("Session set:", state.session);
+    },
   },
 });
 
@@ -102,5 +117,7 @@ export const {
   addToCart,
   addQuantityFromCartMenu,
   calculate_total,
+  setCart,
+  setSession,
 } = cartSlice.actions;
 export default cartSlice.reducer;

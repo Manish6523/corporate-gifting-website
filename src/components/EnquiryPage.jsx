@@ -6,7 +6,7 @@ import { calculate_total } from "../features/cart/cartSlice";
 
 const EnquiryPage = () => {
   const cart = useSelector((state) => state.cart.cart);
-  const price = useSelector((state) => state.cart.price)
+  const price = useSelector((state) => state.cart.priceData)
   const dispatch = useDispatch()
   const [loading, setLoading] = useState(true);
 

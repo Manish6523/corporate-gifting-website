@@ -7,6 +7,8 @@ const CartPage = () => {
   const isShown = useSelector((state) => state.cart.isshown);
   const cart = useSelector((state) => state.cart.cart);
   const dispatch = useDispatch();
+  console.log("-----cart----- : ",cart)
+
 
   return (
     <>

@@ -75,7 +75,7 @@ const Navbar = () => {
               <span>Home</span>
             </Link>
             <Link
-              to={"/user"}
+              to={"/dashboard"}
               onClick={() => toggleMenu()}
               className="user flex items-center gap-4 border-b border-gray-300 text-gray-500 px-4 py-5 hover:text-gray-800 hover:bg-gray-200 transition-all"
             >
@@ -129,9 +129,9 @@ const Navbar = () => {
           </div>
         </div>
       </div>
-      {/* mobile bar start */}
+      {/* mobile bar end */}
       <Menu
-        className="size-8 block mdhidden cursor-pointer"
+        className="size-8 block md:hidden cursor-pointer"
         onClick={() => toggleMenu()}
       />
       <Link to={"/product"}>

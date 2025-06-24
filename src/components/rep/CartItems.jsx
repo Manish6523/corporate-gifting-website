@@ -81,7 +81,7 @@ const CartItems = ({ item }) => {
             onClick={() => {
               dispatch(addQuantityFromCartMenu({ ...item, control: "delete" }));
             }}
-            className="cursor-pointer size-5 absolute top-0 right-0"
+            className="cursor-pointer text-red-600 size-5 absolute top-0 right-0"
           />
         </div>
       </div>

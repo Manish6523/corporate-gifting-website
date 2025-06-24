@@ -5,16 +5,53 @@ import { supabase } from "../../utils/supabase.js";
 import StarRating from "./Stars.jsx";
 import { Loader2, ShoppingCart } from "lucide-react";
 import Counter from "./rep/Counter.jsx";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../features/cart/cartSlice.js";
+import { saveCartToSupabase } from "../../utils/cartSupabase.js";
 
 const ProductDetails = () => {
   const dispatch = useDispatch();
+  const session = useSelector((state) => state.cart.session);
+  const cart = useSelector((state) => state.cart.cart);
 
   const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState(null);
   const [stock, setStock] = useState();
   const [quantity, setQuantity] = useState(products?.quantity || 1);
+
+  // const addtoCart = async () => {
+  //   dispatch(addToCart({ ...products, quantity }));
+  //   if (session) {
+  //     const plainCart = JSON.parse(JSON.stringify(cart));
+  //     console.log("Cart before saving:", plainCart);
+  //     const result = await saveCartToSupabase(session.id, plainCart);
+  //     if (result.success) {
+  //       console.log("Cart saved successfully to Supabase");
+  //     } else {
+  //       console.error("Failed to save cart:", result.message);
+  //     }
+  //   }
+  // };
+
+  const addtoCart = async () => {
+    const newCartItem = { ...products, quantity };
+
+    dispatch(addToCart(newCartItem));
+
+    if (session) {
+      const updatedCart = [...cart, newCartItem];
+
+      const plainCart = JSON.parse(JSON.stringify(updatedCart));
+
+      const result = await saveCartToSupabase(session.id, plainCart);
+
+      if (result.success) {
+        console.log("Cart saved successfully to Supabase");
+      } else {
+        console.error("Failed to save cart:", result.message);
+      }
+    }
+  };
 
   const { id } = useParams();
   useEffect(() => {
@@ -158,13 +195,16 @@ const ProductDetails = () => {
                     <button
                       className="flex gap-5 cursor-pointer items-center justify-center font-bold border-[1.5px] border-black w-full py-3 transition-all duration-300 bg-black/90 text-white hover:bg-white hover:text-black "
                       onClick={() => {
-                        dispatch(addToCart({ ...products, quantity }));
+                        addtoCart();
                       }}
                     >
                       <ShoppingCart /> Add to cart
                     </button>
                   )}
-                  <Link to={"/user/enquiry"} className="flex gap-5 cursor-pointer items-center justify-center font-bold border-[1.5px] border-black w-full py-3 transition-all duration-300 bg-black/90 text-white hover:bg-white hover:text-black ">
+                  <Link
+                    to={"/user/enquiry"}
+                    className="flex gap-5 cursor-pointer items-center justify-center font-bold border-[1.5px] border-black w-full py-3 transition-all duration-300 bg-black/90 text-white hover:bg-white hover:text-black "
+                  >
                     Enqiry For Bulk Order
                   </Link>
                 </div>
