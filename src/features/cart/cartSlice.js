@@ -18,6 +18,7 @@ function calculateTotal(state) {
 // ------------------------------ Initial State ------------------------------
 const initialState = {
   cart: [],
+  wishList: [],
   session: JSON.parse(localStorage.getItem("session")) || null,
   priceData: { subtotal: 0, gst: 0, total: 0 },
   isshown: false,
@@ -56,6 +57,7 @@ const cartSlice = createSlice({
             action.payload.price * action.payload.quantity
           ).toFixed(2),
           thumbnail: action.payload.thumbnail,
+          isLiked: action.payload.isLiked || false,
           stock: action.payload.availabilityStatus,
         });
         calculateTotal(state);
@@ -102,6 +104,9 @@ const cartSlice = createSlice({
       state.cart = action.payload;
       calculateTotal(state);
     },
+    setWishlist: (state, action) => {
+      state.wishList = action.payload;
+    },
 
     // ------------------------------ Authenticaton ------------------------------
     setSession: (state, action) => {
@@ -109,6 +114,18 @@ const cartSlice = createSlice({
       state.session = action.payload;
       console.log("Session set:", state.session);
     },
+    addProductToWishList: (state, action) => {
+      const existingIndex = state.wishList.findIndex(
+        (item) => item.id === action.payload.id
+      );
+      if (existingIndex !== -1) {
+        state.wishList.splice(existingIndex, 1);
+        toast.error(`${action.payload.title} removed from wishlist!`);
+      } else {
+        state.wishList.push(action.payload);
+        toast.success(`${action.payload.title} added to wishlist!`);
+      }
+    }
   },
 });
 
@@ -118,6 +135,8 @@ export const {
   addQuantityFromCartMenu,
   calculate_total,
   setCart,
+  setWishlist,
+  addProductToWishList,
   setSession,
 } = cartSlice.actions;
 export default cartSlice.reducer;

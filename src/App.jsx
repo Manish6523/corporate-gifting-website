@@ -8,16 +8,25 @@ import CartPage from "./components/CartPage.jsx";
 import { Toaster } from "react-hot-toast";
 import EnquiryPage from "./components/EnquiryPage.jsx";
 import Auth from "./components/Auth.jsx";
-import { fetchCartFromSupaBase, saveCartToSupabase } from "../utils/cartSupabase.js";
-import { useDispatch, useSelector } from "react-redux";
-import { setCart } from "./features/cart/cartSlice.js";
 import Dashboard from "./components/Dashboard.jsx";
+
+import {
+  fetchCartFromSupaBase,
+  fetchWishListFromSupaBase,
+  saveCartToSupabase,
+  saveWishListToSupabase,
+} from "../utils/cartSupabase.js";
+
+import { useDispatch, useSelector } from "react-redux";
+import { setCart, setWishlist } from "./features/cart/cartSlice.js";
 
 function App() {
   const session = useSelector((state) => state.cart.session);
   const cart = useSelector((state) => state.cart.cart);
+  const wishList = useSelector((state) => state.cart.wishList);
   const dispatch = useDispatch();
 
+  // ⬇ Fetch cart from Supabase on login
   useEffect(() => {
     const fetchCart = async () => {
       if (!session) return;
@@ -25,10 +34,20 @@ function App() {
       console.log("Fetched Cart: ", fetchedCart);
       dispatch(setCart(fetchedCart));
     };
+
+    const fetchWishList = async () => {
+      if (!session) return;
+
+      const fetchedWishList = await fetchWishListFromSupaBase(session?.id);
+      console.log("Fetched Wishlist: ", fetchedWishList);
+      dispatch(setWishlist(fetchedWishList));
+    }
+
     fetchCart();
+    fetchWishList();
   }, [session]);
 
-  // 🔁 Save cart after Redux updates
+  // ⬇ Save cart to Supabase on change
   const prevCartRef = useRef(cart);
   useEffect(() => {
     if (
@@ -50,6 +69,30 @@ function App() {
     }
     prevCartRef.current = cart;
   }, [cart, session]);
+
+  // ⬇ Save wishlist to Supabase on change
+  const prevWishListRef = useRef(wishList);
+  useEffect(() => {
+    if (
+      session &&
+      JSON.stringify(prevWishListRef.current) !== JSON.stringify(wishList)
+    ) {
+      const plainWishList = JSON.parse(JSON.stringify(wishList));
+      console.log("Wishlist changed. Saving to Supabase:", plainWishList);
+
+      saveWishListToSupabase(session.id, plainWishList)
+        .then((result) => {
+          if (result.success) {
+            console.log("✅ Wishlist saved to Supabase");
+          } else {
+            console.error("❌ Failed to save wishlist:", result.message);
+          }
+        })
+        .catch((err) => console.error("❌ Wishlist save error:", err));
+    }
+    prevWishListRef.current = wishList;
+  }, [wishList, session]);
+
   return (
     <div className="min-h-screen bg-gray-100">
       <CartPage />

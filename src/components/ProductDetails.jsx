@@ -18,13 +18,14 @@ const ProductDetails = () => {
   const [products, setProducts] = useState(null);
   const [stock, setStock] = useState();
   const [quantity, setQuantity] = useState(products?.quantity || 1);
+  const [isLinked, setIsLinked] = useState(false);
 
   const addtoCart = () => {
-    dispatch(addToCart({ ...products, quantity }));
+    dispatch(addToCart({ ...products, quantity, isLinked }));
   };
 
-
   const { id } = useParams();
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {

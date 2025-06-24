@@ -1,14 +1,13 @@
 import React from "react";
-import { X } from "lucide-react";
+import { ShoppingCart, X } from "lucide-react";
 import { useSelector, useDispatch } from "react-redux";
 import { toggleCart } from "../features/cart/cartSlice";
 import CartItems from "./rep/CartItems";
+import { Link } from "react-router";
 const CartPage = () => {
   const isShown = useSelector((state) => state.cart.isshown);
   const cart = useSelector((state) => state.cart.cart);
   const dispatch = useDispatch();
-  console.log("-----cart----- : ",cart)
-
 
   return (
     <>
@@ -18,7 +17,7 @@ const CartPage = () => {
           onClick={() => dispatch(toggleCart())}
         >
           <div
-            className="cartContainer overflow-y-scroll bg-white w-full max-w-md"
+            className="cartContainer relative overflow-y-scroll pb-14 bg-white w-full max-w-md"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="header py-5 px-4 flex items-center justify-between border-b-1 border-gray-200">
@@ -52,6 +51,16 @@ const CartPage = () => {
               )}
               {/* <CartItems /> */}
             </div>
+            {cart.length > 0 && (
+              <Link
+                to={"/user/enquiry"}
+                onClick={() => dispatch(toggleCart())}
+                className="fixed w-full max-w-md bottom-0 p-5 text-center flex items-center justify-center gap-5
+                hover:bg-black/80 hover:text-white transition-all duration-300 bg-black/90 text-white font-bold"
+              >
+                Proceed to checkout <ShoppingCart />
+              </Link>
+            )}
           </div>
         </section>
       )}

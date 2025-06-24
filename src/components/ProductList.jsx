@@ -1,12 +1,15 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../../utils/supabase.js';
 import ProductCard from './ProductCard.jsx';
+import { useSelector } from 'react-redux';
 
 
 const ProductsList = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const wishlist = useSelector((state) => state.cart.wishList);
 
   useEffect(() => {
     const fetchProducts = async () => {
