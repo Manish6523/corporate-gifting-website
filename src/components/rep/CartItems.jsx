@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Minus, Plus, Trash2 } from "lucide-react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   addQuantityFromCartMenu,
   toggleCart,
@@ -9,6 +9,10 @@ import { Link } from "react-router-dom";
 
 const CartItems = ({ item }) => {
   const dispatch = useDispatch();
+  const session = useSelector((state) => state.cart.session);
+  const cart = useSelector((state) => state.cart.cart);
+
+  if (!session) return null; 
 
   const [quantity, setQuantity] = useState(item.quantity);
 
@@ -25,6 +29,9 @@ const CartItems = ({ item }) => {
       setQuantity(quantity - 1);
       dispatch(addQuantityFromCartMenu({ ...item, control: "remove" }));
     }
+  };
+  const deleteItem = () => {
+    dispatch(addQuantityFromCartMenu({ ...item, control: "delete" }));
   };
 
   return (
@@ -79,7 +86,7 @@ const CartItems = ({ item }) => {
           </div>
           <Trash2
             onClick={() => {
-              dispatch(addQuantityFromCartMenu({ ...item, control: "delete" }));
+              deleteItem();
             }}
             className="cursor-pointer text-red-600 size-5 absolute top-0 right-0"
           />

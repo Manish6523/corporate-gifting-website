@@ -3,7 +3,7 @@ import { supabase } from "./supabase.js";
 export async function saveCartToSupabase(userId, cartItems) {
   const { data, error } = await supabase.from("cart").upsert(
     [{ user_id: userId, cart_items: cartItems }],
-    { onConflict: "user_id" } // ensures update if user cart exists
+    { onConflict: "user_id" }
   );
 
   if (error) {
