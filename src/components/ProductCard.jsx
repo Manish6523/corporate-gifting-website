@@ -2,17 +2,29 @@ import { Link } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import { addProductToWishList, addToCart } from "../features/cart/cartSlice";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-hot-toast";
 
 const ProductCard = ({ product }) => {
+
+  const navigate = useNavigate();
   const dispatch = useDispatch();
+  const session = useSelector((state) => state.cart.session);
+
   const [quantity, setQuantity] = useState(product.quantity || 1);
   const [isLinked, setIsLinked] = useState(false);
+
 
   const wishList = useSelector((state) => state.cart.wishList);
   const isProductInWishlist = wishList.some((item) => item.id === product.id);
 
   const handleWishlistToggle = () => {
-    dispatch(addProductToWishList(product));
+    if(!session){
+      toast.error("Please login to add products to wishlist!");
+      navigate("/auth");
+      return;
+    }
+    dispatch(addProductToWishList({product,navigate}));
   };
 
   return (

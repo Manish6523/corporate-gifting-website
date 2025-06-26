@@ -131,7 +131,7 @@ const Navbar = () => {
       </div>
       {/* mobile bar end */}
       <Menu
-        className="size-8 block md:hidden cursor-pointer"
+        className="size-8 block mdhidden cursor-pointer"
         onClick={() => toggleMenu()}
       />
       <Link to={"/product"}>

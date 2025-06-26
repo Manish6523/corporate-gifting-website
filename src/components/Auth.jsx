@@ -28,7 +28,7 @@ const Auth = () => {
   };
 
   return (
-    <main className="flex items-center justify-center min-h-screen bg-gray-100 p-4">
+    <main className="flex mt-16 justify-center bg-gray-100 p-4">
       <section className="w-full max-w-md overflow-hidden h-[400px] rounded-xl shadow-xl backdrop-blur-3xl relative border border-gray-200">
         {/* Slider wrapper */}
         <div
