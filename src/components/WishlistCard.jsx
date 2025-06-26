@@ -38,7 +38,7 @@ const WishlistCard = ({ list }) => {
           {list.title}
         </h4>
         <p className="text-xs text-gray-600">{list.brand}</p>
-        <p className="text-sm font-medium text-gray-800 mt-1">{list.price}</p>
+        <p className="text-sm font-medium text-gray-800 mt-1">$ {list.price}</p>
       </div>
     </div>
   );

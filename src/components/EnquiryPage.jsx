@@ -5,13 +5,24 @@ import { Link } from "react-router";
 import { calculate_total } from "../features/cart/cartSlice";
 
 const EnquiryPage = () => {
+  const session = useSelector((state) => state.cart.session);
   const cart = useSelector((state) => state.cart.cart);
-  const price = useSelector((state) => state.cart.priceData)
-  const dispatch = useDispatch()
+  const price = useSelector((state) => state.cart.priceData);
+
+  const dispatch = useDispatch();
+
+  const [enquiryData, setEnquiryData] = useState({
+    firstname: session?.username || "",
+    lastname: "",
+    phone: session?.phone || "",
+    email: session?.email || "",
+    company: "",
+    message: "",
+  });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    dispatch(calculate_total())
+    dispatch(calculate_total());
     setLoading(false);
   }, []);
 
@@ -123,6 +134,10 @@ const EnquiryPage = () => {
                 name="firstname"
                 id="firstname"
                 placeholder="John"
+                value={enquiryData.firstname}
+                onChange={(e) =>
+                  setEnquiryData({ ...enquiryData, firstname: e.target.value })
+                }
                 className="border border-gray-300 p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
               />
             </div>
@@ -138,6 +153,10 @@ const EnquiryPage = () => {
                 name="lastname"
                 id="lastname"
                 placeholder="Doe"
+                value={enquiryData.lastname}
+                onChange={(e) =>
+                  setEnquiryData({ ...enquiryData, lastname: e.target.value })
+                }
                 className="border border-gray-300 p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
               />
             </div>
@@ -157,6 +176,10 @@ const EnquiryPage = () => {
                 name="phone"
                 id="phone"
                 placeholder="e.g. 9876543210"
+                value={enquiryData.phone}
+                onChange={(e) =>
+                  setEnquiryData({ ...enquiryData, phone: e.target.value })
+                }
                 className="border border-gray-300 p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
               />
             </div>
@@ -172,6 +195,10 @@ const EnquiryPage = () => {
                 name="email"
                 id="email"
                 placeholder="you@example.com"
+                value={enquiryData.email}
+                onChange={(e) =>
+                  setEnquiryData({ ...enquiryData, email: e.target.value })
+                }
                 className="border border-gray-300 p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
               />
             </div>

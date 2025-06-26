@@ -27,8 +27,8 @@ const Dashboard = () => {
   };
 
   return (
-    <main className="bg-white/90 min-h-screen flex justify-center p-4">
-      <section className="bg-white border h-fit my-18 border-gray-300 py-5 grid grid-cols-1 md:grid-cols-2 rounded-xl shadow-lg max-w-6xl w-full overflow-hidden">
+    <main className="bg-white/90 h-[87vh] flex justify-center p-4">
+      <section className="bg-white border border-gray-300 py-5 grid grid-cols-1 md:grid-cols-2 rounded-xl shadow-lg max-w-6xl w-full overflow-hidden">
         {/* Left */}
         <div className="border-b md:border-r md:border-b-0 border-gray-300 p-6 space-y-5">
           <div className="flex flex-col sm:flex-row items-center gap-5">

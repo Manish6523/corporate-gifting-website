@@ -24,7 +24,7 @@ const ProductCard = ({ product }) => {
       navigate("/auth");
       return;
     }
-    dispatch(addProductToWishList({product,navigate}));
+    dispatch(addProductToWishList(product));
   };
 
   return (

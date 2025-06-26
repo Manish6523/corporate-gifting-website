@@ -3,11 +3,11 @@ import { toast } from "react-hot-toast";
 import { setSession } from "../src/features/cart/cartSlice";
 
 // -------------------- SIGN UP --------------------
-export async function SignUp(username, email, password, navigate, dispatch) {
+export async function SignUp(firstname, lastname, email, password, avatar, address, phone, gender, navigate, dispatch) {
   try {
     const { data, error } = await supabase
       .from("users")
-      .insert([{ username, email, password }])
+      .insert([{ firstname, lastname, email, password, avatar, address, phone, gender }])
       .select()
       .single(); // Get the inserted row
 
@@ -56,7 +56,6 @@ export async function Login(email, password, navigate, dispatch) {
     const { password: _, ...userWithoutPassword } = data;
     dispatch(setSession(userWithoutPassword));
 
-    toast.success("Login successful");
     navigate("/dashboard");
 
     return {

@@ -2,10 +2,10 @@ import React, { useEffect, useRef } from "react";
 import { Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import ProductsList from "./components/ProductList.jsx";
+import { Toaster } from "react-hot-toast";
 import ProductDetails from "./components/ProductDetails.jsx";
 import Home from "./components/Home.jsx";
 import CartPage from "./components/CartPage.jsx";
-import { Toaster } from "react-hot-toast";
 import EnquiryPage from "./components/EnquiryPage.jsx";
 import Auth from "./components/Auth.jsx";
 import Dashboard from "./components/Dashboard.jsx";
@@ -17,14 +17,19 @@ import {
   saveWishListToSupabase,
 } from "../utils/cartSupabase.js";
 
+import { useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setCart, setWishlist } from "./features/cart/cartSlice.js";
 
 function App() {
+  const location = useLocation();
+
   const session = useSelector((state) => state.cart.session);
   const cart = useSelector((state) => state.cart.cart);
   const wishList = useSelector((state) => state.cart.wishList);
   const dispatch = useDispatch();
+
+  const isNavbarVisible = location.pathname !== "/auth";
 
   // ⬇ Fetch cart from Supabase on login
   useEffect(() => {
@@ -41,7 +46,7 @@ function App() {
       const fetchedWishList = await fetchWishListFromSupaBase(session?.id);
       console.log("Fetched Wishlist: ", fetchedWishList);
       dispatch(setWishlist(fetchedWishList));
-    }
+    };
 
     fetchCart();
     fetchWishList();
@@ -96,8 +101,7 @@ function App() {
   return (
     <div className="min-h-screen bg-gray-100">
       <CartPage />
-      <Toaster />
-      <Navbar />
+      {isNavbarVisible && <Navbar />}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/product" element={<ProductsList />} />
@@ -106,6 +110,7 @@ function App() {
         <Route path="/auth" element={<Auth />} />
         <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
+      <Toaster />
     </div>
   );
 }
