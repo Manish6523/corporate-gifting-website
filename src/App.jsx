@@ -9,6 +9,7 @@ import CartPage from "./components/CartPage.jsx";
 import EnquiryPage from "./components/EnquiryPage.jsx";
 import Auth from "./components/Auth.jsx";
 import Dashboard from "./components/Dashboard.jsx";
+import CategoryPage from "./components/CategoryPage.jsx";
 
 import {
   fetchCartFromSupaBase,
@@ -99,19 +100,44 @@ function App() {
   }, [wishList, session]);
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <>
       <CartPage />
-      {isNavbarVisible && <Navbar />}
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/product" element={<ProductsList />} />
-        <Route path="/product/:id" element={<ProductDetails />} />
-        <Route path="/user/enquiry" element={<EnquiryPage />} />
-        <Route path="/auth" element={<Auth />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-      </Routes>
-      <Toaster />
-    </div>
+      <div className="min-h-screen pt-[64px] bg-white">
+        {/* {isNavbarVisible && <Navbar />} */}
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/product" element={<ProductsList />} />
+          <Route path="/product/:id" element={<ProductDetails />} />
+          <Route path="/:category" element={<CategoryPage />} />
+          <Route path="/user/enquiry" element={<EnquiryPage />} />
+          <Route path="/auth" element={<Auth />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+        </Routes>
+        <Toaster
+          position="bottom-right"
+          reverseOrder={false}
+          toastOptions={{
+            style: {
+              background: "#1f2937", // Tailwind gray-800
+              color: "#f9fafb", // Tailwind gray-100
+            },
+            success: {
+              iconTheme: {
+                primary: "#10b981", // Tailwind green-500
+                secondary: "#f9fafb",
+              },
+            },
+            error: {
+              iconTheme: {
+                primary: "#ef4444", // Tailwind red-500
+                secondary: "#f9fafb",
+              },
+            },
+          }}
+        />
+      </div>
+    </>
   );
 }
 

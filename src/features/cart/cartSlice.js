@@ -57,7 +57,6 @@ const cartSlice = createSlice({
             action.payload.price * action.payload.quantity
           ).toFixed(2),
           thumbnail: action.payload.thumbnail,
-          isLiked: action.payload.isLiked || false,
           stock: action.payload.availabilityStatus,
         });
         calculateTotal(state);

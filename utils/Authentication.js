@@ -9,7 +9,7 @@ export async function SignUp(firstname, lastname, email, password, avatar, addre
       .from("users")
       .insert([{ firstname, lastname, email, password, avatar, address, phone, gender }])
       .select()
-      .single(); // Get the inserted row
+      .single();
 
     if (error) {
       toast.error("Email already exists");
@@ -78,7 +78,7 @@ export async function Logout(navigate, dispatch) {
     localStorage.removeItem("session");
 
     toast.success("Logged out successfully");
-    navigate("/login");
+    navigate("/auth");
   } catch (error) {
     console.error("Error during logout:", error);
     toast.error("Logout failed");

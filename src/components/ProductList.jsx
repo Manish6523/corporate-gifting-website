@@ -16,11 +16,12 @@ const ProductsList = () => {
       try {
         const { data, error } = await supabase
           .from('products')
-          .select('id, title, description, price, rating, stock, brand, thumbnail');
+          .select('id, title, description, price, rating, stock, brand, thumbnail, discountPercentage');
 
         if (error) throw error;
 
         setProducts(data);
+        console.log('Products fetched:', data);
         setLoading(false);
       } catch (err) {
         setError(err.message);
@@ -35,14 +36,20 @@ const ProductsList = () => {
   if (error) return <div className="text-center py-10 text-red-500">Error: {error}</div>;
 
   return (
-    <div className="container mx-auto p-4">
+    <main className="container md:w-[70vw] mx-auto p-4 b-green-400 bg-white">
       <h1 className="text-3xl font-bold text-gray-800 mb-6 text-center">Products</h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {products.map((product) => (
-          <ProductCard key={product.id} product={product} />
-        ))}
+      <div className='grid gap-4 grid-cols-2 lg:grid-cols-3 '>
+        {
+          products.map((product) => (
+            <ProductCard
+              key={product.id}
+              product={product}
+              isLinked={wishlist.some((item) => item.id === product.id)}
+            />
+          ))
+        }
       </div>
-    </div>
+    </main>
   );
 };
 

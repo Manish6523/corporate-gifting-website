@@ -1,14 +1,26 @@
-import { Phone } from "lucide-react";
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import WishlistCard from "./WishlistCard";
+import { Logout } from "../../utils/Authentication";
+import { useNavigate } from "react-router";
 
 const Dashboard = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const sessionUser = useSelector((state) => state.cart.session);
   const wishlist = useSelector((state) => state.cart.wishList);
 
+  useEffect(()=>{
+    if (!sessionUser) {
+      navigate("/auth");
+    }
+  },[sessionUser])
+
   const user = {
-    username: sessionUser?.username,
+    username:
+      sessionUser?.firstname +
+      " " +
+      (!!sessionUser?.lastname ? sessionUser?.lastname : ""),
     email: sessionUser?.email,
     phone: sessionUser?.phone,
     address: sessionUser?.address,
@@ -17,18 +29,10 @@ const Dashboard = () => {
     member_since: new Date(sessionUser?.created_at).toLocaleDateString("en-GB"),
   };
 
-  const list = {
-    id: wishlist?.id,
-    title: wishlist?.title,
-    brand: wishlist?.brand,
-    price: wishlist?.price,
-    quantity: wishlist?.quantity,
-    thumbnail: wishlist?.thumbnail,
-  };
 
   return (
-    <main className="bg-white/90 h-[87vh] flex justify-center p-4">
-      <section className="bg-white border border-gray-300 py-5 grid grid-cols-1 md:grid-cols-2 rounded-xl shadow-lg max-w-6xl w-full overflow-hidden">
+    <main className=" flex justify-center items-center p-0 md:p-8">
+      <section className="sm:bg-white  sm:border border-gray-300  grid grid-cols-1 md:grid-cols-2 rounded-xl shadow-lg max-w-6xl w-full overflow-hidden">
         {/* Left */}
         <div className="border-b md:border-r md:border-b-0 border-gray-300 p-6 space-y-5">
           <div className="flex flex-col sm:flex-row items-center gap-5">
@@ -37,9 +41,16 @@ const Dashboard = () => {
               alt="avatar"
               className="w-24 h-24 rounded-full object-cover"
             />
-            <div className="text-center sm:text-left">
-              <div className="text-2xl font-semibold">{user.username}</div>
-              <div className="text-sm text-gray-500">{user.email}</div>
+            <div className="flex items-center justify-between w-full text-center sm:text-left">
+              <div>
+                <div className="text-2xl font-semibold">{user.username}</div>
+                <div className="text-sm text-gray-500">{user.email}</div>
+              </div>
+              <button className="border border-gray-300 hover:bg-gray-100 px-3 py-1 cursor-pointer rounded-lg"
+              onClick={() => {Logout(navigate, dispatch)}}
+              >
+                Logout
+              </button>
             </div>
           </div>
 
@@ -79,10 +90,10 @@ const Dashboard = () => {
 
         {/* Right - Placeholder for Wishlist */}
         <div className="p-6">
-          <h2 className="text-xl font-semibold mb-4">Wishlist Products</h2>
+          <h2 className="text-xl font-semibold mb-4 text-center sm:text-start">Wishlist Products</h2>
 
           {wishlist?.length > 0 ? (
-            <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4 max-h-[460px] overflow-y-auto pr-2 ">
+            <div className="grid pb-4 pr-1 grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-4 max-h-[460px] overflow-y-auto ">
               {wishlist.map((item, index) => (
                 <WishlistCard key={index} list={item} />
               ))}

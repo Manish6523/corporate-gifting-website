@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { ShoppingCart, X } from "lucide-react";
 import { useSelector, useDispatch } from "react-redux";
 import { toggleCart } from "../features/cart/cartSlice";
@@ -9,11 +9,15 @@ const CartPage = () => {
   const cart = useSelector((state) => state.cart.cart);
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    document.body.style.overflow = isShown ? "hidden" : "auto";
+  }, [isShown]);
+
   return (
     <>
       {isShown && (
         <section
-          className="fixed h-screen w-full bg-black/60 z-10 flex justify-end"
+          className="fixed h-screen w-full bg-black/60 z-[55] flex justify-end"
           onClick={() => dispatch(toggleCart())}
         >
           <div
@@ -56,7 +60,7 @@ const CartPage = () => {
                 to={"/user/enquiry"}
                 onClick={() => dispatch(toggleCart())}
                 className="fixed w-full max-w-md bottom-0 p-5 text-center flex items-center justify-center gap-5
-                hover:bg-black/80 hover:text-white transition-all duration-300 bg-black/90 text-white font-bold"
+                hover:bg-black hover:text-white transition-all duration-300 bg-black text-white font-bold"
               >
                 Proceed to checkout <ShoppingCart />
               </Link>

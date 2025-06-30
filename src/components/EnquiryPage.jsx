@@ -1,8 +1,9 @@
 import { Loader2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { calculate_total } from "../features/cart/cartSlice";
+import toast from "react-hot-toast";
 
 const EnquiryPage = () => {
   const session = useSelector((state) => state.cart.session);
@@ -10,18 +11,25 @@ const EnquiryPage = () => {
   const price = useSelector((state) => state.cart.priceData);
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [enquiryData, setEnquiryData] = useState({
-    firstname: session?.username || "",
-    lastname: "",
+    firstname: session?.firstname || "",
+    lastname: session?.lastname || "",
     phone: session?.phone || "",
     email: session?.email || "",
     company: "",
     message: "",
   });
+  
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if(!session) {
+      toast.error("Please login to proceed with the enquiry.");
+      navigate("/auth");
+      return;
+    }
     dispatch(calculate_total());
     setLoading(false);
   }, []);

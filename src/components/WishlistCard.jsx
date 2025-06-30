@@ -28,8 +28,8 @@ const WishlistCard = ({ list }) => {
         onClick={() => toggleWishlist()}
         className="absolute group top-2 right-2 bg-white p-1 rounded-full shadow z-10 cursor-pointer"
       >
-        <Heart size={18} className="text-red-500 block group-hover:hidden" />
-        <X size={18} className="text-red-500 hidden group-hover:block" />
+        <Heart size={18} className="text-red-500 hidden sm:block group-hover:hidden" />
+        <X size={18} className="text-red-500 block sm:hidden group-hover:block" />
       </button>
 
       {/* Hover Details */}

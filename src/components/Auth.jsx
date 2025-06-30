@@ -28,19 +28,21 @@ const Auth = () => {
     }
   };
 
-  const handleLogin = (e) => {
+  const handleLogin = async(e) => {
     e.preventDefault();
     if (!email || !password) return toast.error("Please fill in all fields");
-    Login(email, password, navigate, dispatch);
-    toast.success("Welcome back!");
+    const res = await Login(email, password, navigate, dispatch);
+    if (res.success) {
+      toast.success("Login successful");
+    }
   };
 
-  const handleSignup = (e) => {
+  const handleSignup = async(e) => {
     e.preventDefault();
     if (!email || !password || !firstname || !lastname || !address || !phone || !gender){
       return toast.error("Please fill in all fields");
     }
-    SignUp(
+    const res = await SignUp(
       firstname,
       lastname,
       email,
@@ -52,17 +54,22 @@ const Auth = () => {
       navigate,
       dispatch
     );
+    if (res.success) {
+      toast.success("User created successfully");
+      setStep(1); // Go back to login step
+    }
+
   };
 
   return (
-    <main className="bg-[url('/bgs/gpt.png')] bg-cover bg-center bg-no-repeat h-screen w-screen flex items-center justify-center">
-      <div className="h-full sm:h-[90%] w-full sm:w-[95%] max-w-6xl relative shadow-xl rounded-xl overflow-hidden grid grid-cols-1 md:grid-cols-2">
-        <span
-          className="absolute top-5 left-5 cursor-pointer z-10"
+    <main className="bg-[url('/bgs/gpt.png')]  bg-cover bg-center bg-no-repeat h-screen w-screen flex items-center justify-center">
+      <div className="h-full sm:h-[90%] w-full sm:w-[95%] max-w-6xl  shadow-xl rounded-xl overflow-hidden grid grid-cols-1 md:grid-cols-2">
+        {/* <span
+          className="fixed top-5 left-5 cursor-pointer z-10"
           onClick={() => (step === 1 ? navigate("/") : setStep(1))}
         >
-          <ArrowLeftCircle className="size-8" strokeWidth={1} />
-        </span>
+          <ArrowLeftCircle className="size-10 sm:size-8" strokeWidth={1} />
+        </span> */}
 
         {/* Left or Right: Login or Signup */}
         {step === 1 ? (
@@ -91,7 +98,7 @@ const Auth = () => {
                   className="w-full p-2 border rounded-md focus:border-orange-500 focus:outline-none"
                   required
                 />
-                <button className="w-full bg-orange-500 text-white py-2 rounded-md">
+                <button className="w-full cursor-pointer bg-orange-500 text-white py-2 rounded-md">
                   Login
                 </button>
                 <p className="text-sm text-center">
@@ -219,7 +226,7 @@ const Auth = () => {
                     </div>
                   </div>
                 </div>
-                <button className="w-full bg-orange-500 text-white py-2 rounded-md">
+                <button className="w-full bg-orange-500 cursor-pointer text-white py-2 rounded-md">
                   Create Account
                 </button>
                 <p className="text-sm text-center">
