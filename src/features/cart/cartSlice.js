@@ -111,7 +111,6 @@ const cartSlice = createSlice({
     setSession: (state, action) => {
       localStorage.setItem("session", JSON.stringify(action.payload));
       state.session = action.payload;
-      console.log("Session set:", state.session);
     },
     addProductToWishList: (state, action) => {
       const existingIndex = state.wishList.findIndex(

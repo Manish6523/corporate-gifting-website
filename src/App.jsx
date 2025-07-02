@@ -37,7 +37,6 @@ function App() {
     const fetchCart = async () => {
       if (!session) return;
       const fetchedCart = await fetchCartFromSupaBase(session?.id);
-      console.log("Fetched Cart: ", fetchedCart);
       dispatch(setCart(fetchedCart));
     };
 
@@ -45,7 +44,6 @@ function App() {
       if (!session) return;
 
       const fetchedWishList = await fetchWishListFromSupaBase(session?.id);
-      console.log("Fetched Wishlist: ", fetchedWishList);
       dispatch(setWishlist(fetchedWishList));
     };
 
@@ -61,7 +59,6 @@ function App() {
       JSON.stringify(prevCartRef.current) !== JSON.stringify(cart)
     ) {
       const plainCart = JSON.parse(JSON.stringify(cart));
-      console.log("Cart changed. Saving to Supabase:", plainCart);
 
       saveCartToSupabase(session.id, plainCart)
         .then((result) => {
@@ -84,7 +81,6 @@ function App() {
       JSON.stringify(prevWishListRef.current) !== JSON.stringify(wishList)
     ) {
       const plainWishList = JSON.parse(JSON.stringify(wishList));
-      console.log("Wishlist changed. Saving to Supabase:", plainWishList);
 
       saveWishListToSupabase(session.id, plainWishList)
         .then((result) => {

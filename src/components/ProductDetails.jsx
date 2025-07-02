@@ -46,7 +46,6 @@ const ProductDetails = () => {
 
         const parsedImages = data.images?.split(", ") || [];
         setProduct({ ...data, images: parsedImages });
-        console.log("Product data:", data);
         setStock(data.availabilityStatus === "In Stock" ? true : false);
         setQuantity(data.availabilityStatus === "In Stock" ? 1 : 0);
         setActiveImage(parsedImages[0] || data.thumbnail || null);

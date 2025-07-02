@@ -16,7 +16,6 @@ const CategoryPage = () => {
           .select("*")
           .eq("category", category);
         setResults(data);
-        console.log("Category Data: ", data);
       } catch (error) {
         console.error("Error fetching category data:", error);
       }
@@ -26,13 +25,15 @@ const CategoryPage = () => {
   }, [category]);
 
   return (
-    <main className="container md:w-[70vw] mx-auto p-4 b-green-400 bg-white">
-      <h1 className="text-3xl font-medium text-gray-800 mb-6 text-center">Category: 
-        <span className=""> {category.split('-').join(" ")}</span>
-        </h1>
-  
+    <main className="container mx-auto bg-white">
+      <h1 className="text-3xl font-medium text-gray-800 mb-6 text-center">
+        Category:
+        <span className=""> {category.split("-").join(" ")}</span>
+      </h1>
+
       {results.length > 0 ? (
-        <div className="grid gap-4 grid-cols-2 lg:grid-cols-3 ">
+        <div className=" sm:bg-transparent py-1 px-2 sm:px-0 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 mt-8">
+          {" "}
           {results.map((product) => (
             <ProductCard product={product} />
           ))}

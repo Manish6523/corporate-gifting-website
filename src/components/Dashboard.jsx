@@ -23,7 +23,6 @@ const Dashboard = () => {
       (!!sessionUser?.lastname ? sessionUser?.lastname : ""),
     email: sessionUser?.email,
     phone: sessionUser?.phone,
-    address: sessionUser?.address,
     gender: sessionUser?.gender,
     avatar: sessionUser?.avatar,
     member_since: new Date(sessionUser?.created_at).toLocaleDateString("en-GB"),
@@ -65,10 +64,6 @@ const Dashboard = () => {
               <tr>
                 <td className="font-medium text-black py-2 pr-2">Phone</td>
                 <td className="py-2">{user.phone}</td>
-              </tr>
-              <tr>
-                <td className="font-medium text-black py-2 pr-2">Address</td>
-                <td className="py-2">{user.address}</td>
               </tr>
               <tr>
                 <td className="font-medium text-black py-2 pr-2">Username</td>

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { toast } from "react-hot-toast";
-import { ArrowLeftCircle, Pen, Pencil } from "lucide-react";
+import { ArrowLeftCircle, Loader2, Pen, Pencil } from "lucide-react";
 import { useNavigate } from "react-router";
 import { Login, SignUp } from "../../utils/Authentication";
 
@@ -14,10 +14,11 @@ const Auth = () => {
   const [lastname, setLastname] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [address, setAddress] = useState("");
   const [phone, setPhone] = useState("");
   const [avatar, setAvatar] = useState("/avatar/avatar.jpg");
   const [gender, setGender] = useState("");
+
+  const [loading, setLoadng] = useState(false);
 
   const handleAvatarChange = (e) => {
     const file = e.target.files[0];
@@ -28,27 +29,31 @@ const Auth = () => {
     }
   };
 
-  const handleLogin = async(e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     if (!email || !password) return toast.error("Please fill in all fields");
+
+    setLoadng(true);
     const res = await Login(email, password, navigate, dispatch);
+
     if (res.success) {
       toast.success("Login successful");
+      setLoadng(false);
     }
   };
 
-  const handleSignup = async(e) => {
+  const handleSignup = async (e) => {
     e.preventDefault();
-    if (!email || !password || !firstname || !lastname || !address || !phone || !gender){
+    if (!email || !password || !firstname || !lastname || !phone || !gender) {
       return toast.error("Please fill in all fields");
     }
+    setLoadng(true);
     const res = await SignUp(
       firstname,
       lastname,
       email,
       password,
       avatar,
-      address,
       phone,
       gender,
       navigate,
@@ -56,9 +61,9 @@ const Auth = () => {
     );
     if (res.success) {
       toast.success("User created successfully");
+      setLoadng(false);
       setStep(1); // Go back to login step
     }
-
   };
 
   return (
@@ -98,8 +103,19 @@ const Auth = () => {
                   className="w-full p-2 border rounded-md focus:border-orange-500 focus:outline-none"
                   required
                 />
-                <button className="w-full cursor-pointer bg-orange-500 text-white py-2 rounded-md">
-                  Login
+                <button
+                  disabled={loading}
+                  className={`w-full flex items-center justify-center gap-3 ${
+                    loading ? "bg-orange-400" : "bg-orange-600"
+                  } cursor-pointer text-white py-2 rounded-md`}
+                >
+                  {loading ? (
+                    <>
+                      <Loader2 className="animate-spin" />
+                    </>
+                  ) : (
+                    "Login"
+                  )}
                 </button>
                 <p className="text-sm text-center">
                   Don't have an account?{" "}
@@ -129,6 +145,7 @@ const Auth = () => {
                 className="w-full h-full object-cover transform -scale-x-100"
               />
             </div>
+            {/* -------------------------- */}
             <div className="flex flex-col justify-center px-8 py-12 md:px-12 backdrop-blur-lg overflow-y-auto">
               <form onSubmit={handleSignup} className="space-y-4">
                 <h1 className="text-2xl sm:text-3xl font-bold mb-4">
@@ -179,21 +196,13 @@ const Auth = () => {
                     required
                   />
                   <input
-                    type="text"
-                    placeholder="Address"
-                    value={address}
-                    onChange={(e) => setAddress(e.target.value)}
-                    className="sm:col-span-2 p-2 border rounded-md focus:border-orange-500 focus:outline-none"
-                    required
+                    type="file"
+                    accept="image/*"
+                    id="avatar"
+                    name="avatar"
+                    onChange={handleAvatarChange}
+                    className="p-2 border rounded-md focus:border-orange-500 focus:outline-none hidden"
                   />
-                    <input
-                      type="file"
-                      accept="image/*"
-                      id="avatar"
-                      name="avatar"
-                      onChange={handleAvatarChange}
-                      className="p-2 border rounded-md focus:border-orange-500 focus:outline-none hidden"
-                    />
                   <div className="flex items-center gap-4 flex-wrap sm:col-span-2">
                     <select
                       value={gender}
@@ -216,7 +225,7 @@ const Auth = () => {
                         />
                       )}
 
-                      {/* Pencil Icon as Label */}
+                      {/* Pen Icon as Label */}
                       <label
                         htmlFor="avatar"
                         className="absolute bottom-0 right-0 bg-white rounded-full p-1 shadow-md cursor-pointer hover:bg-gray-100 transition"
@@ -226,8 +235,19 @@ const Auth = () => {
                     </div>
                   </div>
                 </div>
-                <button className="w-full bg-orange-500 cursor-pointer text-white py-2 rounded-md">
-                  Create Account
+                <button
+                  disabled={loading}
+                  className={`w-full flex items-center justify-center gap-3 ${
+                    loading ? "bg-orange-400" : "bg-orange-600"
+                  } cursor-pointer text-white py-2 rounded-md`}
+                >
+                  {loading ? (
+                    <>
+                      <Loader2 className="animate-spin" />
+                    </>
+                  ) : (
+                    "Create Account"
+                  )}
                 </button>
                 <p className="text-sm text-center">
                   Already have an account?{" "}
