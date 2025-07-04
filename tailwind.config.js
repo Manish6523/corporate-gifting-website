@@ -1,4 +1,4 @@
-import { heroui } from "@heroui/theme"
+import { heroui } from "@heroui/theme";
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -7,7 +7,75 @@ module.exports = {
     "./src/**/*.{js,ts,jsx,tsx}", // Include your own components too
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        text: {
+          50: "#160703",
+          100: "#2d0f06",
+          200: "#591d0d",
+          300: "#862c13",
+          400: "#b33b19",
+          500: "#df4920",
+          600: "#e66e4c",
+          700: "#ec9279",
+          800: "#f2b6a6",
+          900: "#f9dbd2",
+          950: "#fcede9",
+        },
+        background: {
+          50: "#160704",
+          100: "#2c0f07",
+          200: "#571d0f",
+          300: "#832c16",
+          400: "#ae3b1e",
+          500: "#da4925",
+          600: "#e16e51",
+          700: "#e9927c",
+          800: "#f0b6a8",
+          900: "#f8dbd3",
+          950: "#fbede9",
+        },
+        primary: {
+          50: "#160604",
+          100: "#2c0b07",
+          200: "#58170e",
+          300: "#842215",
+          400: "#af2e1d",
+          500: "#db3924",
+          600: "#e26150",
+          700: "#ea887b",
+          800: "#f1b0a7",
+          900: "#f8d7d3",
+          950: "#fbebe9",
+        },
+        secondary: {
+          50: "#0c1603",
+          100: "#172c07",
+          200: "#2e580e",
+          300: "#458415",
+          400: "#5cb01c",
+          500: "#73dd22",
+          600: "#8fe34f",
+          700: "#abea7b",
+          800: "#c7f1a7",
+          900: "#e3f8d3",
+          950: "#f1fce9",
+        },
+        accent: {
+          50: "#031606",
+          100: "#072c0b",
+          200: "#0e5816",
+          300: "#158422",
+          400: "#1cb02d",
+          500: "#22dd38",
+          600: "#4fe360",
+          700: "#7bea88",
+          800: "#a7f1af",
+          900: "#d3f8d7",
+          950: "#e9fceb",
+        },
+      },
+    },
   },
   darkMode: "class",
   plugins: [heroui()],
