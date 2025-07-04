@@ -4,7 +4,7 @@ import { useState } from "react";
 import { addProductToWishList, addToCart } from "../features/cart/cartSlice";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
-import { Heart, Plus, Tag } from "lucide-react";
+import { Heart, Plus } from "lucide-react";
 
 const ProductCard = ({ product }) => {
   const navigate = useNavigate();
@@ -13,7 +13,7 @@ const ProductCard = ({ product }) => {
 
   const imagesArr = product.images.split(", ");
   const [quantity, setQuantity] = useState(product.quantity || 1);
-  const [activeImage, setActiveImage] = useState(product.thumbnail);
+  const [activeImage, setActiveImage] = useState(product?.thumbnail);
 
   const wishList = useSelector((state) => state.cart.wishList);
   const isProductInWishlist = wishList.some((item) => item.id === product.id);

@@ -67,12 +67,12 @@ const Navbar = () => {
     navigate(`/${e.target.value}`);
   };
 
-  useEffect(() => {
-    document.body.style.overflow = isMenuOpen ? "hidden" : "auto";
-  }, [isMenuOpen]);
+  // useEffect(() => {
+  //   document.body.style.overflow = isMenuOpen ? "hidden" : "auto";
+  // }, [isMenuOpen]);
 
   return (
-    <nav className="bg-white fixed top-0 z-[50] w-full shadow-md px-4 py-3 flex items-center justify-between">
+    <nav className={`bg-white fixed top-2 sm:top-4 rounded-lg z-[50] w-[95%] sm:w-[90%] left-1/2 transform -translate-x-1/2 shadow-lg ${!isMenuOpen?"border":"border-0"} px-4 py-3 flex items-center justify-between`}>
       <Menu
         className="size-6 cursor-pointer md:hidden"
         onClick={toggleMenu}
@@ -145,8 +145,8 @@ const Navbar = () => {
       </div>
 
       {isMenuOpen && (
-        <div className="fixed top-0 left-0 z-50 w-full h-full bg-white px-4 py-3 flex flex-col gap-5 transition-all md:hidden">
-          <div className="flex justify-between items-center border-b pb-3">
+        <div className="fixed top-0 left-0 z-50 w-full rounded-lg border bg-white px-4 py-3 flex flex-col gap-5 transition-all md:hidden">
+          <div className="flex justify-between items-center border-b pb-3 bg-transparent">
             <img
               src="https://i.ibb.co/6cJGsyM1/logo.png"
               alt="logo"
@@ -212,17 +212,6 @@ const Navbar = () => {
               </option>
             ))}
           </select>
-          <div className="flex gap-3 mt-4">
-            <a href="https://facebook.com" target="_blank" rel="noreferrer">
-              <Facebook className="text-blue-600" />
-            </a>
-            <a href="https://instagram.com" target="_blank" rel="noreferrer">
-              <Instagram className="text-pink-500" />
-            </a>
-            <a href="https://twitter.com" target="_blank" rel="noreferrer">
-              <Twitter className="text-sky-500" />
-            </a>
-          </div>
         </div>
       )}
     </nav>

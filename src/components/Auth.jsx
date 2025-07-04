@@ -63,6 +63,8 @@ const Auth = () => {
       toast.success("User created successfully");
       setLoadng(false);
       setStep(1); // Go back to login step
+    } else {
+      setLoadng(false);
     }
   };
 
@@ -91,6 +93,8 @@ const Auth = () => {
                   type="email"
                   placeholder="Email"
                   value={email}
+                  pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                  title="Please enter a valid email address"
                   onChange={(e) => setEmail(e.target.value)}
                   className="w-full p-2 border rounded-md focus:border-orange-500 focus:outline-none"
                   required
@@ -174,6 +178,8 @@ const Auth = () => {
                   <input
                     type="email"
                     placeholder="eg. johnDoe@xyz.com"
+                    pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                    title="Please enter a valid email address"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     className="sm:col-span-2 p-2 border rounded-md focus:border-orange-500 focus:outline-none"
@@ -185,12 +191,16 @@ const Auth = () => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     className="p-2 border rounded-md focus:border-orange-500 focus:outline-none"
+                    minLength={6}
+                    maxLength={20}
                     required
                   />
                   <input
-                    type="text"
+                    type="tel"
                     placeholder="Phone"
                     value={phone}
+                    pattern="[0-9]{10}"
+                    title="Please enter a valid 10-digit phone number"
                     onChange={(e) => setPhone(e.target.value)}
                     className="p-2 border rounded-md focus:border-orange-500 focus:outline-none"
                     required

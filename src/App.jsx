@@ -21,6 +21,8 @@ import {
 import { useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setCart, setWishlist } from "./features/cart/cartSlice.js";
+import OrderConfirmation from "./components/OrderConfirmation.jsx";
+import Orders from "./components/Orders.jsx";
 
 function App() {
   const location = useLocation();
@@ -98,17 +100,21 @@ function App() {
   return (
     <>
       <CartPage />
-      <div className="min-h-screen pt-[64px] bg-white">
+      <div className="min-h-screen pt-[68px] bg-white">
         {/* {isNavbarVisible && <Navbar />} */}
         <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/product" element={<ProductsList />} />
-          <Route path="/product/:id" element={<ProductDetails />} />
-          <Route path="/:category" element={<CategoryPage />} />
-          <Route path="/user/enquiry" element={<EnquiryPage />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/dashboard" element={<Dashboard />} />
+
+          <Route path="/product" element={<ProductsList />} />
+          <Route path="/orderConfirmation" element={<OrderConfirmation />} />
+          <Route path="/product/:id" element={<ProductDetails />} />
+          <Route path="/:category" element={<CategoryPage />} />
+
+          <Route path="/user/enquiry" element={<EnquiryPage />} />
+          <Route path="/user/orders" element={<Orders />} />
         </Routes>
         <Toaster
           position="bottom-right"

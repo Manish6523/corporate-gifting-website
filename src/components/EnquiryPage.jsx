@@ -9,6 +9,7 @@ import {
   AddOrder,
   DeleteAddress,
 } from "../../utils/Authentication";
+import { address } from "framer-motion/client";
 
 const EnquiryPage = () => {
   const session = useSelector((state) => state.cart.session);
@@ -24,10 +25,12 @@ const EnquiryPage = () => {
 
   const [loadedAddresses, setLoadedAddresses] = useState(session?.address);
 
+  console.log(session)
   const [enquiryData, setEnquiryData] = useState({
-    firstname: session?.address[0].firstname || "",
-    lastname: session?.address[0].lastname || "",
-    phone: session?.address[0].phone || "",
+    firstname: session?.address[0]?.firstname || "",
+    lastname: session?.address[0]?.lastname || "",
+    phone: session?.address[0]?.phone || "",
+    address: session?.address[0]?.address || "",
     email: session?.email || "",
   });
 
@@ -73,7 +76,7 @@ const EnquiryPage = () => {
     const response = await AddOrder(enquiryData, cart, price, dispatch);
     if (response.success) {
       toast.success("Order placed successfully!");
-      navigate("/product");
+      navigate("/orderConfirmation");
       dispatch(setCart([]))
     } else {
       toast.error(response.message || "Failed to place order.");
@@ -100,7 +103,6 @@ const EnquiryPage = () => {
     );
 
     if (response.success) {
-      toast.success("New address added successfully!");
       setToggleAddress(true);
       const sessionData = JSON.parse(localStorage.getItem("session"));
       setLoadedAddresses(sessionData?.address || []);
@@ -298,6 +300,7 @@ const EnquiryPage = () => {
                       firstname: address.firstname,
                       lastname: address.lastname,
                       phone: address.phone,
+                      address: address.address,
                     });
                   }}
                   className={`w-full sm:max-w-sm shadow-lg cursor-pointer hover:-translate-y-1 transition-all flex flex-col gap-3 rounded-3xl p-6 ${

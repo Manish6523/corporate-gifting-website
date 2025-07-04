@@ -12,7 +12,7 @@ const WishlistCard = ({ list }) => {
   };
 
   return (
-    <div className="group border border-gray-300 rounded-xl relative w-full max-w-[220px] overflow-hidden shadow-md bg-white">
+    <div className="group border border-gray-300 rounded-xl hover:-translate-y-1 transition-all relative w-full max-w-[220px] overflow-hidden shadow-lg bg-white">
       {/* Image */}
       <Link to={`/product/${list.id}`}>
         <img
