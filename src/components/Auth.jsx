@@ -39,6 +39,9 @@ const Auth = () => {
     if (res.success) {
       toast.success("Login successful");
       setLoadng(false);
+    } else {
+      setLoadng(false);
+      toast.error(res.message || "Login failed");
     }
   };
 

@@ -72,9 +72,9 @@ const Navbar = () => {
   // }, [isMenuOpen]);
 
   return (
-    <nav className={`bg-white fixed top-2 sm:top-4 rounded-lg z-[50] w-[95%] sm:w-[90%] left-1/2 transform -translate-x-1/2 shadow-lg ${!isMenuOpen?"border":"border-0"} px-4 py-3 flex items-center justify-between`}>
+    <nav className={`bg-background text-text fixed top-2 sm:top-4 rounded-lg z-[50] w-[95%] sm:w-[90%] left-1/2 transform -translate-x-1/2 shadow-lg ${!isMenuOpen?"border":"border-0"} border-gray-300 px-4 py-3 flex items-center justify-between`}>
       <Menu
-        className="size-6 cursor-pointer md:hidden"
+        className="size-6 text-text cursor-pointer md:hidden"
         onClick={toggleMenu}
       />
       <div className="flex items-center gap-4">
@@ -85,13 +85,13 @@ const Navbar = () => {
             className="w-28 sm:w-32"
           />
         </Link>
-        <div className="hidden sm:flex items-center gap-2 bg-gray-100 px-3 py-2 border border-gray-300 rounded">
+        <div className="hidden sm:flex items-center gap-2 bg-secondary px-3 py-2 rounded-full">
           <input
             type="text"
             placeholder="Search"
             className="bg-transparent outline-none text-sm"
           />
-          <Search className="text-gray-600 cursor-pointer" size={18} />
+          <Search className="text-text cursor-pointer" size={18} />
         </div>
       </div>
 
@@ -129,7 +129,7 @@ const Navbar = () => {
             <img
               src={session.avatar}
               alt="avatar"
-              className="size-9 rounded-full object-cover"
+              className="size-9 rounded-full bg-primary border border-primary object-cover"
             />
           </Link>
         )}
@@ -138,14 +138,14 @@ const Navbar = () => {
           className="relative mr-2 cursor-pointer"
         >
           <ShoppingCart className="w-6 h-6" />
-          <span className="absolute -top-1 -right-2 text-xs bg-black text-white w-5 h-5 rounded-full flex items-center justify-center">
+          <span className="absolute -top-1 -right-2 text-xs bg-primary font-bold text-text w-5 h-5 rounded-full flex items-center justify-center">
             {cart.length}
           </span>
         </button>
       </div>
 
       {isMenuOpen && (
-        <div className="fixed top-0 left-0 z-50 w-full rounded-lg border bg-white px-4 py-3 flex flex-col gap-5 transition-all md:hidden">
+        <div className="fixed top-0 left-0 z-50 w-full rounded-lg border bg-background text-text px-4 py-3 flex flex-col gap-5 transition-all md:hidden">
           <div className="flex justify-between items-center border-b pb-3 bg-transparent">
             <img
               src="https://i.ibb.co/6cJGsyM1/logo.png"

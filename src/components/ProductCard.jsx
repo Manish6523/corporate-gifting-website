@@ -42,25 +42,25 @@ const ProductCard = ({ product }) => {
   };
 
   return (
-    <div className="card flex flex-col justify-between bg-white max-w-2xs shadow-md  sm:rounded-2xl p-0 sm:p-3 border border-gray-200 hover:shadow-lg transition-shadow duration-300">
+    <div className="card flex flex-col justify-between text-text bg-background max-w-xs shadow-md  sm:rounded-2xl p-0 sm:p-3 border border-primary hover:shadow-lg duration-300 hover:-translate-y-1 transition-all">
       <div className="images">
         <Link
           to={`/product/${product.id}`}
-          className="relative sm:rounded-2xl overflow-hidden block shadow-md shadow-black/20 transition-all hover:scale-[101%]"
+          className="relative sm:rounded-2xl overflow-hidden block sm:border border-b border-primary shadow-md shadow-black/20 transition-all hover:scale-[101%]"
         >
           <img
             src={activeImage}
             alt="image"
             draggable="false"
-            className="aspect-square bg-gray-200 hover:bg-gray-300 transition-all w-full object-cover"
+            className="aspect-square bg-secondary/50 hover:bg-accent/50 transition-all w-full object-cover"
           />
-          <div className="absolute text-sm sm:text-md top-0 left-0 bg-orange-600 text-white font-medium px-2 sm:pl-6 py-1 flex items-center gap-1">
+          <div className="absolute text-sm sm:text-md top-0 left-0 bg-primary text-text font-medium px-2 sm:pl-6 py-1 flex items-center gap-1">
             {product.discountPercentage}% OFF
           </div>
         </Link>
 
         {imagesArr.length > 0 && (
-          <div className="px-1 flex gap-2 mt-3 overflow-x-auto no-scrollbar">
+          <div className="px-1 flex gap-2 mt-3 overflow-x-auto no-scrollbar text-text">
             {imagesArr.slice(0, 5).map((image, index) => (
               <img
                 key={index}
@@ -69,8 +69,8 @@ const ProductCard = ({ product }) => {
                 alt={`image-${index + 1}`}
                 draggable="false"
                 className={`size-14 object-cover rounded-md sm:rounded-lg border ${
-                  activeImage === image ? "border-gray-500" : "border-gray-200"
-                } hover:border-gray-500 cursor-pointer`}
+                  activeImage === image ? "border-primary bg-accent/50" : "border-primary/50"
+                } hover:border-primary hover:bg-accent/50 cursor-pointer`}
               />
             ))}
           </div>
@@ -86,7 +86,7 @@ const ProductCard = ({ product }) => {
               {product.title}
             </div>
             <div className="flex items-center gap-2 sm:gap-3">
-              <div className="tag text-xs font-medium bg-orange-100 mb-1 w-fit px-2 py-[3px] rounded-full text-orange-600">
+              <div className="tag text-xs font-medium bg-primary/90 mb-1 w-fit px-2 py-[3px] rounded-full text-white">
                 {product.tags.split(", ")[0].toUpperCase()}
               </div>
               <div className="tag text-xs font-medium bg-yellow-100 mb-1 w-fit px-2 py-[3px] rounded-full text-yellow-600">
@@ -113,7 +113,7 @@ const ProductCard = ({ product }) => {
           <div className="button hidden sm:flex gap-0 sm:gap-3 mt-5">
             <button
               onClick={() => addtoCart()}
-              className="bg-gray-500 shadow-md hover:-translate-y-1 shadow-black/20 hover:bg-gray-600/90 transition-all w-full cursor-pointer text-white font-medium rounded-md sm:rounded-xl py-3"
+              className="bg-primary shadow-md hover:-translate-y-1 shadow-black/20 hover:bg-primary/90 transition-all w-full cursor-pointer text-white font-medium rounded-md sm:rounded-xl py-3"
             >
               ADD TO CART
             </button>
@@ -123,12 +123,12 @@ const ProductCard = ({ product }) => {
                 handleWishlistToggle();
               }}
             >
-              <div className="p-2 sm:p-3 hover:bg-gray-100 hover:-translate-y-1 transition-all shadow-md cursor-pointer border border-gray-400 rounded-md hover:shadow-xl sm:rounded-xl">
+              <div className="p-2 sm:p-3 hover:bg-accent hover:-translate-y-1 transition-all shadow-md cursor-pointer border border-primary rounded-md hover:shadow-xl sm:rounded-xl">
                 <Heart
                   className="text-gray-400"
                   strokeWidth={0}
                   fill={
-                    isProductInWishlist ? "oklch(64.6% 0.222 41.116)" : "gray"
+                    isProductInWishlist ? "#d64b39" : "gray"
                   }
                 />
               </div>

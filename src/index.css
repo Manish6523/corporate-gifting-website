@@ -9,3 +9,35 @@
     scrollbar-width: none;
   }
 }
+
+@theme {
+  --color-text: #120604;
+  --color-background: #fdf6f5;
+  --color-primary: #d64b39;
+  --color-secondary: #e5c584;
+  --color-accent: #dfce66;
+
+  /* --color-text: #dde8fc; */
+  /* --color-background: #030c1c; */
+  /* --color-primary: #8baaf3; */
+  /* --color-secondary: #8f0e43; */
+  /* --color-accent: #ec6a44; */
+
+  /* --color-text: #ebd8fb; */
+  /* --color-background: #170424; */
+  /* --color-primary: #c684f3; */
+  /* --color-secondary: #930f7f; */
+  /* --color-accent: #ec3db5; */
+
+  /* --color-text: #161c0d; */
+  /* --color-background: #eff6e4; */
+  /* --color-primary: #4d7416; */
+  /* --color-secondary: #bbf36d; */
+  /* --color-accent: #8cf000; */
+
+  /* --color-text: #0d160d; */
+  /* --color-background: #f5faf5; */
+  /* --color-primary: #56b259; */
+  /* --color-secondary: #93d395; */
+  /* --color-accent: #77ce79; */
+}

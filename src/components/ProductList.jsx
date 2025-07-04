@@ -51,9 +51,9 @@ const ProductsList = () => {
       <span
         className={`py-2 px-5 ${
           tag == id
-            ? "bg-orange-600 text-gray-300"
-            : "text-orange-600 bg-gray-300"
-        } cursor-pointer rounded-full shadow-md hover:bg-orange-600 hover:text-gray-300 transition-all duration-300`}
+            ? "bg-secondary text-text"
+            : "bg-text text-secondary" 
+        } cursor-pointer rounded-full shadow-md hover:bg-secondary hover:text-text transition-all duration-300`}
         onClick={() => setTag(id)}
       >
         {name}
@@ -63,15 +63,15 @@ const ProductsList = () => {
 
   return (
     <main className="container mx-auto p-0 sm:p-4">
-      <h2 className="text-4xl font-bold my-12 text-orange-500 px-3 sm:px-0">All Products</h2>
+      <h2 className="text-4xl font-bold my-12 text-text px-3 sm:px-0">All Products</h2>
       <div className="selectors flex gap-3 flex-wrap px-3 sm:px-0  ">
         {tags.map((tags, index) => (
           <Tags key={index} name={tags.name} id={tags.id} />
         ))}
       </div>
-      <div className=" sm:bg-transparent py-1 px-2 sm:px-0 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 mt-8">
+      <div className=" sm:bg-transparent py-1 px-2 sm:px-0 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10 mt-8 justify-items-center">
         {
-          products.map((product, idx)=>(
+          products.slice(1,5).map((product, idx)=>(
             <ProductCard key={idx} product={product} />
           ))
         }

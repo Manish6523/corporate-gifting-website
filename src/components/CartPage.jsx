@@ -21,7 +21,7 @@ const CartPage = () => {
           onClick={() => dispatch(toggleCart())}
         >
           <div
-            className="cartContainer relative overflow-y-scroll pb-14 bg-white w-full max-w-md"
+            className="cartContainer relative overflow-y-scroll pb-14 bg-background sm:w-fit w-full min-w-md"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="header py-5 px-4 flex items-center justify-between border-b-1 border-gray-200">
@@ -32,7 +32,7 @@ const CartPage = () => {
                 draggable="false"
               />
               <span
-                className="bg-gray-100 hover:bg-gray-300 rounded-full p-2 cursor-pointer transition-all duration-200"
+                className="bg-primary hover:bg-primary/90 text-text rounded-full p-2 cursor-pointer transition-all duration-200"
                 onClick={() => dispatch(toggleCart())}
               >
                 <X className="size-5" />
@@ -41,8 +41,8 @@ const CartPage = () => {
             <div>
               {cart.length === 0 ? (
                 <div className="text-center py-10">
-                  <h2 className="text-lg font-semibold">Your cart is empty</h2>
-                  <p className="text-gray-500">
+                  <h2 className="text-xl font-semibold text-text">Your cart is empty</h2>
+                  <p className="text-text/70">
                     Add items to your cart to see them here.
                   </p>
                 </div>
