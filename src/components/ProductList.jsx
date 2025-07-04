@@ -63,6 +63,14 @@ const ProductsList = () => {
 
   return (
     <main className="container mx-auto p-0 sm:p-4">
+      <div className="bg-primary-500 text-white p-4 rounded-md">
+  Primary Colored Box
+</div>
+
+<button className="bg-secondary-600 hover:bg-secondary-700 text-white px-4 py-2 rounded-lg">
+  Secondary Button
+</button>
+
       <h2 className="text-4xl font-bold my-12 text-orange-500 px-3 sm:px-0">All Products</h2>
       <div className="selectors flex gap-3 flex-wrap px-3 sm:px-0  ">
         {tags.map((tags, index) => (

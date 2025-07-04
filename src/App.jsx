@@ -100,7 +100,7 @@ function App() {
   return (
     <>
       <CartPage />
-      <div className="min-h-screen pt-[68px] bg-white">
+      <div className="min-h-screen pt-[75px] bg-white">
         {/* {isNavbarVisible && <Navbar />} */}
         <Navbar />
         <Routes>
