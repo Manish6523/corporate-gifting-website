@@ -21,10 +21,10 @@ const CartPage = () => {
           onClick={() => dispatch(toggleCart())}
         >
           <div
-            className="cartContainer relative overflow-y-scroll pb-14 bg-background sm:w-fit w-full min-w-md"
+            className="cartContainer relative overflow-y-scroll pb-14 bg-background w-full max-w-md"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="header py-5 px-4 flex items-center justify-between border-b-1 border-gray-200">
+            <div className="header py-5 px-4 flex items-center justify-between border-b-1 border-primary/50">
               <img
                 src="https://i.ibb.co/6cJGsyM1/logo.png"
                 alt="logo"
@@ -32,7 +32,7 @@ const CartPage = () => {
                 draggable="false"
               />
               <span
-                className="bg-primary hover:bg-primary/90 text-text rounded-full p-2 cursor-pointer transition-all duration-200"
+                className="bg-primary hover:bg-primary/90 text-white rounded-full p-2 cursor-pointer transition-all duration-200"
                 onClick={() => dispatch(toggleCart())}
               >
                 <X className="size-5" />
@@ -60,7 +60,7 @@ const CartPage = () => {
                 to={"/user/enquiry"}
                 onClick={() => dispatch(toggleCart())}
                 className="fixed w-full max-w-md bottom-0 p-5 text-center flex items-center justify-center gap-5
-                hover:bg-black hover:text-white transition-all duration-300 bg-black text-white font-bold"
+                hover:bg-primary/90 hover:text-white transition-all duration-300 bg-primary text-white font-bold"
               >
                 Proceed to checkout <ShoppingCart />
               </Link>

@@ -35,7 +35,7 @@ const CartItems = ({ item }) => {
   };
 
   return (
-    <div className="cartItems py-3 pr-5 flex items-start gap-3 border-b-1 border-gray-200 ">
+    <div className="cartItems py-3 pr-5 flex items-start gap-3 border-b-1 border-primary/50 ">
       <div className="left">
         <Link to={`/product/${item.id}`}>
           <img
@@ -53,14 +53,14 @@ const CartItems = ({ item }) => {
         <div className="details text-sm flex flex-col gap-1 pr-5">
           <Link
             to={`/product/${item.id}`}
-            className="title font-bold hover:underline text-gray-800"
+            className="title font-bold hover:underline text-text"
             onClick={() => {
               dispatch(toggleCart());
             }}
           >
             {item.title} {item.brand ? `(${item.brand})` : ""}
           </Link>
-          <span className="price text-gray-500">$ {item.price}</span>
+          <span className="price text-text-50">$ {item.price}</span>
         </div>
         <div className="counter mt-6 flex items-center justify-between">
           <div className="flex items-center gap-7 py-1 ">
@@ -68,7 +68,7 @@ const CartItems = ({ item }) => {
               onClick={() => {
                 handleRemoveQuantity();
               }}
-              className="rounded-full cursor-pointer border border-black bg-white text-black hover:bg-black hover:text-white transition-all p-1"
+              className="rounded-full cursor-pointer bg-primary hover:bg-primary/90 text-white transition-all p-1"
             >
               <Minus className="size-4 cursor-pointer" />
             </button>
@@ -79,7 +79,7 @@ const CartItems = ({ item }) => {
               onClick={() => {
                 HandleAddQuantity();
               }}
-              className="rounded-full cursor-pointer border border-black bg-white text-black hover:bg-black hover:text-white transition-all p-1"
+              className="rounded-full cursor-pointer bg-primary hover:bg-primary/90 text-white transition-all p-1"
             >
               <Plus className="size-4 cursor-pointer" />
             </button>

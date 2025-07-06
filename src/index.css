@@ -11,17 +11,30 @@
 }
 
 @theme {
-  --color-text: #120604;
-  --color-background: #fdf6f5;
-  --color-primary: #d64b39;
-  --color-secondary: #e5c584;
-  --color-accent: #dfce66;
+  /* --color-text: #120604; */
+  /* --color-background: #fdf6f5; */
+  /* --color-primary: #d64b39; */
+  /* --color-secondary: #e5c584; */
+  /* --color-accent: #dfce66; */
 
-  /* --color-text: #dde8fc; */
-  /* --color-background: #030c1c; */
-  /* --color-primary: #8baaf3; */
-  /* --color-secondary: #8f0e43; */
-  /* --color-accent: #ec6a44; */
+  --color-text: #161c0d;
+  --color-background: #eff6e4;
+  --color-primary: #4d7416;
+  --color-secondary: #bbf36d;
+  --color-accent: #8cf000;
+  
+  /* --color-text: #e8ede8;  */
+  /* --color-background: #070907;  */
+  /* --color-primary: #b2c2b1;  */
+  /* --color-secondary: #4a5760;  */
+  /* --color-accent: #727492;  */
+
+
+  /* --color-text: #ede6ed; */
+  /* --color-background: #0a070a; */
+  /* --color-primary: #bfa8c1; */
+  /* --color-secondary: #604a44; */
+  /* --color-accent: #988c6f; */
 
   /* --color-text: #ebd8fb; */
   /* --color-background: #170424; */
@@ -29,15 +42,10 @@
   /* --color-secondary: #930f7f; */
   /* --color-accent: #ec3db5; */
 
-  /* --color-text: #161c0d; */
-  /* --color-background: #eff6e4; */
-  /* --color-primary: #4d7416; */
-  /* --color-secondary: #bbf36d; */
-  /* --color-accent: #8cf000; */
-
   /* --color-text: #0d160d; */
   /* --color-background: #f5faf5; */
   /* --color-primary: #56b259; */
   /* --color-secondary: #93d395; */
   /* --color-accent: #77ce79; */
+
 }

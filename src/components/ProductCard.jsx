@@ -14,6 +14,7 @@ const ProductCard = ({ product }) => {
   const imagesArr = product.images.split(", ");
   const [quantity, setQuantity] = useState(product.quantity || 1);
   const [activeImage, setActiveImage] = useState(product?.thumbnail);
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
 
   const wishList = useSelector((state) => state.cart.wishList);
   const isProductInWishlist = wishList.some((item) => item.id === product.id);
@@ -60,16 +61,16 @@ const ProductCard = ({ product }) => {
         </Link>
 
         {imagesArr.length > 0 && (
-          <div className="px-1 flex gap-2 mt-3 overflow-x-auto no-scrollbar text-text">
+          <div className="px-2 flex gap-2 mt-3 overflow-x-auto no-scrollbar text-text">
             {imagesArr.slice(0, 5).map((image, index) => (
               <img
                 key={index}
                 src={image}
-                onClick={() => setActiveImage(image)}
+                onClick={() => {setActiveImage(image);setActiveImageIndex(index);}}
                 alt={`image-${index + 1}`}
                 draggable="false"
                 className={`size-14 object-cover rounded-md sm:rounded-lg border ${
-                  activeImage === image ? "border-primary bg-accent/50" : "border-primary/50"
+                  activeImageIndex == index || activeImage === image ? "border-primary" : "border-secondary"
                 } hover:border-primary hover:bg-accent/50 cursor-pointer`}
               />
             ))}
@@ -80,7 +81,7 @@ const ProductCard = ({ product }) => {
       </div>
 
       <div>
-        <div className="p-1 sm:p-0">
+        <div className="p-2 sm:p-0">
           <div className="details my-2 sm:my-5">
             <div className="title font-medium text-md sm:text-xl">
               {product.title}
@@ -128,7 +129,7 @@ const ProductCard = ({ product }) => {
                   className="text-gray-400"
                   strokeWidth={0}
                   fill={
-                    isProductInWishlist ? "#d64b39" : "gray"
+                    isProductInWishlist ? "#4d7416" : "gray"
                   }
                 />
               </div>
@@ -141,8 +142,8 @@ const ProductCard = ({ product }) => {
                 addtoCart();
               }}
             >
-              <div className="p-2 sm:p-3 md:p-4 shadow-md shadow-black/20 cursor-pointer border border-gray-400 rounded-md sm:rounded-xl">
-                <Plus className="text-[#808080]" strokeWidth={3} />
+              <div className="p-2 sm:p-3 md:p-4 shadow-md shadow-black/20 transition-all cursor-pointer border border-primary rounded-md sm:rounded-xl">
+                <Plus className="text-primary " strokeWidth={2} />
               </div>
             </button>
 
@@ -151,12 +152,12 @@ const ProductCard = ({ product }) => {
                 handleWishlistToggle();
               }}
             >
-              <div className="p-2 sm:p-3 md:p-4 shadow-md shadow-black/20 cursor-pointer border border-gray-400 rounded-md sm:rounded-xl">
+              <div className="p-2 sm:p-3 md:p-4 shadow-md shadow-black/20 cursor-pointer border border-primary rounded-md sm:rounded-xl">
                 <Heart
-                  className="text-gray-400"
+                  className="text-primary"
                   strokeWidth={0}
                   fill={
-                    isProductInWishlist ? "oklch(64.6% 0.222 41.116)" : "gray"
+                    isProductInWishlist ? "#4d7416" : "gray"
                   }
                 />
               </div>

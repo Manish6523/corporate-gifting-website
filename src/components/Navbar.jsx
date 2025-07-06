@@ -129,7 +129,7 @@ const Navbar = () => {
             <img
               src={session.avatar}
               alt="avatar"
-              className="size-9 rounded-full bg-primary border border-primary object-cover"
+              className="size-9 rounded-full bg-primary p-[1px] border border-primary object-cover"
             />
           </Link>
         )}

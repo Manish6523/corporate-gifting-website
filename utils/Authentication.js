@@ -191,6 +191,23 @@ export async function DeleteAddress(addressIdx, dispatch) {
   }
 }
 
+// -------------------- Fetch Orders --------------------
+export async function fetchOrders(id) {
+  try {
+    const { data, error } = await supabase
+      .from("orders")
+      .select("*")
+      .eq("user_id", id)
+      .order("created_at", { ascending: false });
+
+    return { success: true, orders: data, message: "Orders fetched successfully" };
+  } catch (error) {
+    console.error("Error fetching orders:", error);
+    toast.error("Failed to fetch orders");
+    return { success: false, message: "Failed to fetch orders" };
+  }
+}
+
 export async function AddOrder(orderDetails, cart, price, dispatch) {
   try {
     const session = JSON.parse(localStorage.getItem("session"));

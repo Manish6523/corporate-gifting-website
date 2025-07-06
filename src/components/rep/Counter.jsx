@@ -1,17 +1,15 @@
 import React from "react";
 import { Minus, Plus } from "lucide-react";
 
-const Counter = ({ quantity, setQuantity, stock,maximumstock }) => {
+const Counter = ({ quantity, setQuantity, stock, maximumstock }) => {
   return (
-    <div className="flex items-center justify-between  transition-all shadow-sm border border-gray-400">
+    <div className="flex items-center justify-between bg-background transition-all shadow-sm border border-secondary text-text rounded">
       <button
-        className="cursor-pointer border-r border-gray-400 p-2 hover:bg-gray-200 transition-all duration-300"
+        className="cursor-pointer border-r border-secondary p-2 hover:bg-secondary/50 transition-all duration-300 disabled:opacity-40"
         disabled={quantity <= 1 || !stock}
-        onClick={() => {
-          setQuantity(quantity - 1);
-        }}
+        onClick={() => setQuantity(quantity - 1)}
       >
-        <Minus className="size-6" />
+        <Minus className="size-5 text-text" />
       </button>
       <input
         type="number"
@@ -19,21 +17,22 @@ const Counter = ({ quantity, setQuantity, stock,maximumstock }) => {
         id="quantity"
         disabled={!stock}
         value={quantity}
-        className="no-spinner text-center outline-0 min-w-[50px]"
+        className="no-spinner bg-transparent text-center outline-none min-w-[50px] text-text disabled:opacity-40"
         onChange={(e) => {
-          setQuantity(Number(e.target.value));
+          let val = Number(e.target.value);
+          if (val < 1) val = 1;
+          else if (val > maximumstock) val = maximumstock;
+          setQuantity(val);
         }}
         min="1"
         max={maximumstock}
       />
       <button
-        className="cursor-pointer border-l border-gray-400 p-2 hover:bg-gray-200 transition-all duration-300"
+        className="cursor-pointer border-l border-secondary p-2 hover:bg-secondary/50 transition-all duration-300 disabled:opacity-40"
         disabled={!stock || quantity >= maximumstock}
-        onClick={() => {
-          setQuantity(quantity + 1);
-        }}
+        onClick={() => setQuantity(quantity + 1)}
       >
-        <Plus className="size-6" />
+        <Plus className="size-5 text-text" />
       </button>
     </div>
   );

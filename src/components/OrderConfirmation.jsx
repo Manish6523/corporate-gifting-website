@@ -10,7 +10,7 @@ const OrderConfirmation = () => {
         <h2 className="text-2xl font-semibold text-gray-800 mb-2">Order Confirmed !</h2>
         <p className="text-sm text-gray-600 mb-2">
           Your order has been placed successfully.{" "}
-          <Link to="/user/orders" className="text-green-600 font-medium hover:underline">
+          <Link to="/dashboard" className="text-green-600 font-medium hover:underline">
             Order History
           </Link>
         </p>

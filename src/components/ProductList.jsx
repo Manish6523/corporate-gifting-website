@@ -69,9 +69,9 @@ const ProductsList = () => {
           <Tags key={index} name={tags.name} id={tags.id} />
         ))}
       </div>
-      <div className=" sm:bg-transparent py-1 px-2 sm:px-0 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10 mt-8 justify-items-center">
+      <div className=" sm:bg-transparent py-1 px-2 sm:px-0 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-5 mt-8 justify-items-center">
         {
-          products.slice(1,5).map((product, idx)=>(
+          products.slice(1,15).map((product, idx)=>(
             <ProductCard key={idx} product={product} />
           ))
         }
