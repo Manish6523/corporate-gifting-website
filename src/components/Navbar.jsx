@@ -64,7 +64,7 @@ const Navbar = () => {
 
   const handleCategoryChange = (e) => {
     setSelectedCategory(e.target.value);
-    navigate(`/${e.target.value}`);
+    navigate(`/user/category/${e.target.value}`);
   };
 
   // useEffect(() => {
@@ -72,7 +72,11 @@ const Navbar = () => {
   // }, [isMenuOpen]);
 
   return (
-    <nav className={`bg-background text-text fixed top-2 sm:top-4 rounded-lg z-[50] w-[95%] sm:w-[90%] left-1/2 transform -translate-x-1/2 shadow-lg ${!isMenuOpen?"border":"border-0"} border-gray-300 px-4 py-3 flex items-center justify-between`}>
+    <nav
+      className={`bg-background text-text fixed top-2 sm:top-4 rounded-lg z-[50] w-[95%] sm:w-[90%] left-1/2 transform -translate-x-1/2 shadow-lg ${
+        !isMenuOpen ? "border" : "border-0"
+      } border-gray-300 px-4 py-3 flex items-center justify-between`}
+    >
       <Menu
         className="size-6 text-text cursor-pointer md:hidden"
         onClick={toggleMenu}
@@ -133,15 +137,12 @@ const Navbar = () => {
             />
           </Link>
         )}
-        <button
-          onClick={() => dispatch(toggleCart())}
-          className="relative mr-2 cursor-pointer"
-        >
+        <Link to={"/user/cart"} className="relative mr-2 cursor-pointer">
           <ShoppingCart className="w-6 h-6" />
           <span className="absolute -top-1 -right-2 text-xs bg-primary font-bold text-text w-5 h-5 rounded-full flex items-center justify-center">
             {cart.length}
           </span>
-        </button>
+        </Link>
       </div>
 
       {isMenuOpen && (
@@ -181,7 +182,7 @@ const Navbar = () => {
             <ShoppingBasket className="size-7 " strokeWidth={1} /> Products
           </Link>
           <Link
-            to="/cart"
+            to="/user/cart"
             className="flex gap-3 font-light text-lg items-center"
             onClick={toggleMenu}
           >

@@ -24,7 +24,7 @@ const CartPage = () => {
             className="cartContainer relative overflow-y-scroll pb-14 bg-background w-full max-w-md"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="header py-5 px-4 flex items-center justify-between border-b-1 border-primary/50">
+            <div className="header py-5 px-4 bg-background flex items-center justify-between border-b-1 border-primary/50">
               <img
                 src="https://i.ibb.co/6cJGsyM1/logo.png"
                 alt="logo"

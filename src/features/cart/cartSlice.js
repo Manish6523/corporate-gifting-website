@@ -40,12 +40,13 @@ const cartSlice = createSlice({
       );
       if (existingItem) {
         // If it exists, update the quantity
+        toast("😅 Already in Cart!");
         existingItem.quantity = action.payload.quantity;
         existingItem.price = parseFloat(
           action.payload.price * action.payload.quantity
         ).toFixed(2);
         calculateTotal(state);
-        toast.success(`${action.payload.title} has been added to the cart!`);
+        // toast.success(`${action.payload.title} has been added to the cart!`);
       } else {
         // If it doesn't exist, add a new item to the cart
         state.cart.push({
@@ -123,7 +124,7 @@ const cartSlice = createSlice({
         state.wishList.push(action.payload);
         toast.success(`${action.payload.title} added to wishlist!`);
       }
-    }
+    },
   },
 });
 

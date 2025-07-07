@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { Heart, Plus } from "lucide-react";
 
-const ProductCard = ({ product }) => {
+const ProductCard = ({ product, onImageLoad }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const session = useSelector((state) => state.cart.session);
@@ -43,7 +43,7 @@ const ProductCard = ({ product }) => {
   };
 
   return (
-    <div className="card flex flex-col justify-between text-text bg-background max-w-xs shadow-md  sm:rounded-2xl p-0 sm:p-3 border border-primary hover:shadow-lg duration-300 hover:-translate-y-1 transition-all">
+    <div className="card flex flex-col justify-between text-text bg-background max-w-xs shadow-md sm:rounded-2xl p-0 sm:p-3 border border-primary hover:shadow-lg duration-300 hover:-translate-y-1 transition-all">
       <div className="images">
         <Link
           to={`/product/${product.id}`}
@@ -53,6 +53,7 @@ const ProductCard = ({ product }) => {
             src={activeImage}
             alt="image"
             draggable="false"
+            onLoad={onImageLoad}
             className="aspect-square bg-secondary/50 hover:bg-accent/50 transition-all w-full object-cover"
           />
           <div className="absolute text-sm sm:text-md top-0 left-0 bg-primary text-text font-medium px-2 sm:pl-6 py-1 flex items-center gap-1">
@@ -66,18 +67,21 @@ const ProductCard = ({ product }) => {
               <img
                 key={index}
                 src={image}
-                onClick={() => {setActiveImage(image);setActiveImageIndex(index);}}
+                onClick={() => {
+                  setActiveImage(image);
+                  setActiveImageIndex(index);
+                }}
                 alt={`image-${index + 1}`}
                 draggable="false"
                 className={`size-14 object-cover rounded-md sm:rounded-lg border ${
-                  activeImageIndex == index || activeImage === image ? "border-primary" : "border-secondary"
+                  activeImageIndex == index || activeImage === image
+                    ? "border-primary"
+                    : "border-secondary"
                 } hover:border-primary hover:bg-accent/50 cursor-pointer`}
               />
             ))}
           </div>
         )}
-        
-
       </div>
 
       <div>
@@ -119,46 +123,30 @@ const ProductCard = ({ product }) => {
               ADD TO CART
             </button>
 
-            <button
-              onClick={() => {
-                handleWishlistToggle();
-              }}
-            >
+            <button onClick={handleWishlistToggle}>
               <div className="p-2 sm:p-3 hover:bg-accent hover:-translate-y-1 transition-all shadow-md cursor-pointer border border-primary rounded-md hover:shadow-xl sm:rounded-xl">
                 <Heart
                   className="text-gray-400"
                   strokeWidth={0}
-                  fill={
-                    isProductInWishlist ? "#4d7416" : "gray"
-                  }
+                  fill={isProductInWishlist ? "#4d7416" : "gray"}
                 />
               </div>
             </button>
           </div>
 
           <div className="smbtn sm:hidden flex items-center justify-between gap-0 sm:gap-3 mt-2 sm:mt-5">
-            <button
-              onClick={() => {
-                addtoCart();
-              }}
-            >
+            <button onClick={addtoCart}>
               <div className="p-2 sm:p-3 md:p-4 shadow-md shadow-black/20 transition-all cursor-pointer border border-primary rounded-md sm:rounded-xl">
-                <Plus className="text-primary " strokeWidth={2} />
+                <Plus className="text-primary" strokeWidth={2} />
               </div>
             </button>
 
-            <button
-              onClick={() => {
-                handleWishlistToggle();
-              }}
-            >
+            <button onClick={handleWishlistToggle}>
               <div className="p-2 sm:p-3 md:p-4 shadow-md shadow-black/20 cursor-pointer border border-primary rounded-md sm:rounded-xl">
                 <Heart
                   className="text-primary"
                   strokeWidth={0}
-                  fill={
-                    isProductInWishlist ? "#4d7416" : "gray"
-                  }
+                  fill={isProductInWishlist ? "#4d7416" : "gray"}
                 />
               </div>
             </button>

@@ -1,47 +1,64 @@
-import React from "react";
-import { Heart, X } from "lucide-react";
-import { Link } from "react-router";
-import { useDispatch } from "react-redux";
-import { addProductToWishList } from "../features/cart/cartSlice";
+import { Plus, Heart } from "lucide-react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { addToCart, addProductToWishList } from "../features/cart/cartSlice";
+import { toast } from "react-hot-toast";
 
-const WishlistCard = ({ list }) => {
+const WishCard = ({ product }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const session = useSelector((state) => state.cart.session);
+  const wishList = useSelector((state) => state.cart.wishList);
+  const isWished = wishList.some((item) => item.id === product.id);
+
+  const handleAddToCart = () => {
+    if (!session) return toast.error("Login required");
+    dispatch(addToCart({ ...product, quantity: 1 }));
+  };
 
   const toggleWishlist = () => {
-    dispatch(addProductToWishList(list));
+    if (!session) return toast.error("Login required");
+    dispatch(addProductToWishList(product));
   };
 
   return (
-    <div className="group border border-gray-300 rounded-xl hover:-translate-y-1 transition-all relative w-full max-w-[220px] overflow-hidden shadow-lg bg-white">
-      {/* Image */}
-      <Link to={`/product/${list.id}`}>
+    <div className="bg-white rounded-xl border border-gray-200 shadow-sm w-[160px] sm:w-[180px] shrink-0 p-2 flex flex-col justify-between hover:shadow-md transition-all">
+      <div className="relative">
         <img
-          src={list.thumbnail}
-          alt={list.title}
-          className="w-full h-44 object-contain transition-transform duration-300 group-hover:scale-105"
+          src={product.thumbnail}
+          alt={product.title}
+          className="rounded-lg aspect-square object-cover w-full bg-gray-100"
         />
-      </Link>
-
-      {/* Heart Icon */}
-      <button
-      title="remove from wishlist"
-        onClick={() => toggleWishlist()}
-        className="absolute group top-2 right-2 bg-white p-1 rounded-full shadow z-10 cursor-pointer"
-      >
-        <Heart size={18} className="text-red-500 hidden sm:block group-hover:hidden" />
-        <X size={18} className="text-red-500 block sm:hidden group-hover:block" />
-      </button>
-
-      {/* Hover Details */}
-      <div className="absolute bottom-0 left-0 w-full bg-white/90 text-black p-3 transform translate-y-full group-hover:translate-y-0 transition duration-300">
-        <h4 className="text-sm font-semibold truncate" title={list.title}>
-          {list.title}
-        </h4>
-        <p className="text-xs text-gray-600">{list.brand}</p>
-        <p className="text-sm font-medium text-gray-800 mt-1">$ {list.price}</p>
+        <button
+          onClick={toggleWishlist}
+          className="absolute top-2 right-2 cursor-pointer bg-white rounded-full p-[6px] shadow"
+        >
+          <Heart
+            size={16}
+            className="text-red-500"
+            fill={isWished ? "currentColor" : "none"}
+          />
+        </button>
       </div>
+
+      <div className="mt-3 space-y-1 text-sm">
+        <p className="font-medium line-clamp-2 leading-snug">{product.title}</p>
+        <div className="flex items-center gap-1">
+          <span className="font-semibold text-base">${product.price.toFixed(2)}</span>
+          <span className="text-xs text-gray-400 line-through">
+            ${(product.price * (1 + product.discountPercentage / 100)).toFixed(2)}
+          </span>
+        </div>
+      </div>
+
+      <button
+        onClick={handleAddToCart}
+        className="mt-3 bg-primary text-white rounded-md py-2 text-xs font-semibold hover:bg-primary/90 transition"
+      >
+        Add to Cart
+      </button>
     </div>
   );
 };
 
-export default WishlistCard;
+export default WishCard;

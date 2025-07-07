@@ -22,7 +22,7 @@ import { useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setCart, setWishlist } from "./features/cart/cartSlice.js";
 import OrderConfirmation from "./components/OrderConfirmation.jsx";
-import Orders from "./components/Orders.jsx";
+import Cart from "./components/Cart.jsx";
 
 function App() {
   const location = useLocation();
@@ -99,9 +99,9 @@ function App() {
 
   return (
     <>
-      <CartPage />
-      <div className="min-h-screen pt-[75px] bg-background">
-        {/* {isNavbarVisible && <Navbar />} */}
+      {/* <CartPage /> */}
+      <div className="min-h-screen pt-[87px] bg-background">
+        {isNavbarVisible && <Navbar />}
         <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
@@ -111,10 +111,10 @@ function App() {
           <Route path="/product" element={<ProductsList />} />
           <Route path="/orderConfirmation" element={<OrderConfirmation />} />
           <Route path="/product/:id" element={<ProductDetails />} />
-          <Route path="/:category" element={<CategoryPage />} />
+          <Route path="user/category/:category" element={<CategoryPage />} />
 
           <Route path="/user/enquiry" element={<EnquiryPage />} />
-          <Route path="/user/orders" element={<Orders />} />
+          <Route path="/user/cart" element={<Cart />} />
         </Routes>
         <Toaster
           position="bottom-right"

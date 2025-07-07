@@ -426,7 +426,7 @@ const Dashboard = () => {
                   </div>
                 ))}
               </div>
-              {sessionUser.address.length == 0 && (
+              {sessionUser?.address.length == 0 && (
                 <div className="text-center py-8 sm:py-12">
                   {/* Icon Container */}
                   <div className="w-16 h-16 sm:w-20 sm:h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
