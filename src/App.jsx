@@ -23,6 +23,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setCart, setWishlist } from "./features/cart/cartSlice.js";
 import OrderConfirmation from "./components/OrderConfirmation.jsx";
 import Cart from "./components/Cart.jsx";
+import { Footer } from "./components/Footer.jsx";
 
 function App() {
   const location = useLocation();
@@ -100,9 +101,9 @@ function App() {
   return (
     <>
       {/* <CartPage /> */}
-      <div className="min-h-screen pt-[87px] bg-background">
+      <div className=" bg-background pt-24">
         {isNavbarVisible && <Navbar />}
-        <Navbar />
+        {/* <Navbar /> */}
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/auth" element={<Auth />} />
@@ -116,6 +117,7 @@ function App() {
           <Route path="/user/enquiry" element={<EnquiryPage />} />
           <Route path="/user/cart" element={<Cart />} />
         </Routes>
+        <Footer />
         <Toaster
           position="bottom-right"
           reverseOrder={false}

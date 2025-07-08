@@ -68,24 +68,12 @@ const ProductsList = () => {
     { id: 15, slug: "sports-accessories", name: "Sports Accessories" },
   ];
 
-  const Tags = ({ name, id }) => {
-    return (
-      <span
-        className={`py-2 px-5 ${
-          tag === id ? "bg-secondary text-text" : "bg-text text-secondary"
-        } cursor-pointer rounded-full shadow-md hover:bg-secondary hover:text-text transition-all duration-300`}
-        onClick={() => setTag(id)}
-      >
-        {name}
-      </span>
-    );
-  };
 
   if (error)
     return <div className="text-center py-10 text-red-500">Error: {error}</div>;
 
   return (
-    <main className="container mx-auto p-0 sm:p-4 relative">
+    <main className="container mx-auto  sm:p-4 relative">
       {/* Loader overlay */}
       {loading && (
         <div className="fixed inset-0 bg-background z-50 flex items-center justify-center">
@@ -97,15 +85,9 @@ const ProductsList = () => {
         </div>
       )}
 
-      <h2 className="text-4xl font-bold my-12 text-text px-3 sm:px-0">
+      <h2 className="text-4xl font-bold mt-24 mb-12 text-text px-3 sm:px-0">
         All Products
       </h2>
-
-      <div className="selectors flex gap-3 flex-wrap px-3 sm:px-0">
-        {tags.map((tagObj, index) => (
-          <Tags key={index} name={tagObj.name} id={tagObj.id} />
-        ))}
-      </div>
 
       <div
         className={`mt-8 px-2 sm:px-0 ${

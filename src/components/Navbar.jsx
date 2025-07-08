@@ -1,221 +1,106 @@
+import { ShoppingCart, User2, Menu, X } from "lucide-react";
 import React, { useEffect, useState } from "react";
-import {
-  Facebook,
-  Instagram,
-  Twitter,
-  Search,
-  ShoppingCart,
-  Menu,
-  X,
-  Home,
-  User2,
-  ShoppingBasket,
-  Phone,
-} from "lucide-react";
-import { useSelector, useDispatch } from "react-redux";
-import { toggleCart } from "../features/cart/cartSlice";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { Link, useLocation } from "react-router-dom";
 
 const Navbar = () => {
-  const cart = useSelector((state) => state.cart.cart);
   const session = useSelector((state) => state.cart.session);
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const { pathname } = useLocation();
-
+  const location = useLocation();
+  const isHome = location.pathname === "/";
+  const [scrolled, setScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState("");
-
-  const categories = [
-    { id: 1, slug: "beauty", name: "Beauty" },
-    { id: 2, slug: "fragrances", name: "Fragrances" },
-    { id: 3, slug: "furniture", name: "Furniture" },
-    { id: 4, slug: "groceries", name: "Groceries" },
-    { id: 5, slug: "home-decoration", name: "Home Decoration" },
-    { id: 6, slug: "kitchen-accessories", name: "Kitchen Accessories" },
-    { id: 7, slug: "laptops", name: "Laptops" },
-    { id: 8, slug: "mens-shirts", name: "Mens Shirts" },
-    { id: 9, slug: "mens-shoes", name: "Mens Shoes" },
-    { id: 10, slug: "mens-watches", name: "Mens Watches" },
-    { id: 11, slug: "mobile-accessories", name: "Mobile Accessories" },
-    { id: 12, slug: "motorcycle", name: "Motorcycle" },
-    { id: 13, slug: "skin-care", name: "Skin Care" },
-    { id: 14, slug: "smartphones", name: "Smartphones" },
-    { id: 15, slug: "sports-accessories", name: "Sports Accessories" },
-    { id: 16, slug: "sunglasses", name: "Sunglasses" },
-    { id: 17, slug: "tablets", name: "Tablets" },
-    { id: 18, slug: "tops", name: "Tops" },
-    { id: 19, slug: "vehicle", name: "Vehicle" },
-    { id: 20, slug: "womens-bags", name: "Womens Bags" },
-    { id: 21, slug: "womens-dresses", name: "Womens Dresses" },
-    { id: 22, slug: "womens-jewellery", name: "Womens Jewellery" },
-    { id: 23, slug: "womens-shoes", name: "Womens Shoes" },
-    { id: 24, slug: "womens-watches", name: "Womens Watches" },
-  ];
 
   useEffect(() => {
-    const pathParts = pathname.split("/");
-    const categorySlug = pathParts[1];
-    const exists = categories.some((c) => c.slug === categorySlug);
-    setSelectedCategory(exists ? categorySlug : "");
-  }, [pathname]);
+    const handleScroll = () => {
+      const heroHeight = document.querySelector("#hero")?.offsetHeight || 0;
+      setScrolled(window.scrollY > heroHeight);
+    };
+
+    if (isHome) {
+      window.addEventListener("scroll", handleScroll);
+    }
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [isHome]);
+
+  const bgClass = isHome && !scrolled ? "bg-transparent" : "bg-white shadow-md";
+  const textColorClass = isHome && !scrolled ? "text-white" : "text-primary";
+  const logoSrc = isHome && !scrolled ? "/white-logo.png" : "/golden-logo.png";
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
-  const handleCategoryChange = (e) => {
-    setSelectedCategory(e.target.value);
-    navigate(`/user/category/${e.target.value}`);
-  };
-
-  // useEffect(() => {
-  //   document.body.style.overflow = isMenuOpen ? "hidden" : "auto";
-  // }, [isMenuOpen]);
-
   return (
-    <nav
-      className={`bg-background text-text fixed top-2 sm:top-4 rounded-lg z-[50] w-[95%] sm:w-[90%] left-1/2 transform -translate-x-1/2 shadow-lg ${
-        !isMenuOpen ? "border" : "border-0"
-      } border-gray-300 px-4 py-3 flex items-center justify-between`}
-    >
-      <Menu
-        className="size-6 text-text cursor-pointer md:hidden"
-        onClick={toggleMenu}
-      />
-      <div className="flex items-center gap-4">
-        <Link to="/">
-          <img
-            src="https://i.ibb.co/6cJGsyM1/logo.png"
-            alt="logo"
-            className="w-28 sm:w-32"
-          />
-        </Link>
-        <div className="hidden sm:flex items-center gap-2 bg-secondary px-3 py-2 rounded-full">
-          <input
-            type="text"
-            placeholder="Search"
-            className="bg-transparent outline-none text-sm"
-          />
-          <Search className="text-text cursor-pointer" size={18} />
-        </div>
-      </div>
+    <div className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${bgClass}`}>
+      <div className={`flex items-center justify-between px-6 py-4 ${textColorClass}`}>
+        {/* Logo */}
+        <img src={logoSrc} className="w-32 h-auto" alt="Logo" />
 
-      <div className="hidden md:flex gap-6 items-center text-sm">
-        <Link to="/">Home</Link>
-        <Link to="/product">Products</Link>
-        <select
-          value={selectedCategory}
-          onChange={handleCategoryChange}
-          className="border border-gray-400 px-3 py-2 cursor-pointer rounded"
-        >
-          <option value="" disabled>
-            Category
-          </option>
-          {categories.map((cat) => (
-            <option key={cat.id} value={cat.slug}>
-              {cat.name}
-            </option>
-          ))}
-        </select>
-      </div>
+        {/* Desktop Navigation */}
+        <nav className="hidden md:flex items-center space-x-6 font-medium">
+          <Link to="/" className="hover:underline">Home</Link>
+          <Link to="/product" className="hover:underline">Product</Link>
+          <Link to="/about" className="hover:underline">About</Link>
+          <Link to="/contact" className="hover:underline">Contact</Link>
+        </nav>
 
-      <div className="flex items-center gap-4">
-        {!session ? (
-          <>
-            <Link to="/auth" className="text-blue-500 text-sm hover:underline">
+        {/* Desktop Session Links */}
+        <div className="hidden md:flex items-center space-x-4">
+          {!session ? (
+            <Link
+              to="/auth"
+              className="btn bg-gradient-to-r from-primary to-primary/80 hover:from-primary/80 hover:to-primary/90 hover:-translate-y-0.5 transition-all cursor-pointer shadow-md text-sm sm:text-base text-white font-medium px-4 py-1 rounded-lg flex items-center gap-2"
+            >
               Login
             </Link>
-            <Link to="/auth" className="text-blue-500 text-sm hover:underline">
-              Signup
-            </Link>
-          </>
-        ) : (
-          <Link to="/dashboard">
-            <img
-              src={session.avatar}
-              alt="avatar"
-              className="size-9 rounded-full bg-primary p-[1px] border border-primary object-cover"
-            />
-          </Link>
-        )}
-        <Link to={"/user/cart"} className="relative mr-2 cursor-pointer">
-          <ShoppingCart className="w-6 h-6" />
-          <span className="absolute -top-1 -right-2 text-xs bg-primary font-bold text-text w-5 h-5 rounded-full flex items-center justify-center">
-            {cart.length}
-          </span>
-        </Link>
-      </div>
-
-      {isMenuOpen && (
-        <div className="fixed top-0 left-0 z-50 w-full rounded-lg border bg-background text-text px-4 py-3 flex flex-col gap-5 transition-all md:hidden">
-          <div className="flex justify-between items-center border-b pb-3 bg-transparent">
-            <img
-              src="https://i.ibb.co/6cJGsyM1/logo.png"
-              alt="logo"
-              className="w-28"
-            />
-            <X className="cursor-pointer" onClick={toggleMenu} />
-          </div>
-          <input
-            type="text"
-            placeholder="Search..."
-            className="border px-3 py-2 rounded"
-          />
-          <Link
-            to="/"
-            className="flex gap-3 font-light text-lg items-center"
-            onClick={toggleMenu}
-          >
-            <Home className="size-7 " strokeWidth={1} /> Home
-          </Link>
-          <Link
-            to="/dashboard"
-            className="flex gap-3 font-light text-lg items-center"
-            onClick={toggleMenu}
-          >
-            <User2 className="size-7 " strokeWidth={1} /> Profile
-          </Link>
-          <Link
-            to="/product"
-            className="flex gap-3 font-light text-lg items-center"
-            onClick={toggleMenu}
-          >
-            <ShoppingBasket className="size-7 " strokeWidth={1} /> Products
-          </Link>
-          <Link
-            to="/user/cart"
-            className="flex gap-3 font-light text-lg items-center"
-            onClick={toggleMenu}
-          >
-            <ShoppingCart className="size-7 " strokeWidth={1} /> Cart
-          </Link>
-          <Link
-            to="/user/enquiry"
-            className="flex gap-3 font-light text-lg items-center"
-            onClick={toggleMenu}
-          >
-            <Phone className="size-7 " strokeWidth={1} /> Enquiry
-          </Link>
-          <select
-            value={selectedCategory}
-            onChange={handleCategoryChange}
-            className="border px-3 py-2 rounded"
-          >
-            <option value="" disabled>
-              Category
-            </option>
-            {categories.map((cat) => (
-              <option
-                key={cat.id}
-                onClick={() => setIsMenuOpen(false)}
-                value={cat.slug}
-              >
-                {cat.name}
-              </option>
-            ))}
-          </select>
+          ) : (
+            <>
+              <Link to="/dashboard" className="hover:underline">
+                <User2 strokeWidth={1.5} />
+              </Link>
+              <Link to="/user/cart" className="hover:underline">
+                <ShoppingCart strokeWidth={1.5} />
+              </Link>
+            </>
+          )}
         </div>
-      )}
-    </nav>
+
+        {/* Mobile Hamburger Icon */}
+        <button onClick={toggleMenu} className="md:hidden z-50">
+          {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
+        </button>
+
+        {/* Mobile Dropdown Menu */}
+        {isMenuOpen && (
+          <div className={`absolute top-full left-0 w-full px-6 py-4 bg-white shadow-lg ${isHome && !scrolled ? "text-primary" : "text-primary"} md:hidden`}>
+            <div className="flex flex-col gap-4 font-medium">
+              <Link to="/" onClick={toggleMenu} className="hover:underline">Home</Link>
+              <Link to="/about" onClick={toggleMenu} className="hover:underline">About</Link>
+              <Link to="/contact" onClick={toggleMenu} className="hover:underline">Contact</Link>
+              <Link to="/cart" onClick={toggleMenu} className="hover:underline">Cart</Link>
+
+              {!session ? (
+                <Link
+                  to="/auth"
+                  onClick={toggleMenu}
+                  className="bg-primary text-white px-4 py-2 rounded-lg text-center font-semibold"
+                >
+                  Login
+                </Link>
+              ) : (
+                <>
+                  <Link to="/dashboard" onClick={toggleMenu} className="hover:underline flex items-center gap-2">
+                    <User2 strokeWidth={1.5} /> Dashboard
+                  </Link>
+                  <Link to="/user/cart" onClick={toggleMenu} className="hover:underline flex items-center gap-2">
+                    <ShoppingCart strokeWidth={1.5} /> Cart
+                  </Link>
+                </>
+              )}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
   );
 };
 

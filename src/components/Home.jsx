@@ -1,9 +1,20 @@
-import React from 'react'
+import React from 'react';
+import {HeroSection} from './home/componentes/HeroBanner';
+import {Featured} from './home/componentes/Featured';
+import {GiftCategories} from './home/componentes/GiftCategories';
+import {Testimonials} from './home/componentes/Testimonials';
 
-const Home = () => {
+export default function Home() {
   return (
-    <div>Home</div>
-  )
+    <>
+      {/* <Navbar /> */}
+      <HeroSection />
+      <Featured />
+      <GiftCategories />
+      <Testimonials />
+      {/* <HeroBanner /> */}
+      {/* <CompanyIntro /> */}
+      {/* <FeaturedProducts /> */}
+    </>
+  );
 }
-
-export default Home

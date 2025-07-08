@@ -74,17 +74,17 @@ const Auth = () => {
   return (
     <main className="bg-[url('/bgs/gpt.png')]  bg-cover bg-center bg-no-repeat h-screen w-screen flex items-center justify-center">
       <div className="h-full sm:h-[90%] w-full sm:w-[95%] max-w-6xl  shadow-xl rounded-xl overflow-hidden grid grid-cols-1 md:grid-cols-2">
-        {/* <span
+        <span
           className="fixed top-5 left-5 cursor-pointer z-10"
           onClick={() => (step === 1 ? navigate("/") : setStep(1))}
         >
           <ArrowLeftCircle className="size-10 sm:size-8" strokeWidth={1} />
-        </span> */}
+        </span>
 
         {/* Left or Right: Login or Signup */}
         {step === 1 ? (
           <>
-            <div className="flex flex-col justify-center px-8 py-12 md:px-12 backdrop-blur-lg overflow-y-auto">
+            <div className="flex flex-col justify-center px-8 py-12 md:px-12 backdrop-blur-sm overflow-y-auto">
               <form onSubmit={handleLogin} className="space-y-6">
                 <h1 className="text-3xl flex flex-col items-start font-bold mb-6 ">
                   <span>Welcome back to </span>

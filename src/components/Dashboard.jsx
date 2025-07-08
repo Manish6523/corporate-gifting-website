@@ -118,10 +118,10 @@ const Dashboard = () => {
 
   return (
     <>
-      <main className="container mx-auto p-4 md:p-8 text-text">
+      <main className="container mx-auto p-1 sm:p-4 md:p-8  text-text">
         <header>
           <h1 className="text-3xl font-bold mb-4 flex items-center gap-3">
-            <User2 strokeWidth={0.5} size={50} fill="#4d7416" /> My Profile
+            <User2 strokeWidth={0.5} size={50} fill="#996f04" /> My Profile
           </h1>
           <div className="flex justify-between items-center p-4 bg-accent/20 rounded-lg shadow-lg">
             <div className="content flex items-center gap-5">
@@ -137,7 +137,7 @@ const Dashboard = () => {
                 <p className="text-xs sm:text-sm text-gray-600">{user.email}</p>
               </div>
             </div>
-            <button onClick={()=>Logout(navigate, dispatch)} className="btn bg-gradient-to-r from-primary to-primary/80  hover:from-primary/80 hover:to-primary/90 hover:-translate-y-0.5 transition-all cursor-pointer shadow-md text-sm sm:text-base text-white font-medium px-4 py-2 rounded-lg flex items-center  gap-2">
+            <button onClick={()=>Logout(navigate, dispatch)} className="btn bg-gradient-to-r from-primary to-primary/80  hover:from-primary/80 hover:to-primary/90 hover:-translate-y-0.5 transition-all cursor-pointer shadow-md text-sm sm:text-base text-white font-medium px-4 py-2 rounded-lg flex items-center gap-2">
               <LogOutIcon size={17} />
               Log out
             </button>
@@ -469,7 +469,7 @@ const Dashboard = () => {
                   <Plus size={18} /> Add more
                 </button>
               </div>
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4">
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-1 md:gap-2 sm:gap-4">
                 {wishlist.length > 0
                   ? wishlist.map((item, index) => (
                       <ProductCard key={index} product={item} />
