@@ -6,14 +6,14 @@ import { Link, useLocation } from "react-router-dom";
 const Navbar = () => {
   const session = useSelector((state) => state.cart.session);
   const location = useLocation();
-  const isHome = location.pathname === "/";
+  const isHome = true;
   const [scrolled, setScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
       const heroHeight = document.querySelector("#hero")?.offsetHeight || 0;
-      setScrolled(window.scrollY > heroHeight);
+      setScrolled(window.scrollY > 10);
     };
 
     if (isHome) {
@@ -31,7 +31,7 @@ const Navbar = () => {
 
   return (
     <div className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${bgClass}`}>
-      <div className={`flex items-center justify-between px-6 py-4 ${textColorClass}`}>
+      <div className={`flex items-center justify-between px-6 transition-all ${scrolled? 'py-3': 'py-4'} ${textColorClass}`}>
         {/* Logo */}
         <img src={logoSrc} className="w-32 h-auto" alt="Logo" />
 
