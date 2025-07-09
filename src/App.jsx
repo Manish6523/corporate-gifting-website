@@ -9,7 +9,7 @@ import EnquiryPage from "./components/EnquiryPage.jsx";
 import Auth from "./components/Auth.jsx";
 import Dashboard from "./components/Dashboard.jsx";
 import CategoryPage from "./components/CategoryPage.jsx";
-
+import AboutUs from "./components/AboutUs.jsx";
 import {
   fetchCartFromSupaBase,
   fetchWishListFromSupaBase,
@@ -107,6 +107,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/about" element={<AboutUs />} />
 
           <Route path="/product" element={<ProductsList />} />
           <Route path="/orderConfirmation" element={<OrderConfirmation />} />
