@@ -48,7 +48,7 @@ export const GiftCategories = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
           {giftCategories.map((category, index) => {
             const discountPercent = Math.round(
               ((category.price - category.discountPrice) / category.price) * 100
@@ -78,7 +78,8 @@ export const GiftCategories = () => {
 
                 {/* Content */}
                 <div className="p-4">
-                  <h3 className="font-semibold text-lg mb-1">{category.title}</h3>
+                  <h3 className="md:hidden font-semibold text-lg mb-1">{(category.title.length>12)?category.title.slice(0,12)+"..." : category.title}</h3>
+                  <h3 className="md:block hidden font-semibold text-lg mb-1">{category.title}</h3>
 
                   {/* Rating */}
                   <div className="flex items-center gap-1 mb-2">

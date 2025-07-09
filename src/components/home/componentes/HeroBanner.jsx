@@ -3,9 +3,9 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, HeartHandshake } from "lucide-react";
-// import { Glow } from "./Glow";
-import { Mockup } from "./Mockup";
 import { Link } from "react-router";
+import Buttons from "../../Buttons";
+
 
 export const HeroSection = () => {
   return (
@@ -50,12 +50,21 @@ export const HeroSection = () => {
           transition={{ duration: 0.6, delay: 0.4 }}
           className="mt-8 flex justify-center gap-4 flex-wrap"
         >
-          <Link to={"/product"} className="bg-primary cursor-pointer text-white px-6 py-2 rounded-md font-semibold hover:bg-primary/80 transition flex items-center">
+          {/* <Link to={"/product"} className="bg-primary cursor-pointer text-white px-6 py-2 rounded-md font-semibold hover:bg-primary/80 transition flex items-center">
             Browse Gifts <ArrowRight className="ml-2 h-4 w-4" />
-          </Link>
-          <button className="border border-white px-6 py-2 rounded-md hover:bg-white hover:text-primary font-semibold transition flex items-center">
+          </Link> */}
+
+         <Buttons text={" Browse Gifts"} view={"block"}/>
+          
+          {/* <Link to={"/contact"} className="border border-white px-6 py-2 rounded-md hover:bg-white hover:text-primary font-semibold transition flex items-center">
             <HeartHandshake className="mr-2 h-4 w-4" /> Contact Now
-          </button>
+          </Link> */}
+          <Link className="relative text-white font-bold py-2 px-6 border-2 border-white overflow-hidden group rounded-lg">
+              <span className="relative z-10 group-hover:text-primary flex items-center">
+                <HeartHandshake className="mr-2 h-4 w-4" /> Contact Now 
+              </span>
+              <span className="absolute inset-0 bg-white scale-x-0   group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
+            </Link>
         </motion.div>
 {/*  
         <motion.div
