@@ -1,30 +1,39 @@
-// File: src/components/GiftCategories.jsx
 import React from "react";
+import { Heart, Star } from "lucide-react";
+import { Link } from "react-router";
 
 const giftCategories = [
   {
     title: "Executive Gifts",
     description: "Premium items for C-suite and VIP clients",
     image: "https://images.unsplash.com/photo-1549298916-b41d501d3772?w=400&h=300&fit=crop",
-    price: "From $50",
+    price: 200,
+    discountPrice: 176,
+    rating: 4.7,
   },
   {
     title: "Employee Welcome Kits",
     description: "Onboarding packages for new team members",
-    image: "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=400&h=300&fit=crop",
-    price: "From $25",
+    image: "https://i.ibb.co/GQ7JmJMy/asset-9.jpg",
+    price: 100,
+    discountPrice: 88,
+    rating: 4.5,
   },
   {
     title: "Holiday Collections",
     description: "Seasonal gifts for special occasions",
-    image: "https://images.unsplash.com/photo-1512909006721-3d6018887943?w=400&h=300&fit=crop",
-    price: "From $15",
+    image: "https://i.ibb.co/ycPpRb5K/asset-18.jpg",
+    price: 80,
+    discountPrice: 70,
+    rating: 4.6,
   },
   {
     title: "Tech Accessories",
     description: "Modern gadgets and accessories",
     image: "https://images.unsplash.com/photo-1468495244123-6c6c332eeece?w=400&h=300&fit=crop",
-    price: "From $30",
+    price: 150,
+    discountPrice: 132,
+    rating: 4.8,
   },
 ];
 
@@ -40,29 +49,73 @@ export const GiftCategories = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {giftCategories.map((category, index) => (
-            <div
-              key={index}
-              className="group cursor-pointer bg-white rounded-lg overflow-hidden shadow hover:shadow-xl transition-all duration-300"
-            >
-              <div className="aspect-[4/3] overflow-hidden">
+          {giftCategories.map((category, index) => {
+            const discountPercent = Math.round(
+              ((category.price - category.discountPrice) / category.price) * 100
+            );
+
+            return (
+              <div
+                key={index}
+                className="bg-white rounded-md overflow-hidden shadow-md hover:shadow-lg hover:-translate-y-1  transition-all duration-300 relative group"
+              >
+                {/* Discount Badge */}
+                <div className="absolute top-2 -left-1 bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-r-lg z-10 font-semibold">
+                  {discountPercent}% OFF
+                </div>
+
+                {/* Wishlist Icon */}
+                <button className="absolute top-2 sm:top-3 right-2 cursor-pointer sm:right-3 z-10 p-1.5 sm:p-2 bg-white/80 backdrop-blur-sm rounded-full hover:bg-white transition-colors shadow-sm border border-gray-100">
+                  <Heart stroke="none" fill="gray"/>
+                </button>
+
+                {/* Product Image */}
                 <img
                   src={category.image}
                   alt={category.title}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
                 />
-              </div>
-              <div className="p-4">
-                <div className="flex items-start justify-between mb-2">
-                  <h3 className="font-semibold text-lg">{category.title}</h3>
-                  <span className="bg-yellow-100 w-[50%] text-yellow-800 px-2 py-1 text-sm rounded-full text-center">
-                    {category.price}
-                  </span>
+
+                {/* Content */}
+                <div className="p-4">
+                  <h3 className="font-semibold text-lg mb-1">{category.title}</h3>
+
+                  {/* Rating */}
+                  <div className="flex items-center gap-1 mb-2">
+                    {Array.from({ length: 5 }, (_, i) => (
+                      <Star
+                        key={i}
+                        className={`w-4 h-4 ${
+                          i < Math.round(category.rating) ? "fill-yellow-400 text-yellow-400" : "text-gray-300"
+                        }`}
+                      />
+                    ))}
+                    <span className="text-sm text-gray-600 ml-1">({category.rating})</span>
+                  </div>
+
+                  {/* Price Section */}
+                  <div className="mb-3">
+                    <span className="text-lg font-bold text-black mr-2">
+                      ${category.discountPrice}.00
+                    </span>
+                    <span className="text-gray-400 line-through text-sm">
+                      ${category.price}.00
+                    </span>
+                  </div>
+
+                  {/* Add to Cart Button */}
+                  <button className="w-full bg-[#996f04] hover:bg-[#a08a52] text-white font-medium py-2 px-4 rounded">
+                    Add to Cart
+                  </button>
+
+                  {/* Quick View */}
+                  <Link to="/product/id" className="text-center flex items-center justify-center text-[#ba8c16] mt-2 text-sm cursor-pointer hover:underline">
+                    Quick view
+                  </Link>
                 </div>
-                <p className="text-gray-600 text-sm">{category.description}</p>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>

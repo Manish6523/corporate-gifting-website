@@ -4,6 +4,7 @@ import {Featured} from './home/componentes/Featured';
 import {GiftCategories} from './home/componentes/GiftCategories';
 import {Testimonials} from './home/componentes/Testimonials';
 
+
 export default function Home() {
   return (
     <>

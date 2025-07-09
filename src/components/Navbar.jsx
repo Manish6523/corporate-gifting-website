@@ -25,7 +25,7 @@ const Navbar = () => {
 
   const bgClass = isHome && !scrolled ? "bg-transparent" : "bg-white shadow-md";
   const textColorClass = isHome && !scrolled ? "text-white" : "text-primary";
-  const logoSrc = isHome && !scrolled ? "/white-logo.png" : "/golden-logo.png";
+  const logoSrc = isHome && !scrolled ? "/white-logo.png" : "/mahendi-logo.png";
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 

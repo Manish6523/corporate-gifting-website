@@ -17,7 +17,7 @@ export const HeroSection = () => {
           alt="Background"
           className="w-full h-full object-cover opacity-40"
         />
-        <div className="absolute inset-0 bg-black opacity-30"></div>
+        <div className="absolute inset-0 bg-black opacity-40"></div>
       </div>
       
       <div className="max-w-5xl mx-auto text-center relative z-10">
@@ -57,7 +57,7 @@ export const HeroSection = () => {
             <HeartHandshake className="mr-2 h-4 w-4" /> Contact Now
           </button>
         </motion.div>
-{/* 
+{/*  
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
