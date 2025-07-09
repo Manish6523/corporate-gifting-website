@@ -57,9 +57,12 @@ const Navbar = () => {
               <Link to="/dashboard" className="hover:underline">
                 <User2 strokeWidth={1.5} />
               </Link>
-              <Link to="/user/cart" className="hover:underline">
+             <Link to="/user/cart" className="hover:underline relative">
+                <span className="absolute -top-1 -right-1 bg-primary text-white text-xs font-semibold rounded-full px-1">
+                  {useSelector((state) => state.cart.cart.length)}
+                </span>
                 <ShoppingCart strokeWidth={1.5} />
-              </Link>
+              </Link>
             </>
           )}
         </div>
