@@ -56,7 +56,7 @@ const ProductCard = ({ product, onImageLoad }) => {
             onLoad={onImageLoad}
             className="aspect-square bg-secondary/50 hover:bg-accent/50 transition-all w-full object-cover"
           />
-          <div className="absolute text-sm sm:text-md top-0 left-0 bg-primary text-text font-medium px-2 sm:pl-6 py-1 flex items-center gap-1">
+          <div className="absolute text-sm sm:text-md top-0 left-0 bg-primary text-white font-medium px-2 sm:pl-6 py-1 flex items-center gap-1">
             {product.discountPercentage}% OFF
           </div>
         </Link>
@@ -73,6 +73,7 @@ const ProductCard = ({ product, onImageLoad }) => {
                 }}
                 alt={`image-${index + 1}`}
                 draggable="false"
+                onLoad={onImageLoad}
                 className={`size-14 object-cover rounded-md sm:rounded-lg border ${
                   activeImageIndex == index || activeImage === image
                     ? "border-primary"

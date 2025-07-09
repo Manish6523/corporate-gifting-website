@@ -5,7 +5,6 @@ import ProductsList from "./components/ProductList.jsx";
 import { Toaster } from "react-hot-toast";
 import ProductDetails from "./components/ProductDetails.jsx";
 import Home from "./components/Home.jsx";
-import CartPage from "./components/CartPage.jsx";
 import EnquiryPage from "./components/EnquiryPage.jsx";
 import Auth from "./components/Auth.jsx";
 import Dashboard from "./components/Dashboard.jsx";
@@ -101,7 +100,7 @@ function App() {
   return (
     <>
       {/* <CartPage /> */}
-      <div className=" bg-background pt-24">
+      <div className=" bg-background">
         {isNavbarVisible && <Navbar />}
         {/* <Navbar /> */}
         <Routes>

@@ -118,8 +118,8 @@ const Dashboard = () => {
 
   return (
     <>
-      <main className="container mx-auto p-1 sm:p-4 md:p-8  text-text">
-        <header>
+      <main className="container mx-auto p-1 sm:p-4 md:p-8   text-text">
+        <header className="mt-24">
           <h1 className="text-3xl font-bold mb-4 flex items-center gap-3">
             <User2 strokeWidth={0.5} size={50} fill="#996f04" /> My Profile
           </h1>
