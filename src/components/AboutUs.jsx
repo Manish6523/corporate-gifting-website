@@ -3,66 +3,66 @@ import { motion, useInView } from "framer-motion";
 import { Link } from "react-router";
 import { ArrowRight, HeartHandshake } from "lucide-react";
 
-
 const AboutUs = () => {
   const sectionRef = useRef(null);
   const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
 
   return (
     <>
-    <section className="relative bg-black text-white py-55 px-4 overflow-hidden" id='hero'>
-      
-      <div className="absolute inset-0 z-0">
-        <img
-          src="https://i.ibb.co/5XtzvTm1/nina-mercado-Cnr-Du-Y0t-Frg-unsplash.jpg"
-          alt="Background"
-          className="w-full h-full object-cover opacity-40"
-        />
-        <div className="absolute inset-0 bg-black opacity-40"></div>
-      </div>
-      
-      <div className="max-w-5xl mx-auto text-center relative z-10">
-        <motion.h1
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="text-4xl md:text-6xl font-bold  flex flex-col gap-1"
-        >
-         <div className="text-white">
-            About Us 
+      <section
+        className="relative bg-black text-white py-55 px-4 overflow-hidden"
+        id="hero"
+      >
+        <div className="absolute inset-0 z-0">
+          <img
+            src="https://i.ibb.co/TBSXd7hQ/mia-golic-6-Jtu-Gv-Lzh20-unsplash-1.jpg"
+            alt="Background"
+            className="w-full h-full object-cover opacity-40"
+          />
+          <div className="absolute inset-0 bg-black opacity-40"></div>
         </div>
-       
-        </motion.h1>
 
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="mt-4 text-xl text-gray-300"
-        >
-          
-        </motion.p>
+        <div className="max-w-5xl mx-auto text-center relative z-10">
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="text-4xl md:text-5xl lg:text-6xl font-bold  flex flex-col gap-1"
+          >
+            <div className="text-primary">
+              About <span className="text-primary">Us</span>
+            </div>
+            <p className="mt-4 text-lg md:text-2xl text-gray-300 font-light">
+              At Legacy Gifts, we turn thoughtful ideas into memorable
+              experiences. Our mission is to help businesses build stronger
+              relationships through premium, customized gifting solutions that
+              reflect care, appreciation, and professionalism.             
+            </p>
+          </motion.h1>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          className="mt-8 flex justify-center gap-4 flex-wrap"
-        >
-         
-        </motion.div>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="mt-4 text-xl text-gray-300"
+          ></motion.p>
 
-       
-      </div>
-    </section>  
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            className="mt-8 flex justify-center gap-4 flex-wrap"
+          ></motion.div>
+        </div>
+      </section>
       {/* about us */}
       <section className="px-4 md:px-10 lg:px-20 xl:px-40 py-5 flex justify-center">
         <div className="w-full max-w-[1280px] flex flex-col items-center">
           {/* Hero Section */}
-          <div className="flex flex-col lg:flex-row w-full gap-10">
+          <div className="flex flex-col items-start lg:flex-row w-full gap-10">
             {/* Text Block with Animation */}
             <motion.div
-              className="flex flex-col justify-center items-start  h-auto lg:h-[500px] gap-5"
+              className="flex flex-col justify-center items-center md:items-start h-auto lg:h-[500px] gap-5"
               initial={{ opacity: 0, x: -50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
@@ -70,14 +70,14 @@ const AboutUs = () => {
               <h1 className="text-black text-3xl md:text-4xl font-semibold">
                 About Legacy Gifts
               </h1>
-              <p className="text-gray-600 max-w-[640px] mx-auto lg:mx-0">
+              <p className="text-gray-600 max-w-[640px] mx-auto lg:mx-0 text-base md:text-lg">
                 Established in 2021, Legacy Gifts is India's trusted corporate
                 gifting partner, delivering thoughtful, high-quality gifts that
                 make a lasting impression. We specialize in premium, customized
                 gifting solutions designed to strengthen professional
                 relationships and reflect your brand’s values.
               </p>
-              <p className="text-gray-600 max-w-[640px] mx-auto lg:mx-0 text-sm md:text-base">
+              <p className="text-gray-600 max-w-[640px] mx-auto lg:mx-0 text-base md:text-lg">
                 From festive celebrations to employee milestones, we curate
                 gifts with care, style, and meaning. Our nationwide delivery,
                 personalized service, and commitment to excellence make us the
@@ -100,17 +100,16 @@ const AboutUs = () => {
         </div>
       </section>
 
-
       {/* about section */}
-      <section className="px-10 py-16 bg-[#fcefcd]">
+      <section className="px-10 py-16 bg-gradient-to-bl from-[#fff7e0] to-[#f5d58c]/10">
         <div className=" py-10 px-6 md:px-20">
           <div className="flex flex-col md:flex-row justify-between items-center max-w-7xl mx-auto gap-10">
             {/* Left Text */}
             <div className="md:w-1/2">
-              <h2 className="text-3xl font-semibold  text-black mb-3">
+              <h2 className="text-3xl md:text-4xl font-semibold  text-black mb-3">
                 Gifting That Reflects Your Brand
               </h2>
-              <p className="text-gray-600">
+              <p className="text-gray-600 text-base md:text-lg">
                 At Legacy Gifts, we believe that a gift is more than just a
                 gesture — it’s a reflection of your brand’s values. Our curated,
                 luxurious gift solutions create lasting impressions and
@@ -119,24 +118,28 @@ const AboutUs = () => {
             </div>
 
             {/* Right Stats */}
-            <div className="md:w-1/2 flex justify-around w-full text-center">
+            <div className="md:w-1/2 flex justify-around w-full text-center flex-wrap">
               <div>
-                <h3 className="text-[#996f04] text-2xl font-bold">1000+</h3>
-                <p className="text-gray-700 text-sm">Happy Clients</p>
+                <h3 className="text-[#996f04] text-3xl font-bold mb-2">1000+</h3>
+                <p className="text-gray-700">Happy Clients</p>
               </div>
               <div>
-                <h3 className="text-[#996f04] text-2xl font-bold">500+</h3>
-                <p className="text-gray-700 text-sm">Premium Products</p>
+                <h3 className="text-[#996f04] text-3xl font-bold mb-2">4.9</h3>
+                <p className="text-gray-700">Average Rating</p>
               </div>
               <div>
-                <h3 className="text-[#996f04] text-2xl font-bold">100+</h3>
-                <p className="text-gray-700 text-sm">Corporate Partners</p>
+                <h3 className="text-[#996f04] text-3xl font-bold mb-2">500+</h3>
+                <p className="text-gray-700">Premium Products</p>
               </div>
+              <div>
+                <h3 className="text-[#996f04] text-3xl font-bold mb-2">100+</h3>
+                <p className="text-gray-700">Corporate Partners</p>
+              </div>
+              
             </div>
           </div>
         </div>
       </section>
-      
 
       {/* about Enquirey */}
       <section
@@ -165,7 +168,7 @@ const AboutUs = () => {
             <h1 className="text-black text-3xl md:text-4xl font-semibold">
               About our products
             </h1>
-            <p className="text-gray-600 max-w-[640px] text-sm md:text-base">
+            <p className="text-gray-600 max-w-[640px] text-base md:text-lg">
               We offer a wide range of high-end products that are both
               impressive and practical — each one carefully selected to reflect
               sophistication, gratitude, and professionalism. From elegant gift
@@ -201,7 +204,4 @@ const AboutUs = () => {
   );
 };
 
-
-
 export default AboutUs;
-

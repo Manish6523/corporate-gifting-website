@@ -22,13 +22,12 @@
   --color-primary: #4d7416;
   --color-secondary: #bbf36d;
   --color-accent: #8cf000; */
-  
+
   /* --color-text: #e8ede8;  */
   /* --color-background: #070907;  */
   /* --color-primary: #b2c2b1;  */
   /* --color-secondary: #4a5760;  */
   /* --color-accent: #727492;  */
-
 
   /* --color-text: #ede6ed; */
   /* --color-background: #0a070a; */
@@ -48,10 +47,25 @@
   /* --color-secondary: #93d395; */
   /* --color-accent: #77ce79; */
 
-  --color-text: #000000;  
+  --color-text: #000000;
   --color-background: #ffffff;
   --color-primary: #ba8c16;
   --color-secondary: #f5f5f5;
   --color-accent: #ffffff;
+}
 
+@keyframes appear {
+  from {
+    opacity: 0.3;
+    scale: 0.85;
+  }
+  to {
+    opacity: 1;
+    scale: 1;
+  }
+}
+section {
+  animation: appear linear;
+  animation-timeline: view();
+  animation-range: entry 0% cover 40%;
 }

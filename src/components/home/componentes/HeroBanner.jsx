@@ -59,8 +59,8 @@ export const HeroSection = () => {
           {/* <Link to={"/contact"} className="border border-white px-6 py-2 rounded-md hover:bg-white hover:text-primary font-semibold transition flex items-center">
             <HeartHandshake className="mr-2 h-4 w-4" /> Contact Now
           </Link> */}
-          <Link className="relative text-white font-bold py-2 px-6 border-2 border-white overflow-hidden group rounded-lg">
-              <span className="relative z-10 group-hover:text-primary flex items-center">
+          <Link className="relative text-white font-bold py-2 px-6 border-2 border-white  overflow-hidden group rounded-lg">
+              <span className="relative z-10 group-hover:text-primary  flex items-center">
                 <HeartHandshake className="mr-2 h-4 w-4" /> Contact Now 
               </span>
               <span className="absolute inset-0 bg-white scale-x-0   group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>

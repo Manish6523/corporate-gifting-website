@@ -73,7 +73,7 @@ const ProductsList = () => {
       {(loading || !allImagesLoaded) && (
         <div className="fixed inset-0 bg-background z-50 flex items-center justify-center">
           <img
-            src="/logo.png"
+            src="/mahendi-logo.png"
             alt="Loading..."
             className="w-[130px] md:w-[300px] animate-fade-scale"
           />

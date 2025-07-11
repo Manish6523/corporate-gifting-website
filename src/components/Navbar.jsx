@@ -25,6 +25,7 @@ const Navbar = () => {
 
   const bgClass = isHome && !scrolled ? "bg-transparent" : "bg-white shadow-md";
   const textColorClass = isHome && !scrolled ? "text-white" : "text-primary";
+  const hoverColorClass = isHome && !scrolled ? "bg-white" : "bg-primary";
   const logoSrc = isHome && !scrolled ? "/white-logo.png" : "/mahendi-logo.png";
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
@@ -33,16 +34,29 @@ const Navbar = () => {
     <div className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${bgClass}`}>
       <div className={`flex items-center justify-between px-6 transition-all ${scrolled? 'py-3': 'py-4'} ${textColorClass}`}>
         {/* Logo */}
-        <img src={logoSrc} className="w-32 h-auto" alt="Logo" />
+        <img src={logoSrc} className="w-32 h-auto cursor-pointer" alt="Logo" />
 
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center space-x-6 font-medium">
-          <Link to="/" className="hover:underline">Home</Link>
-          <Link to="/product" className="hover:underline">Product</Link>
-          <Link to="/about" className="hover:underline">About</Link>
-          <Link to="/contact" className="hover:underline">Contact</Link>
+        <nav className="hidden md:flex items-center space-x-6 font-medium text-base lg:text-lg lg:space-x-8">
+          <Link to="/" className="relative  py-0  group">Home
+          <span className={`absolute left-0 bottom-0 w-0 h-[2px] ${hoverColorClass} transition-all duration-300 group-hover:w-full`}></span>
+          </Link>
+          <Link to="/product" className="relative  py-0  group">Product
+          <span className={`absolute left-0 bottom-0 w-0 h-[2px] ${hoverColorClass} transition-all duration-300 group-hover:w-full`}></span>
+          </Link>
+          <Link to="/about" className="relative  py-0  group">About
+          <span className={`absolute left-0 bottom-0 w-0 h-[2px] ${hoverColorClass} transition-all duration-300 group-hover:w-full`}></span>
+          </Link>
+          <Link to="/contact" className="relative  py-0  group">Contact
+          <span className={`absolute left-0 bottom-0 w-0 h-[2px] ${hoverColorClass} transition-all duration-300 group-hover:w-full`}></span>
+          </Link>
+          {/* <Link to="/contact" className="hover:underline">Contact</Link> */}
         </nav>
-
+        {/* <button className="relative text-[#bc8f14] font-bold py-2 px-6 group">
+  Enquiry Now
+  <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-[#bc8f14] transition-all duration-300 group-hover:w-full"></span>
+</button> */}
+      
         {/* Desktop Session Links */}
         <div className="hidden md:flex items-center space-x-4">
           {!session ? (
@@ -80,7 +94,7 @@ const Navbar = () => {
               <Link to="/about" onClick={toggleMenu} className="hover:underline">About</Link>
               <Link to="/contact" onClick={toggleMenu} className="hover:underline">Contact</Link>
               <Link to="/cart" onClick={toggleMenu} className="hover:underline">Cart</Link>
-
+              
               {!session ? (
                 <Link
                   to="/auth"
@@ -104,7 +118,9 @@ const Navbar = () => {
         )}
       </div>
     </div>
+    
   );
 };
+
 
 export default Navbar;
