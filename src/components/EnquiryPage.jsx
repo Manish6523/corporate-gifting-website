@@ -105,7 +105,7 @@ const EnquiryPage = () => {
   }
 
   return (
-    <main className="min-h-[87vh] bg-background grid grid-cols-1 md:grid-cols-2 overflow-y-auto">
+    <main className="min-h-screen bg-background pt-18 grid grid-cols-1 md:grid-cols-2 overflow-y-auto">
       {/* Right: Your Estimate */}
    <div className="right p-5 md:p-0 order-1 md:order-2 mt-7 relative">
   <h1 className="w-full text-center text-3xl font-semibold mb-9 text-text">

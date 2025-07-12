@@ -56,7 +56,7 @@ const ProductCard2 = ({ product, onImageLoad }) => {
         {/* Like Button */}
         <button
           onClick={handleWishlistToggle}
-          className="absolute top-2 right-2 bg-white/90 backdrop-blur-sm p-1.5 rounded-full shadow hover:bg-white transition"
+          className="absolute top-2 right-2 cursor-pointer bg-white/90 backdrop-blur-sm p-1.5 rounded-full shadow hover:bg-white transition"
         >
           <Heart
             className={`size-5 transition-colors ${
@@ -99,10 +99,13 @@ const ProductCard2 = ({ product, onImageLoad }) => {
               ₹{product.price.toLocaleString("en-IN")}
             </span>
             <span className="text-sm line-through font-medium text-gray-400">
-              {/* show price whit added discount */}
-              ${product.price + (1+product.discountPercentage*100)}
+              ₹
+              {Math.round(
+                product.price / (1 - product.discountPercentage / 100)
+              ).toLocaleString("en-IN")}
             </span>
           </div>
+
           <button
             onClick={handleAddToCart}
             className="p-2 px-4 w-full md:w-fit cursor-pointer hover:bg-gradient-to-br bg-gradient-to-bl from-primary via-primary/80 to-primary rounded-md text-white transition duration-200 mt-3"
