@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { addToCart, addProductToWishList } from "../features/cart/cartSlice";
 import { toast } from "react-hot-toast";
+import { Link } from "react-router";
 
 const WishCard = ({ product }) => {
   const dispatch = useDispatch();
@@ -23,7 +24,7 @@ const WishCard = ({ product }) => {
 
   return (
     <div className="bg-white rounded-xl border border-gray-200 shadow-sm w-[160px] sm:w-[180px] shrink-0 p-2 flex flex-col justify-between hover:shadow-md transition-all">
-      <div className="relative">
+      <Link to={"/product/"+product.id} className="relative">
         <img
           src={product.thumbnail}
           alt={product.title}
@@ -39,7 +40,7 @@ const WishCard = ({ product }) => {
             fill={isWished ? "currentColor" : "none"}
           />
         </button>
-      </div>
+      </Link>
 
       <div className="mt-3 space-y-1 text-sm">
         <p className="font-medium line-clamp-2 leading-snug">{product.title}</p>

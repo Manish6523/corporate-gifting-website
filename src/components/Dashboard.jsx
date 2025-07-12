@@ -257,7 +257,7 @@ const Dashboard = () => {
                   ))}
                 </div>
                 {/* ---------- Table for md+ screens ---------- */}
-                <div className="hidden md:block overflow-x-auto rounded-xl border border-b-0 border-primary bg-secondary/30 overflow-hidden shadow-lg">
+                <div className="hidden md:block overflow-x-auto rounded-xl border border-b-0 border-primary bg-secondary/30 overflow-hidden shadow-md">
                   <table className="w-full text-white ">
                     <thead>
                       <tr className="bg-primary">

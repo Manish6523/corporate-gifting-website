@@ -35,7 +35,7 @@ const Cart = () => {
 
   if (cart.length === 0) {
     return (
-      <div className="min-h-[60vh]  flex flex-col items-center justify-center gap-4 text-center">
+      <div className="min-h-screen  flex flex-col items-center justify-center gap-4 text-center">
         <ShoppingCart size={48} className="text-primary" />
         <p className="text-lg font-semibold">Your cart is empty</p>
         <p className="text-sm text-gray-500">

@@ -58,18 +58,18 @@ const ProductDetails = () => {
     );
 
   return (
-    <main className="w-full h-full bg-background text-text">
+    <main className="w-full h-full bg-background text-text pt-20">
       <div className="sm:w-[85vw] md:w-[95vw] mx-auto p-4 min-h-screen">
         <div className="grid grid-cols-1 md:grid-cols-2 mt-10 gap-10">
           {/* Image Gallery */}
           <section className="flex flex-col-reverse lg:flex-row gap-4">
-            <div className="flex flex-col gap-2 items-center lg:w-auto w-full">
+            <div className="flex flex-row md:flex-col gap-2 items-center lg:w-auto w-full">
               {product.images.length > 1 &&
                 product.images.map((img, idx) => (
                   <div
                     key={idx}
                     onClick={() => setActiveImage(img)}
-                    className={`w-full md:w-28 h-28 border rounded cursor-pointer overflow-hidden ${
+                    className={`w-full md:w-28 md:h-28 border rounded cursor-pointer overflow-hidden ${
                       activeImage === img
                         ? "border-primary bg-primary/10"
                         : "border-secondary bg-secondary"
@@ -121,9 +121,9 @@ const ProductDetails = () => {
               {/* warranty, shipping, return */}
             </ul>
 
-            <div className="h-px bg-secondary my-7" />
+            {/* <div className="h-px bg-secondary my-7" /> */}
 
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-2 my-9">
               {["depth", "width", "height"].map((dim) => (
                 <button
                   key={dim}
@@ -136,7 +136,7 @@ const ProductDetails = () => {
               ))}
             </div>
 
-            <div className="h-px bg-secondary my-7" />
+            {/* <div className="h-px bg-secondary my-7" /> */}
 
             <div>
               <div className="text-xs  ">
