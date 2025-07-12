@@ -55,16 +55,16 @@ const Navbar = () => {
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center space-x-6 font-medium text-base lg:text-lg">
           <Link to="/" className="hover:underline flex items-center gap-2">
-            <Home size={18} /> Home
+             Home
           </Link>
           <Link to="/product" className="hover:underline flex items-center gap-2">
-            <Boxes size={18} /> Product
+             Product
           </Link>
           <Link to="/about" className="hover:underline flex items-center gap-2">
-            <Info size={18} /> About
+             About
           </Link>
           <Link to="/contact" className="hover:underline flex items-center gap-2">
-            <Phone size={18} /> Contact
+             Contact
           </Link>
         </nav>
 

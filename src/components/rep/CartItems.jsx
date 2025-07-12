@@ -3,84 +3,85 @@ import { ChevronRight, Minus, Plus, Trash2 } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addQuantityFromCartMenu,
-  toggleCart,
 } from "../../features/cart/cartSlice";
 import { Link } from "react-router-dom";
 
 const CartItems = ({ item }) => {
   const dispatch = useDispatch();
   const session = useSelector((state) => state.cart.session);
-
-  if (!session) return null;
-
   const [quantity, setQuantity] = useState(item.quantity);
 
   useEffect(() => {
     setQuantity(item.quantity);
   }, [item.quantity]);
 
+  if (!session) return null;
+
   const HandleAddQuantity = () => {
     setQuantity(quantity + 1);
     dispatch(addQuantityFromCartMenu({ ...item, control: "add" }));
   };
+
   const handleRemoveQuantity = () => {
     if (quantity > 1) {
       setQuantity(quantity - 1);
       dispatch(addQuantityFromCartMenu({ ...item, control: "remove" }));
     }
   };
+
   const handleDeleteProduct = () => {
     dispatch(addQuantityFromCartMenu({ ...item, control: "delete" }));
   };
 
   return (
-    <div className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-white rounded-xl shadow-sm gap-4 text-sm">
-      <div className="flex gap-4 items-start sm:items-center w-full sm:w-auto">
-        <Link to={"/product/" + item.id} className="flex-shrink-0">
+    <div className="flex flex-col sm:flex-row items-center justify-between p-4 bg-white rounded-xl shadow-md border border-gray-100 hover:shadow-lg transition-all duration-300">
+      {/* Product Info */}
+      <div className="flex items-start sm:items-center gap-4 w-full sm:w-auto">
+        <Link to={`/product/${item.id}`} className="flex-shrink-0">
           <img
             src={item.thumbnail}
-            alt="Product"
-            className="w-24 h-24 rounded-lg bg-secondary/80 hover:bg-secondary/90 transition-all object-cover"
+            alt={item.title}
+            className="w-24 h-24 object-cover rounded-lg border border-gray-200 hover:scale-105 transition-transform duration-300"
           />
         </Link>
         <div>
-          <p className="font-semibold text-base">{item.title}</p>
-          {/* <p className="text-sm text-gray-500">{product}</p> */}
-          <div className="flex items-center gap-2 mt-2">
-            {/* <span className="line-through text-gray-400 text-sm">
-                      ${item.title}
-                    </span> */}
-            <span className="text-text font-medium">${item?.price}</span>
-          </div>
+          <h4 className="font-semibold text-base">{item.title}</h4>
+          <p className="text-primary font-semibold mt-1">${item.price}</p>
         </div>
       </div>
 
-      <div className="flex justify-between items-center w-full sm:w-auto gap-4 flex-wrap">
+      {/* Actions */}
+      <div className="flex flex-col sm:flex-row items-center justify-between w-full sm:w-auto gap-4 mt-4 sm:mt-0">
+        {/* Quantity Controls */}
         <div className="flex items-center gap-2">
           <button
-            onClick={() => handleRemoveQuantity()}
-            className="p-1 rounded-full bg-gray-200 cursor-pointer hover:bg-gray-300"
+            onClick={handleRemoveQuantity}
+            className="w-8 h-8 flex cursor-pointer items-center justify-center rounded-full bg-gray-200 hover:bg-primary hover:text-white transition"
           >
             <Minus size={16} />
           </button>
           <span className="w-6 text-center">{quantity}</span>
           <button
-            onClick={() => HandleAddQuantity()}
-            className="p-1 rounded-full bg-gray-200 cursor-pointer hover:bg-gray-300"
+            onClick={HandleAddQuantity}
+            className="w-8 h-8 flex cursor-pointer items-center justify-center rounded-full bg-gray-200 hover:bg-primary hover:text-white transition"
           >
             <Plus size={16} />
           </button>
         </div>
-        <div className="flex gap-2">
+
+        {/* Delete + Link */}
+        <div className="flex items-center gap-3 text-gray-500">
           <button
-            onClick={() => handleDeleteProduct()}
-            className="text-gray-600 cursor-pointer hover:text-black"
+            onClick={handleDeleteProduct}
+            className="hover:text-primary transition cursor-pointer"
+            title="Remove from cart"
           >
-            <Trash2 size={16} />
+            <Trash2 size={18} />
           </button>
           <Link
-            to={"/product/" + item.id}
-            className="text-gray-600 hover:text-black"
+            to={`/product/${item.id}`}
+            className="hover:text-primary transition"
+            title="View product"
           >
             <ChevronRight strokeWidth={1.5} />
           </Link>

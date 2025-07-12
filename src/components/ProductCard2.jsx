@@ -67,7 +67,7 @@ const ProductCard2 = ({ product, onImageLoad }) => {
       </div>
 
       {/* Thumbnail Slider */}
-      {imagesArr.length > 1 && (
+      {(
         <div className="flex gap-2 px-2 pt-2 overflow-x-auto no-scrollbar">
           {imagesArr.map((image, index) => (
             <img
