@@ -53,19 +53,20 @@ const Navbar = () => {
         </Link>
 
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center space-x-6 font-medium text-base lg:text-lg">
-          <Link to="/" className="hover:underline flex items-center gap-2">
-             Home
+         <nav className="hidden md:flex items-center space-x-6 font-medium text-base lg:text-lg lg:space-x-8">
+          <Link to="/" className="relative  py-0  group">Home
+          <span className={`absolute left-0 bottom-0 w-0 h-[2px] ${hoverColorClass} transition-all duration-300 group-hover:w-full`}></span>
           </Link>
-          <Link to="/product" className="hover:underline flex items-center gap-2">
-             Product
+          <Link to="/product" className="relative  py-0  group">Product
+          <span className={`absolute left-0 bottom-0 w-0 h-[2px] ${hoverColorClass} transition-all duration-300 group-hover:w-full`}></span>
           </Link>
-          <Link to="/about" className="hover:underline flex items-center gap-2">
-             About
+          <Link to="/about" className="relative  py-0  group">About
+          <span className={`absolute left-0 bottom-0 w-0 h-[2px] ${hoverColorClass} transition-all duration-300 group-hover:w-full`}></span>
           </Link>
-          <Link to="/contact" className="hover:underline flex items-center gap-2">
-             Contact
+          <Link to="/contact" className="relative  py-0  group">Contact
+          <span className={`absolute left-0 bottom-0 w-0 h-[2px] ${hoverColorClass} transition-all duration-300 group-hover:w-full`}></span>
           </Link>
+          {/* <Link to="/contact" className="hover:underline">Contact</Link> */}
         </nav>
 
         {/* Desktop Session Actions */}
