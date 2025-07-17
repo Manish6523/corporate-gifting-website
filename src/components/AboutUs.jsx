@@ -93,7 +93,7 @@ const AboutUs = () => {
               transition={{ duration: 0.8 }}
               style={{
                 backgroundImage:
-                  "linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.4)), url('public/aboutus.jpeg')",
+                  "linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.4)), url('aboutus.jpeg')",
               }}
             ></motion.div>
           </div>
@@ -154,7 +154,7 @@ const AboutUs = () => {
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.8 }}
             style={{
-              backgroundImage: "url('public/aboutus2.jpeg')",
+              backgroundImage: "url('aboutus2.jpeg')",
             }}
           ></motion.div>
 
