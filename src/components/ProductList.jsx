@@ -35,7 +35,7 @@ const LIMIT = 8;
 
 const ProductList = () => {
   const [range, setRange] = useState([0, 10000]);
-  const [sortBy, setSortBy] = useState("Price: High to Low");
+  const [sortBy, setSortBy] = useState("Price: Low to High");
   const [category, setCategory] = useState("All");
   const [products, setProducts] = useState([]);
   const [page, setPage] = useState(1);

@@ -62,7 +62,7 @@ const ProductCard = ({ product, onImageLoad }) => {
         </Link>
 
         {imagesArr.length > 0 && (
-          <div className="px-2 flex gap-2 mt-3 overflow-x-auto no-scrollbar text-text">
+          <div className="px-2 hidden sm:flex gap-2 mt-3 overflow-x-auto no-scrollbar text-text">
             {imagesArr.slice(0, 5).map((image, index) => (
               <img
                 key={index}
@@ -83,39 +83,37 @@ const ProductCard = ({ product, onImageLoad }) => {
             ))}
           </div>
         )}
+        <div className="details my-2 sm:my-5">
+          <div className="title font-medium text-md sm:text-xl">
+            {product.title}
+          </div>
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+            <div className="tag text-xs font-medium bg-primary/90 w-fit px-2 py-[3px] rounded-full text-white">
+              {product.tags.split(", ")[0].toUpperCase()}
+            </div>
+            <div className="tag text-xs font-medium bg-yellow-100 mb-1 w-fit px-2 py-[3px] rounded-full text-yellow-600">
+              {product.rating} ★
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div>
-        <div className="p-2 sm:p-0">
-          <div className="details my-2 sm:my-5">
-            <div className="title font-medium text-md sm:text-xl">
-              {product.title}
-            </div>
-            <div className="flex items-center gap-2 sm:gap-3">
-              <div className="tag text-xs font-medium bg-primary/90 mb-1 w-fit px-2 py-[3px] rounded-full text-white">
-                {product.tags.split(", ")[0].toUpperCase()}
-              </div>
-              <div className="tag text-xs font-medium bg-yellow-100 mb-1 w-fit px-2 py-[3px] rounded-full text-yellow-600">
-                {product.rating} ★
-              </div>
-            </div>
+      <div className="p-2 sm:p-0">
+        <div className="price">
+          <div className="flex items-center gap-2 flex-wrap sm:gap-5">
+            <span className="text-lg font-bold">
+              ${product.price.toFixed(2)}
+            </span>
+            <span className="text-gray-500 line-through">
+              $
+              {(product.price * (1 + product.discountPercentage / 100)).toFixed(
+                2
+              )}
+            </span>
           </div>
+        </div>
 
-          <div className="price">
-            <div className="flex items-center gap-2 flex-wrap sm:gap-5">
-              <span className="text-lg font-bold">
-                ${product.price.toFixed(2)}
-              </span>
-              <span className="text-gray-500 line-through">
-                $
-                {(
-                  product.price *
-                  (1 + product.discountPercentage / 100)
-                ).toFixed(2)}
-              </span>
-            </div>
-          </div>
-
+        <div>
           <div className="button hidden sm:flex gap-0 sm:gap-3 mt-5">
             <button
               onClick={() => addtoCart()}

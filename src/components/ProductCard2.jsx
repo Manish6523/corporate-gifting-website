@@ -86,7 +86,10 @@ const ProductCard2 = ({ product, onImageLoad }) => {
 
       {/* Details */}
       <div className="p-3">
-        <Link to={`/product/${product.id}`} className="text-base sm:text-lg hover:underline font-semibold text-gray-800 line-clamp-1">
+        <Link
+          to={`/product/${product.id}`}
+          className="text-base sm:text-lg hover:underline font-semibold text-gray-800 line-clamp-1"
+        >
           {product.title}
         </Link>
         <p className="text-sm text-gray-600 mt-1 line-clamp-2">
@@ -97,13 +100,13 @@ const ProductCard2 = ({ product, onImageLoad }) => {
         <div className="flex flex-wrap items-center justify-between mt-3">
           <div className="flex items-center gap-2 flex-wrap">
             <span className="text-lg font-bold text-primary">
-              ₹{product.price.toLocaleString("en-IN")}
+              ${product.price.toLocaleString("en-IN")}
             </span>
             <span className="text-sm line-through font-medium text-gray-400">
-              ₹
+              $
               {Math.round(
                 product.price / (1 - product.discountPercentage / 100)
-              ).toLocaleString("en-IN")}
+              )}
             </span>
           </div>
 
