@@ -129,7 +129,7 @@ const ProductCard = ({ product, onImageLoad }) => {
                 <Heart
                   className="text-gray-400"
                   strokeWidth={0}
-                  fill={isProductInWishlist ? "#4d7416" : "gray"}
+                  fill={isProductInWishlist ? "#ba8c16" : "gray"}
                 />
               </div>
             </button>
@@ -147,7 +147,7 @@ const ProductCard = ({ product, onImageLoad }) => {
                 <Heart
                   className="text-primary"
                   strokeWidth={0}
-                  fill={isProductInWishlist ? "#4d7416" : "gray"}
+                  fill={isProductInWishlist ? "#ba8c16" : "gray"}
                 />
               </div>
             </button>

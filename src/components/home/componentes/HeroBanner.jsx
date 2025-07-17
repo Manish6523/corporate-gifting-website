@@ -9,7 +9,7 @@ import Buttons from "../../Buttons";
 
 export const HeroSection = () => {
   return (
-    <section className="relative bg-black text-white py-64 px-4 overflow-hidden min-h-screen" id='hero'>
+    <section className="relative bg-black text-white flex items-center justify-center px-4 overflow-hidden min-h-screen" id='hero'>
       
       <div className="absolute inset-0 z-0">
         <img

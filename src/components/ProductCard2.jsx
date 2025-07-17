@@ -41,13 +41,14 @@ const ProductCard2 = ({ product, onImageLoad }) => {
     <div className="w-full max-w-xs flex flex-col justify-between rounded-lg shadow-md overflow-hidden relative group bg-white transition-all duration-300 hover:shadow-xl sm:max-w-sm md:max-w-md">
       {/* Image Section */}
       <div className="relative">
-        <img
-          src={activeImage}
-          alt={product.name}
-          className="w-full h-52 object-contain rounded-t-lg bg-gradient-to-br from-primary/40 via-primary/20 to-primary/40 transition-transform duration-300 hover:scale-105 hover:brightness-95 border-b-2 border-primary"
-          onLoad={onImageLoad}
-        />
-
+        <Link to={`/product/${product.id}`} className="block">
+          <img
+            src={activeImage}
+            alt={product.name}
+            className="w-full h-52 object-contain rounded-t-lg bg-gradient-to-br from-primary/60 via-primary/20 to-primary/40 transition-transform duration-300 hover:scale-105 hover:brightness-95 border-b-2 border-primary"
+            onLoad={onImageLoad}
+          />
+        </Link>
         {/* Discount Tag */}
         <div className="absolute top-2 left-2 bg-gray-200 px-3 py-1 text-xs rounded font-medium text-gray-800">
           {product.discountPercentage}% OFF
@@ -67,7 +68,7 @@ const ProductCard2 = ({ product, onImageLoad }) => {
       </div>
 
       {/* Thumbnail Slider */}
-      {(
+      {
         <div className="flex gap-2 px-2 pt-2 overflow-x-auto no-scrollbar">
           {imagesArr.map((image, index) => (
             <img
@@ -81,20 +82,20 @@ const ProductCard2 = ({ product, onImageLoad }) => {
             />
           ))}
         </div>
-      )}
+      }
 
       {/* Details */}
       <div className="p-3">
-        <h3 className="text-base sm:text-lg font-semibold text-gray-800 line-clamp-1">
+        <Link to={`/product/${product.id}`} className="text-base sm:text-lg hover:underline font-semibold text-gray-800 line-clamp-1">
           {product.title}
-        </h3>
+        </Link>
         <p className="text-sm text-gray-600 mt-1 line-clamp-2">
           {product.description}
         </p>
 
         {/* Price and Add to Cart */}
         <div className="flex flex-wrap items-center justify-between mt-3">
-          <div className="flex flex-col">
+          <div className="flex items-center gap-2 flex-wrap">
             <span className="text-lg font-bold text-primary">
               ₹{product.price.toLocaleString("en-IN")}
             </span>
@@ -108,7 +109,7 @@ const ProductCard2 = ({ product, onImageLoad }) => {
 
           <button
             onClick={handleAddToCart}
-            className="p-2 px-4 w-full md:w-fit cursor-pointer hover:bg-gradient-to-br bg-gradient-to-bl from-primary via-primary/80 to-primary rounded-md text-white transition duration-200 mt-3"
+            className="p-2 px-4 w-full cursor-pointer hover:bg-gradient-to-br bg-gradient-to-bl from-primary via-primary/80 to-primary rounded-md text-white transition duration-200 mt-3"
           >
             Add to Cart
           </button>

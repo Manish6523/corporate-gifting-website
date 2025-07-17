@@ -465,9 +465,9 @@ const Dashboard = () => {
                   <Heart size={30} fill="red" strokeWidth={0} />
                   <span className="text-2xl font-bold">My Wishlist</span>
                 </div>
-                <button className="flex items-center gap-1">
+                <Link to={'/product'} className="flex items-center gap-1">
                   <Plus size={18} /> Add more
-                </button>
+                </Link>
               </div>
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-1 md:gap-2 sm:gap-4">
                 {wishlist.length > 0

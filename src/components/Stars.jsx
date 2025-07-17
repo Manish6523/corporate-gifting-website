@@ -21,11 +21,11 @@ const StarRating = ({ rating,text }) => {
 };
 
 const FullStar = ({text}) => (
-  <span className={`text-orange-500 ${text} font-bold`}>★</span>
+  <span className={`text-primary ${text} font-bold`}>★</span>
 );
 
 const HalfStar = ({text}) => (
-  <span className={`text-orange-500 ${text} font-bold`}>☆</span>
+  <span className={`text-primary ${text} font-bold`}>☆</span>
 );
 
 const EmptyStar = ({text}) => (

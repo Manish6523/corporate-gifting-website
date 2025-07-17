@@ -92,7 +92,7 @@ const Cart = () => {
                 <ShoppingCart size={25} />
               </div>
               Your Cart{" "}
-              <span className="text-gray-500 text-base">
+              <span className="hidden sm:flex text-gray-500 text-base">
                 ({cart.length} products)
               </span>
             </h2>

@@ -9,7 +9,6 @@ const categories = [
   "beauty",
   "fragrances",
   "furniture",
-  "groceries",
   "home-decoration",
   "kitchen-accessories",
   "laptops",
@@ -135,7 +134,7 @@ const ProductList = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-muted text-text">
       {/* Hero */}
-      <div className="relative w-full h-[400px] md:h-[600px] overflow-hidden">
+      <div className="relative w-full h-[400px] md:h-[550px] overflow-hidden">
         <motion.img
           initial={{ scale: 1.1 }}
           animate={{ scale: 1 }}
@@ -155,7 +154,7 @@ const ProductList = () => {
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-4xl md:text-6xl font-extrabold leading-tight drop-shadow-lg"
+            className="text-4xl md:text-6xl font-extrabold leading-tight drop-shadow-lg text-center"
           >
             Celebrate With Style 🎁
           </motion.h1>
@@ -189,9 +188,9 @@ const ProductList = () => {
       </div>
 
       {/* Main Content */}
-      <div className="grid grid-cols-1 md:grid-cols-[280px_1fr] gap-6 px-4 md:px-8 lg:px-12 py-4 md:py-12">
+      <div className="grid grid-cols-1 md:grid-cols-[280px_1fr] gap-6 px-2 md:px-8 lg:px-12 py-4 md:py-12">
         {/* Desktop Filters */}
-        <aside className="hidden md:block sticky top-20 h-fit bg-white/30 border border-white/10 backdrop-blur-md rounded-2xl shadow-lg p-6">
+        <aside className="hidden md:block sticky top-30 h-fit bg-white/30 border border-white/10 backdrop-blur-md rounded-2xl shadow-lg p-6">
           <FiltersPanel />
         </aside>
 
@@ -217,7 +216,7 @@ const ProductList = () => {
             <>
               <motion.div
                 layout
-                className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6"
+                className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-1 sm:gap-4"
               >
                 {products.map((product) => (
                   <motion.div
@@ -259,7 +258,7 @@ const ProductList = () => {
           >
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-lg font-semibold">Filters</h2>
-              <button onClick={() => setShowMobileFilters(false)}>
+              <button className="cursor-pointer" onClick={() => setShowMobileFilters(false)}>
                 <X className="w-6 h-6" />
               </button>
             </div>
