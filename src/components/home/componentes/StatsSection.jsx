@@ -9,7 +9,7 @@ export const StatsSection = () => {
                 <p className="text-gray-700">Happy Clients</p>
               </div>
               <div>
-                <h3 className="text-[#996f04] text-3xl md:tetx-4xl font-bold mb-2">4.9</h3>
+                <h3 className="text-[#996f04] text-3xl md:tetx-4xl font-bold mb-2">4.5+</h3>
                 <p className="text-gray-700">Average Rating</p>
               </div>
               <div>

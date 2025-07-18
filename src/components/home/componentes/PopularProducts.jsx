@@ -80,7 +80,7 @@ export const PopularProducts = () => {
                   <img
                     src={category.thumbnail}
                     alt={category.title}
-                    className="w-full h-48 object-cover bg-gradient-to-br from-primary/60 via-primary/20 to-primary/40 group-hover:scale-105 transition-transform duration-300"
+                    className="w-full h-48 object-contain bg-gradient-to-br from-primary/60 via-primary/20 to-primary/40 group-hover:scale-105 transition-transform duration-300"
                   />
                 </Link>
 
