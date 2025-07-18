@@ -30,7 +30,7 @@ const Cart = () => {
         transition={{ duration: 0.4 }}
       >
         <img
-          src="/logo.png"
+          src="/mahendi-logo.png"
           alt="Loading..."
           className="w-[130px] md:w-[200px]"
         />
