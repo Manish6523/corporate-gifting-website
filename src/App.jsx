@@ -10,6 +10,7 @@ import Auth from "./components/Auth.jsx";
 import Dashboard from "./components/Dashboard.jsx";
 import CategoryPage from "./components/CategoryPage.jsx";
 import AboutUs from "./components/AboutUs.jsx";
+import Contact from "./components/Contact.jsx";
 import {
   fetchCartFromSupaBase,
   fetchWishListFromSupaBase,
@@ -23,6 +24,7 @@ import { setCart, setWishlist } from "./features/cart/cartSlice.js";
 import OrderConfirmation from "./components/OrderConfirmation.jsx";
 import Cart from "./components/Cart.jsx";
 import { Footer } from "./components/Footer.jsx";
+import A from "./components/A.jsx";
 
 function App() {
   const location = useLocation();
@@ -108,6 +110,7 @@ function App() {
           <Route path="/auth" element={<Auth />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/about" element={<AboutUs />} />
+          <Route path="/contact" element={<Contact />} />
 
           <Route path="/product" element={<ProductsList />} />
 
@@ -118,6 +121,7 @@ function App() {
 
           <Route path="/user/enquiry" element={<EnquiryPage />} />
           <Route path="/user/cart" element={<Cart />} />
+          <Route path="/a" element={<A />} />
         </Routes>
         <Footer />
         <Toaster
