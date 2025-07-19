@@ -43,15 +43,15 @@ export const Testimonials = () => {
   }, []);
 
   return (
-    <section className="py-16 px-4 bg-gray-100">
-      <div className="max-w-4xl mx-auto text-center">
-        <h2 className="text-3xl md:text-4xl font-bold mb-4">What Our Clients Say</h2>
+    <section className="py-16 px-4 bg-white">
+      <div className="max-w-4xl mx-auto text-center group">
+        <h2 className="text-3xl md:text-4xl font-bold mb-4 text-primary">What Our <span className="text-[#5C4400]">Clients Say</span></h2>
         <p className="text-gray-600 text-lg mb-12">
           Trusted by companies worldwide for their corporate gifting needs
         </p>
         
-        <div className="bg-white p-8 rounded shadow">
-          <div className="flex justify-center mb-4">
+        <div className="bg-white p-8 rounded shadow-md group-hover:scale-103 transition-transform duration-300">
+          <div className="flex justify-center mb-4 ">
             {[...Array(testimonials[activeTestimonial].rating)].map((_, i) => (
               <Star key={i} className="h-5 w-5 fill-yellow-400 text-yellow-400" />
             ))}
@@ -74,7 +74,7 @@ export const Testimonials = () => {
             <button
               key={index}
               onClick={() => setActiveTestimonial(index)}
-              className={`w-3 h-3 rounded-full transition-colors ${index === activeTestimonial ? "bg-yellow-500" : "bg-gray-300"}`}
+              className={`w-3 h-3 rounded-full transition-colors cursor-pointer ${index === activeTestimonial ? "bg-yellow-500" : "bg-gray-300"}`}
             />
           ))}
         </div>

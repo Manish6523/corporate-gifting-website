@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { addToCart, addProductToWishList } from "../features/cart/cartSlice";
 import { toast } from "react-hot-toast";
+import { Link } from "react-router";
 
 const WishCard = ({ product }) => {
   const dispatch = useDispatch();
@@ -24,14 +25,17 @@ const WishCard = ({ product }) => {
   return (
     <div className="bg-white rounded-xl border border-gray-200 shadow-sm w-[160px] sm:w-[180px] shrink-0 p-2 flex flex-col justify-between hover:shadow-md transition-all">
       <div className="relative">
-        <img
-          src={product.thumbnail}
-          alt={product.title}
-          className="rounded-lg aspect-square object-cover w-full bg-gray-100"
-        />
+        <Link to={"/product/" + product.id} className="relative">
+          <img
+            src={product.thumbnail}
+            alt={product.title}
+            className="rounded-lg aspect-square object-cover w-full bg-gray-100"
+          />
+        </Link>
+
         <button
           onClick={toggleWishlist}
-          className="absolute top-2 right-2 cursor-pointer bg-white rounded-full p-[6px] shadow"
+          className="absolute top-2 right-2 z-10 cursor-pointer bg-white rounded-full p-[6px] shadow"
         >
           <Heart
             size={16}
@@ -44,9 +48,14 @@ const WishCard = ({ product }) => {
       <div className="mt-3 space-y-1 text-sm">
         <p className="font-medium line-clamp-2 leading-snug">{product.title}</p>
         <div className="flex items-center gap-1">
-          <span className="font-semibold text-base">${product.price.toFixed(2)}</span>
-          <span className="text-xs text-gray-400 line-through">
-            ${(product.price * (1 + product.discountPercentage / 100)).toFixed(2)}
+          <span className="font-bold text-primary">
+            ${product.price.toFixed(2)}
+          </span>
+          <span className="text-xs font-semibold text-gray-400 line-through">
+            $
+            {(product.price * (1 + product.discountPercentage / 100)).toFixed(
+              2
+            )}
           </span>
         </div>
       </div>

@@ -112,6 +112,8 @@ function App() {
           <Route path="/contact" element={<Contact />} />
 
           <Route path="/product" element={<ProductsList />} />
+
+          
           <Route path="/orderConfirmation" element={<OrderConfirmation />} />
           <Route path="/product/:id" element={<ProductDetails />} />
           <Route path="user/category/:category" element={<CategoryPage />} />

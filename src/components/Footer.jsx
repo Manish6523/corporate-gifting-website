@@ -3,11 +3,11 @@ import { Link } from "react-router";
 
 export const Footer = () => {
   return (
-    <footer className="bg-black text-white py-10 px-6 md:px-20">
+    <footer className="bg-[#333333] text-white py-10 px-6 md:px-20">
       <div className="max-w-screen-xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
         {/* Brand / About Section */}
         <div>
-          <h2 className="text-2xl font-bold text-[#ba8c16] mb-4">
+          <h2 className="text-2xl font-bold text-primary mb-4">
             Legacy Gifts
           </h2>
           <p className="text-base text-gray-300">
@@ -18,20 +18,20 @@ export const Footer = () => {
 
         {/* Quick Links */}
         <div>
-          <h3 className="text-xl font-semibold mb-4 text-[#ba8c16]">
+          <h3 className="text-xl font-semibold mb-4 text-primary">
             Quick Links
           </h3>
           <ul className="flex flex-col space-y-2 text-gray-300">
-            <Link to="/" className="hover:text-[#ba8c16] cursor-pointer transition-all">
+            <Link to="/" className="hover:text-primary cursor-pointer transition-all">
               Home
             </Link>
-            <Link to="/product" className="hover:text-[#ba8c16] cursor-pointer transition-all">
+            <Link to="/product" className="hover:text-primary cursor-pointer transition-all">
               Products
             </Link>
-            <Link to="/about" className="hover:text-[#ba8c16] cursor-pointer transition-all">
+            <Link to="/about" className="hover:text-primary cursor-pointer transition-all">
               About
             </Link>
-            <Link to="/contact" className="hover:text-[#ba8c16] cursor-pointer transition-all">
+            <Link to="/contact" className="hover:text-primary cursor-pointer transition-all">
               Contact
             </Link>
           </ul>

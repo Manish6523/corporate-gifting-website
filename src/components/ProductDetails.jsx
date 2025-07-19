@@ -36,6 +36,7 @@ const ProductDetails = () => {
         setStock(data.availabilityStatus === "In Stock");
         setQuantity(data.availabilityStatus === "In Stock" ? 1 : 0);
         setActiveImage(parsedImages[0] || data.thumbnail || null);
+        console.log(data);
       })
       .catch(console.error)
       .finally(() => setLoading(false));
@@ -58,18 +59,18 @@ const ProductDetails = () => {
     );
 
   return (
-    <main className="w-full h-full bg-background text-text">
+    <main className="w-full h-full bg-background text-text pt-10 sm:pt-20">
       <div className="sm:w-[85vw] md:w-[95vw] mx-auto p-4 min-h-screen">
         <div className="grid grid-cols-1 md:grid-cols-2 mt-10 gap-10">
           {/* Image Gallery */}
           <section className="flex flex-col-reverse lg:flex-row gap-4">
-            <div className="flex flex-col gap-2 items-center lg:w-auto w-full">
+            <div className="flex flex-row lg:flex-col gap-2 items-center lg:w-auto w-full">
               {product.images.length > 1 &&
                 product.images.map((img, idx) => (
                   <div
                     key={idx}
                     onClick={() => setActiveImage(img)}
-                    className={`w-full md:w-28 h-28 border rounded cursor-pointer overflow-hidden ${
+                    className={`w-full md:w-28 md:h-28 border rounded cursor-pointer overflow-hidden ${
                       activeImage === img
                         ? "border-primary bg-primary/10"
                         : "border-secondary bg-secondary"
@@ -98,7 +99,8 @@ const ProductDetails = () => {
           <section className="space-y-4">
             <div className="text-sm space-y-1  ">
               <div>
-                Brand: <span className="font-light">{product.brand || "N/A"}</span>
+                Brand:{" "}
+                <span className="font-light">{product.brand || "N/A"}</span>
               </div>
               <div>
                 Availability:{" "}
@@ -121,13 +123,13 @@ const ProductDetails = () => {
               {/* warranty, shipping, return */}
             </ul>
 
-            <div className="h-px bg-secondary my-7" />
+            {/* <div className="h-px bg-secondary my-7" /> */}
 
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-2 my-9">
               {["depth", "width", "height"].map((dim) => (
                 <button
                   key={dim}
-                  className="px-8 py-3 border border-primary text-primary hover:bg-primary hover:text-white rounded transition"
+                  className="px-8 py-3 border w-full sm:w-fit border-primary text-primary hover:bg-primary hover:text-white rounded transition"
                 >
                   {`${dim.charAt(0).toUpperCase() + dim.slice(1)}: ${
                     product[`dimensions_${dim}`]
@@ -136,15 +138,13 @@ const ProductDetails = () => {
               ))}
             </div>
 
-            <div className="h-px bg-secondary my-7" />
+            {/* <div className="h-px bg-secondary my-7" /> */}
 
             <div>
-              <div className="text-xs  ">
-                USD (incl. of all taxes):
-              </div>
+              <div className="text-xs  ">USD (incl. of all taxes):</div>
               <div className="flex items-center gap-3">
-                <span className="text-3xl text-text">${product.price}</span>
-                <span className="line-through   text-xl">
+                <span className="text-3xl font-bold text-primary">${product.price}</span>
+                <span className="line-through text-xl text-text/60">
                   $
                   {(
                     product.price *
@@ -163,23 +163,25 @@ const ProductDetails = () => {
                   stock={stock}
                   maximumstock={product.stock}
                 />
-                <Link
-                  to="/user/enquiry"
-                  className="px-8 py-2 border bg-primary text-white rounded text-center"
-                >
-                  Enquiry
-                </Link>
-                <button
-                  disabled={!stock}
-                  onClick={handleAddToCart}
-                  className={`px-6 py-2 border rounded ${
-                    stock
-                      ? "border-primary text-primary hover:bg-primary hover:text-white"
-                      : "bg-secondary   cursor-not-allowed"
-                  }`}
-                >
-                  {stock ? "Add to Cart" : "Out of Stock"}
-                </button>
+                <div className="btns w-full flex flex-wrap gap-4 items-center">
+                  <Link
+                    to="/user/enquiry"
+                    className="px-8 py-2 border w-full sm:w-fit bg-primary text-white rounded text-center"
+                  >
+                    Enquiry
+                  </Link>
+                  <button
+                    disabled={!stock}
+                    onClick={handleAddToCart}
+                    className={`px-6 py-2 w-full sm:w-fit border rounded transition ${
+                      stock
+                        ? "border-primary text-primary hover:bg-primary cursor-pointer hover:text-white"
+                        : "bg-secondary text-text border-secondary cursor-not-allowed"
+                    }`}
+                  >
+                    {stock ? "Add to Cart" : "Out of Stock"}
+                  </button>
+                </div>
               </div>
             </div>
           </section>
@@ -191,10 +193,10 @@ const ProductDetails = () => {
             {["Description", "Reviews"].map((tab, idx) => (
               <span
                 key={idx}
-                className={`p-3 cursor-pointer font-medium ${
+                className={`p-3 cursor-pointer font-medium transition-colors ${
                   activeTab === idx + 1
                     ? "border-b-2 border-primary text-primary"
-                    : " "
+                    : "text-text hover:text-primary"
                 }`}
                 onClick={() => setActiveTab(idx + 1)}
               >
@@ -237,7 +239,7 @@ const ProductDetails = () => {
                   </div>
                 ))
               ) : (
-                <p className="text-center  ">
+                <p className="text-center text-text/70">
                   No reviews yet for this product.
                 </p>
               )}

@@ -118,7 +118,7 @@ const Dashboard = () => {
 
   return (
     <>
-      <main className="container mx-auto p-1 sm:p-4 md:p-8   text-text">
+      <main className="container mx-auto p-1 sm:p-4 md:p-8 text-text">
         <header className="mt-24">
           <h1 className="text-3xl font-bold mb-4 flex items-center gap-3">
             <User2 strokeWidth={0.5} size={50} fill="#996f04" /> My Profile
@@ -144,7 +144,7 @@ const Dashboard = () => {
           </div>
         </header>
         <section className="mt-8">
-          <div className="bg-accent/20 px-4 md:px-12 py-4 rounded-lg shadow-lg">
+          <div className="bg-accent/20 px-2 md:px-12 py-4 rounded-lg shadow-lg">
             {/* ---------- heading ---------- */}
             {orders.length !== 0 && (
               <>
@@ -257,7 +257,7 @@ const Dashboard = () => {
                   ))}
                 </div>
                 {/* ---------- Table for md+ screens ---------- */}
-                <div className="hidden md:block overflow-x-auto rounded-xl border border-b-0 border-primary bg-secondary/30 overflow-hidden shadow-lg">
+                <div className="hidden md:block overflow-x-auto rounded-xl border border-b-0 border-primary bg-secondary/30 overflow-hidden shadow-md">
                   <table className="w-full text-white ">
                     <thead>
                       <tr className="bg-primary">
@@ -465,11 +465,11 @@ const Dashboard = () => {
                   <Heart size={30} fill="red" strokeWidth={0} />
                   <span className="text-2xl font-bold">My Wishlist</span>
                 </div>
-                <button className="flex items-center gap-1">
+                <Link to={'/product'} className="flex items-center gap-1">
                   <Plus size={18} /> Add more
-                </button>
+                </Link>
               </div>
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-1 md:gap-2 sm:gap-4">
+              <div className={`grid ${wishlist.length > 1 ? "grid-cols-2" : "grid-cols-1"} lg:grid-cols-4 gap-1 md:gap-2 sm:gap-4`}>
                 {wishlist.length > 0
                   ? wishlist.map((item, index) => (
                       <ProductCard key={index} product={item} />
