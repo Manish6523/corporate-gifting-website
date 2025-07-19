@@ -1,250 +1,311 @@
 import React, { useEffect, useState } from "react";
-import "./Spinner.css";
-import { Link, useNavigate, useParams } from "react-router";
-import { supabase } from "../../utils/supabase.js";
-import StarRating from "./Stars.jsx";
-import { Loader2 } from "lucide-react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { addToCart } from "../features/cart/cartSlice.js";
 import toast from "react-hot-toast";
+
+// --- UI & Icons ---
+import { Loader2, ShoppingCart, Info } from "lucide-react";
+import StarRating from "./Stars.jsx";
 import Counter from "./rep/Counter.jsx";
 
+// --- Redux ---
+import { addToCart } from "../features/cart/cartSlice.js";
+import { supabase } from "../../utils/supabase.js";
+
 const ProductDetails = () => {
+  const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const session = useSelector((state) => state.cart.session);
 
-  const [loading, setLoading] = useState(true);
+  // --- Component State ---
   const [product, setProduct] = useState(null);
-  const [quantity, setQuantity] = useState(0);
-  const [stock, setStock] = useState(false);
-  const [activeImage, setActiveImage] = useState(null);
-  const [activeTab, setActiveTab] = useState(1);
+  const [loading, setLoading] = useState(true);
+  const [quantity, setQuantity] = useState(1);
+  const [activeImage, setActiveImage] = useState("");
+  const [activeTab, setActiveTab] = useState("description");
 
-  const { id } = useParams();
-
+  // --- Data Fetching ---
   useEffect(() => {
-    supabase
-      .from("products")
-      .select("*")
-      .eq("id", id)
-      .single()
-      .then(({ data, error }) => {
+    const fetchProduct = async () => {
+      setLoading(true);
+      try {
+        const { data, error } = await supabase
+          .from("products")
+          .select("*")
+          .eq("id", id)
+          .single();
+
+          console.log("Fetched product data:", data);
+          
         if (error) throw error;
+
         const parsedImages = data.images?.split(", ") || [];
         setProduct({ ...data, images: parsedImages });
-        setStock(data.availabilityStatus === "In Stock");
-        setQuantity(data.availabilityStatus === "In Stock" ? 1 : 0);
-        setActiveImage(parsedImages[0] || data.thumbnail || null);
-        console.log(data);
-      })
-      .catch(console.error)
-      .finally(() => setLoading(false));
+        setActiveImage(parsedImages[0] || data.thumbnail);
+        if (data.availabilityStatus !== "In Stock") {
+          setQuantity(0);
+        }
+      } catch (error) {
+        console.error("Failed to fetch product:", error);
+        toast.error("Could not load product details.");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProduct();
   }, [id]);
 
+  // --- Event Handlers ---
   const handleAddToCart = () => {
     if (!session) {
-      toast.error("Please login to add products to cart.");
+      toast.error("Please login to add items to your cart.");
       navigate("/auth");
       return;
     }
-    dispatch(addToCart({ ...product, quantity }));
+    if (quantity > 0) {
+      dispatch(addToCart({ ...product, quantity }));
+      toast.success(`${product.title} added to cart!`);
+    }
   };
 
-  if (loading)
+  // --- Derived State ---
+  const isInStock = product?.availabilityStatus === "In Stock";
+  const originalPrice = (
+    product?.price * (1 + product?.discountPercentage / 100)
+  ).toFixed(2);
+
+  // --- Render Loading State ---
+  if (loading) {
     return (
-      <div className="h-[87vh] flex items-center justify-center bg-background">
-        <Loader2 className="animate-spin size-14 text-primary" />
+      <div className="flex items-center justify-center min-h-[80vh] bg-background">
+        <Loader2 className="size-12 animate-spin text-primary" />
       </div>
     );
+  }
 
+  // --- Render Error/Not Found State ---
+  if (!product) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[80vh] bg-background text-text gap-4">
+        <h2 className="text-2xl font-semibold">Product Not Found</h2>
+        <p className="text-text/70">
+          We couldn't find the product you're looking for.
+        </p>
+        <Link
+          to="/"
+          className="mt-4 px-6 py-2 bg-primary text-white rounded hover:bg-primary/90 transition-colors"
+        >
+          Go Home
+        </Link>
+      </div>
+    );
+  }
+
+  // --- Main Component Render ---
   return (
-    <main className="w-full h-full bg-background text-text pt-10 sm:pt-20">
-      <div className="sm:w-[85vw] md:w-[95vw] mx-auto p-4 min-h-screen">
-        <div className="grid grid-cols-1 md:grid-cols-2 mt-10 gap-10">
-          {/* Image Gallery */}
-          <section className="flex flex-col-reverse lg:flex-row gap-4">
-            <div className="flex flex-row lg:flex-col gap-2 items-center lg:w-auto w-full">
-              {product.images.length > 1 &&
-                product.images.map((img, idx) => (
-                  <div
-                    key={idx}
-                    onClick={() => setActiveImage(img)}
-                    className={`w-full md:w-28 md:h-28 border rounded cursor-pointer overflow-hidden ${
-                      activeImage === img
-                        ? "border-primary bg-primary/10"
-                        : "border-secondary bg-secondary"
-                    }`}
-                  >
-                    <img
-                      src={img}
-                      alt="preview"
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                ))}
+    <main className="bg-gradient-to-br from-primary/50 via-primary/10 to-primary/30 text-text pt-15 min-h-screen">
+      <div className="container mx-auto px-4 py-8 md:py-12">
+        {/* Breadcrumbs */}
+        <div className="text-sm text-text/60 mb-6">
+          <Link to="/" className="hover:text-primary">
+            Home
+          </Link>{" "}
+          /{" "}
+          <Link to="/product" className="hover:text-primary">
+            Products
+          </Link>{" "}
+          / <span className="text-text">{product.title}</span>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          {/* ## Image Gallery */}
+          <section>
+            <div className="border border-primary bg-gradient-to-bl from-primary/60 via-primary/30 to-primary/60 rounded-lg mb-4 flex items-center justify-center p-4 h-96">
+              <img
+                src={activeImage}
+                alt={product.title}
+                className="max-w-full max-h-full object-contain"
+              />
             </div>
-            <div className="flex justify-center items-center border border-secondary bg-secondary rounded overflow-hidden">
-              {activeImage && (
-                <img
-                  src={activeImage}
-                  alt="main preview"
-                  className="max-w-full max-h-full object-contain"
-                />
-              )}
+            <div className="flex gap-3 overflow-x-auto">
+              {product.images.map((img, idx) => (
+                <div
+                  key={idx}
+                  onClick={() => setActiveImage(img)}
+                  className={`flex-shrink-0 w-24 h-24 border-2 rounded-md cursor-pointer p-1 transition-all ${
+                    activeImage === img
+                      ? "border-primary"
+                      : "border-secondary hover:border-primary/50"
+                  }`}
+                >
+                  <img
+                    src={img}
+                    alt={`Thumbnail ${idx + 1}`}
+                    className="w-full h-full object-cover rounded-sm"
+                  />
+                </div>
+              ))}
             </div>
           </section>
 
-          {/* Product Details */}
-          <section className="space-y-4">
-            <div className="text-sm space-y-1  ">
-              <div>
-                Brand:{" "}
-                <span className="font-light">{product.brand || "N/A"}</span>
-              </div>
-              <div>
-                Availability:{" "}
-                <span className="font-light">
-                  {stock ? `Only ${product.stock} left` : "Out of stock"}
-                </span>
-              </div>
-              <div>
-                SKU: <span className="font-light">{product.sku}</span>
-              </div>
-            </div>
-
-            <h1 className="text-4xl font-medium">{product.title}</h1>
-
-            <div className="text-2xl">
-              <StarRating rating={product.rating} text="text-2xl" />
-            </div>
-
-            <ul className="list-disc ml-4 space-y-2 text-text">
-              {/* warranty, shipping, return */}
-            </ul>
-
-            {/* <div className="h-px bg-secondary my-7" /> */}
-
-            <div className="flex flex-wrap gap-2 my-9">
-              {["depth", "width", "height"].map((dim) => (
-                <button
-                  key={dim}
-                  className="px-8 py-3 border w-full sm:w-fit border-primary text-primary hover:bg-primary hover:text-white rounded transition"
-                >
-                  {`${dim.charAt(0).toUpperCase() + dim.slice(1)}: ${
-                    product[`dimensions_${dim}`]
-                  }`}
-                </button>
-              ))}
-            </div>
-
-            {/* <div className="h-px bg-secondary my-7" /> */}
-
+          {/* ## Product Information & Actions */}
+          <section className="flex flex-col gap-y-5">
             <div>
-              <div className="text-xs  ">USD (incl. of all taxes):</div>
-              <div className="flex items-center gap-3">
-                <span className="text-3xl font-bold text-primary">${product.price}</span>
-                <span className="line-through text-xl text-text/60">
-                  $
-                  {(
-                    product.price *
-                    (1 + product.discountPercentage / 100)
-                  ).toFixed(2)}
+              <span className="text-sm font-medium text-primary uppercase tracking-wider">
+                {product.brand || "Generic"}
+              </span>
+              <h1 className="text-4xl font-bold text-text mt-1">
+                {product.title}
+              </h1>
+              <div className="flex items-center gap-4 mt-3">
+                <StarRating rating={product.rating} />
+                <span className="text-sm text-text/60">
+                  ({product.reviews.length} reviews)
                 </span>
               </div>
             </div>
 
-            {/* Cart / Enquiry */}
-            <div className="space-y-4">
-              <div className="flex flex-wrap gap-4 items-center">
-                <Counter
-                  quantity={quantity}
-                  setQuantity={setQuantity}
-                  stock={stock}
-                  maximumstock={product.stock}
-                />
-                <div className="btns w-full flex flex-wrap gap-4 items-center">
-                  <Link
-                    to="/user/enquiry"
-                    className="px-8 py-2 border w-full sm:w-fit bg-primary text-white rounded text-center"
-                  >
-                    Enquiry
-                  </Link>
-                  <button
-                    disabled={!stock}
-                    onClick={handleAddToCart}
-                    className={`px-6 py-2 w-full sm:w-fit border rounded transition ${
-                      stock
-                        ? "border-primary text-primary hover:bg-primary cursor-pointer hover:text-white"
-                        : "bg-secondary text-text border-secondary cursor-not-allowed"
-                    }`}
-                  >
-                    {stock ? "Add to Cart" : "Out of Stock"}
-                  </button>
-                </div>
+            <p className="text-base text-text/80 leading-relaxed">
+              {product.description.substring(0, 150)}...
+            </p>
+
+            <div className="my-2">
+              <span className="text-4xl font-extrabold text-primary">
+                ${product.price.toFixed(2)}
+              </span>
+              <span className="ml-3 text-xl font-medium text-text/50 line-through">
+                ${originalPrice}
+              </span>
+            </div>
+
+            <div className="p-4 bg-secondary/20 border-l-4 border-primary/50 rounded-r-lg space-y-2">
+              <div
+                className={`text-sm font-semibold ${
+                  isInStock ? "text-green-500" : "text-red-500"
+                }`}
+              >
+                {product.availabilityStatus}
               </div>
+              <div className="text-xs text-text/70">
+                SKU: {product.sku}
+              </div>
+              {isInStock && (
+                <div className="text-xs text-text/70">
+                  Only {product.stock} items left in stock!
+                </div>
+              )}
+            </div>
+
+            {/* Actions */}
+            <div className="flex flex-col sm:flex-row gap-4 mt-4">
+              <Counter
+                quantity={quantity}
+                setQuantity={setQuantity}
+                stock={isInStock}
+                maximumstock={product?.stock}
+              />
+              <button
+                onClick={handleAddToCart}
+                disabled={!isInStock || quantity === 0}
+                className="flex-grow flex items-center justify-center gap-2 px-6 py-3 bg-primary text-white font-semibold rounded-lg shadow-md hover:bg-primary/90 transition-all disabled:bg-secondary disabled:text-text/50 disabled:cursor-not-allowed"
+              >
+                <ShoppingCart size={20} />
+                <span>{isInStock ? "Add to Cart" : "Out of Stock"}</span>
+              </button>
+              <Link
+                to="/user/enquiry"
+                className="flex items-center justify-center gap-2 px-6 py-3 border border-primary text-primary font-semibold rounded-lg hover:bg-primary/10 transition-all"
+              >
+                <Info size={20} />
+                <span>Enquiry</span>
+              </Link>
             </div>
           </section>
         </div>
 
-        {/* Tabs */}
-        <div className="mt-10">
-          <div className="flex justify-center gap-24 border-b border-secondary">
-            {["Description", "Reviews"].map((tab, idx) => (
-              <span
-                key={idx}
-                className={`p-3 cursor-pointer font-medium transition-colors ${
-                  activeTab === idx + 1
-                    ? "border-b-2 border-primary text-primary"
-                    : "text-text hover:text-primary"
-                }`}
-                onClick={() => setActiveTab(idx + 1)}
-              >
-                {tab}
-              </span>
-            ))}
+        {/* ## Tabs for Description and Reviews */}
+        <div className="mt-16">
+          <div className="border-b border-secondary flex gap-8">
+            <button
+              onClick={() => setActiveTab("description")}
+              className={`py-3 text-lg font-medium transition-all ${
+                activeTab === "description"
+                  ? "text-primary border-b-2 border-primary"
+                  : "text-text/60 hover:text-primary"
+              }`}
+            >
+              Description
+            </button>
+            <button
+              onClick={() => setActiveTab("reviews")}
+              className={`py-3 text-lg font-medium transition-all ${
+                activeTab === "reviews"
+                  ? "text-primary border-b-2 border-primary"
+                  : "text-text/60 hover:text-primary"
+              }`}
+            >
+              Reviews
+            </button>
           </div>
-
-          {activeTab === 1 ? (
-            <div className="font-light w-[90%] md:w-[50%] mx-auto mt-10 text-text">
-              {product.description}
-            </div>
-          ) : (
-            <div className="mt-10 w-[95%] md:w-[60%] mx-auto text-text">
-              {product.reviews.length > 0 ? (
-                product.reviews.map((r, i) => (
-                  <div
-                    key={i}
-                    className="flex gap-4 mb-6 p-5 border-b border-secondary"
-                  >
-                    <img
-                      src={r.reviewerAvatar}
-                      alt="avatar"
-                      className="w-14 h-14 rounded-full object-cover"
-                    />
-                    <div className="flex-1 space-y-2">
-                      <div className="flex justify-between">
-                        <h1 className="font-semibold text-text text-sm">
-                          {r.reviewerName}
-                        </h1>
-                        <span className="text-xs text-accent">
-                          {new Date(r.date).toDateString()}
-                        </span>
+          <div className="mt-8 text-text/90">
+            {activeTab === "description" ? (
+              <div className="prose max-w-none text-text/80">
+                <p>{product.description}</p>
+                <h3 className="text-text font-semibold mt-6">Dimensions</h3>
+                <ul className="list-disc pl-5">
+                  <li>Width: {product?.dimensions?.width} cm</li>
+                  <li>Height: {product?.dimensions?.height} cm</li>
+                  <li>Depth: {product?.dimensions?.depth} cm</li>
+                </ul>
+                <h3 className="text-text font-semibold mt-6">More Info</h3>
+                 <ul className="list-disc pl-5">
+                  <li>Warranty: {product.warrantyInformation}</li>
+                  <li>Shipping: {product.shippingInformation}</li>
+                  <li>Return Policy: {product.returnPolicy}</li>
+                </ul>
+              </div>
+            ) : (
+              <div>
+                {product.reviews.length > 0 ? (
+                  <div className="space-y-6">
+                    {product.reviews.map((review, i) => (
+                      <div
+                        key={i}
+                        className="flex gap-4 p-4 border border-secondary rounded-lg bg-secondary/20"
+                      >
+                        <img
+                          src={`${review.reviewerAvatar}`} // Using an avatar placeholder
+                          alt={review.reviewerName}
+                          className="w-12 h-12 rounded-full bg-primary/20"
+                        />
+                        <div className="flex-1">
+                          <div className="flex justify-between items-center">
+                            <h4 className="font-semibold text-text">
+                              {review.reviewerName}
+                            </h4>
+                            <span className="text-xs text-text/60">
+                              {new Date(review.date).toLocaleDateString()}
+                            </span>
+                          </div>
+                          <div className="my-1">
+                             <StarRating rating={review.rating} text="text-sm" />
+                          </div>
+                          <p className="text-sm text-text/80">
+                            {review.comment}
+                          </p>
+                        </div>
                       </div>
-                      <StarRating rating={r.rating} text="text-xs" />
-                      <p className="text-sm leading-relaxed text-text">
-                        {r.comment}
-                      </p>
-                    </div>
+                    ))}
                   </div>
-                ))
-              ) : (
-                <p className="text-center text-text/70">
-                  No reviews yet for this product.
-                </p>
-              )}
-            </div>
-          )}
+                ) : (
+                  <p className="text-center text-text/70 py-8">
+                    This product has no reviews yet.
+                  </p>
+                )}
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </main>

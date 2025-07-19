@@ -1,47 +1,147 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { toast } from "react-hot-toast";
-import { ArrowLeftCircle, Loader2, Pen, Pencil } from "lucide-react";
-import { useNavigate } from "react-router";
-import { Login, SignUp } from "../../utils/Authentication";
+import { ArrowLeft, Loader2, UserPlus, LogIn, Edit2 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { Login, SignUp } from "../../utils/Authentication"; // Assuming these are your auth functions
+import { motion, AnimatePresence } from "framer-motion";
 
+// --- Main Auth Component ---
 const Auth = () => {
+  const navigate = useNavigate();
+  const [isLogin, setIsLogin] = useState(true);
+
+  const handleBack = () => {
+    navigate("/");
+  };
+
+  return (
+    <main className="min-h-screen w-screen flex items-center justify-center bg-gray-100 font-sans p-4">
+      <div className="relative w-full max-w-5xl h-[655px] flex rounded-2xl shadow-2xl overflow-hidden bg-white">
+        {/* Back button */}
+        <button
+          onClick={handleBack}
+          className="absolute top-6 left-6 z-20 text-gray-500 hover:text-gray-800 transition-colors cursor-pointer"
+        >
+          <ArrowLeft size={24} />
+        </button>
+
+        {/* Left Panel: Form */}
+        <div className="w-full md:w-1/2 p-8 sm:p-12 flex flex-col justify-center overflow-y-auto">
+          <AnimatePresence mode="wait">
+            {isLogin ? (
+              <LoginForm key="login" onSwitch={() => setIsLogin(false)} />
+            ) : (
+              <SignupForm key="signup" onSwitch={() => setIsLogin(true)} />
+            )}
+          </AnimatePresence>
+        </div>
+
+        {/* Right Panel: Decorative Image */}
+        <div className="hidden md:block w-1/2 relative">
+           <img 
+             src="https://images.unsplash.com/photo-1720798231559-287de1c8a3e5?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjR8fGdpZnQlMjBiZ2FjaHJvdW5kc3xlbnwwfDF8MHx8fDA%3D"
+             alt="Gifts"
+             className="w-full h-full object-cover"
+           />
+           <div className="absolute inset-0 bg-black/30 flex flex-col justify-end items-start p-12 text-white">
+             <motion.div
+               initial={{ opacity: 0, y: 20 }}
+               animate={{ opacity: 1, y: 0 }}
+               transition={{ duration: 0.8, delay: 0.2 }}
+             >
+              <h1 className="text-5xl font-bold leading-tight drop-shadow-lg">Elegant Gifts</h1>
+              <p className="mt-4 text-xl opacity-90 max-w-sm drop-shadow-md">
+                Discover the perfect gift for every occasion.
+              </p>
+             </motion.div>
+           </div>
+        </div>
+      </div>
+    </main>
+  );
+};
+
+
+// --- Login Form Component ---
+const LoginForm = ({ onSwitch }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const [step, setStep] = useState(1); // 1 = login, 2 = signup (full form)
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    if (!email || !password) return toast.error("Please fill in all fields");
+    setLoading(true);
+    try {
+      const res = await Login(email, password, navigate, dispatch);
+      if (res.success) {
+        toast.success("Login successful");
+        // Navigate is handled inside Login function
+      } else {
+        toast.error(res.message || "Login failed");
+      }
+    } catch (error) {
+        toast.error("An unexpected error occurred.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, x: -50 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: 50 }}
+      transition={{ duration: 0.5 }}
+      className="w-full"
+    >
+      <h2 className="text-3xl font-bold text-gray-800 mb-2">Welcome Back!</h2>
+      <p className="text-gray-500 mb-8">Please enter your details to sign in.</p>
+      <form onSubmit={handleLogin} className="space-y-6">
+        <Input field="email" type="email" value={email} onChange={setEmail} placeholder="your.email@example.com" />
+        <Input field="password" type="password" value={password} onChange={setPassword} placeholder="••••••••" />
+        <button
+          disabled={loading}
+          className="w-full flex items-center justify-center gap-2 bg-primary text-white py-3 rounded-lg font-semibold hover:bg-primary/90 transition-colors disabled:bg-primary/70 cursor-pointer"
+        >
+          {loading ? <Loader2 className="animate-spin" /> : <LogIn size={20} />}
+          <span>Sign In</span>
+        </button>
+      </form>
+      <p className="text-sm text-center text-gray-500 mt-8">
+        Don't have an account?{" "}
+        <button onClick={onSwitch} className="font-semibold text-primary hover:underline cursor-pointer">
+          Sign Up
+        </button>
+      </p>
+    </motion.div>
+  );
+};
+
+// --- Signup Form Component ---
+const SignupForm = ({ onSwitch }) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [phone, setPhone] = useState("");
-  const [avatar, setAvatar] = useState("/avatar/avatar.jpg");
+  const [avatar, setAvatar] = useState(null);
+  const [avatarPreview, setAvatarPreview] = useState("/avatar/avatar.jpg");
   const [gender, setGender] = useState("");
-
-  const [loading, setLoadng] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleAvatarChange = (e) => {
     const file = e.target.files[0];
     if (file) {
+      setAvatar(file);
       const reader = new FileReader();
-      reader.onloadend = () => setAvatar(reader.result);
+      reader.onloadend = () => setAvatarPreview(reader.result);
       reader.readAsDataURL(file);
-    }
-  };
-
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    if (!email || !password) return toast.error("Please fill in all fields");
-
-    setLoadng(true);
-    const res = await Login(email, password, navigate, dispatch);
-
-    if (res.success) {
-      toast.success("Login successful");
-      setLoadng(false);
-    } else {
-      setLoadng(false);
-      toast.error(res.message || "Login failed");
     }
   };
 
@@ -50,234 +150,112 @@ const Auth = () => {
     if (!email || !password || !firstname || !lastname || !phone || !gender) {
       return toast.error("Please fill in all fields");
     }
-    setLoadng(true);
-    const res = await SignUp(
-      firstname,
-      lastname,
-      email,
-      password,
-      avatar,
-      phone,
-      gender,
-      navigate,
-      dispatch
-    );
-    if (res.success) {
-      toast.success("User created successfully");
-      setLoadng(false);
-      setStep(1); // Go back to login step
-    } else {
-      setLoadng(false);
+    setLoading(true);
+    try {
+        // The SignUp function needs to handle file upload or base64 string
+        const res = await SignUp(firstname, lastname, email, password, avatarPreview, phone, gender, navigate, dispatch);
+        if (res.success) {
+            toast.success("Account created successfully! Please log in.");
+            onSwitch(); // Switch to login form
+        } else {
+            toast.error(res.message || "Signup failed");
+        }
+    } catch(error) {
+        toast.error("An unexpected error occurred during signup.");
+    } finally {
+        setLoading(false);
     }
   };
 
   return (
-    <main className="bg-[url('/bgs/gpt.png')]  bg-cover bg-center bg-no-repeat h-screen w-screen flex items-center justify-center">
-      <div className="h-full sm:h-[90%] w-full sm:w-[95%] max-w-6xl  shadow-xl rounded-xl overflow-hidden grid grid-cols-1 md:grid-cols-2">
-        <span
-          className="fixed top-5 left-5 cursor-pointer z-10"
-          onClick={() => (step === 1 ? navigate("/") : setStep(1))}
+    <motion.div
+      initial={{ opacity: 0, x: 50 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: -50 }}
+      transition={{ duration: 0.5 }}
+      className="w-full"
+    >
+      <h2 className="text-3xl font-bold text-gray-800 mb-2">Create an Account</h2>
+      <p className="text-gray-500 mb-6">Join us and start gifting today!</p>
+      
+      <form onSubmit={handleSignup} className="space-y-4">
+        <div className="flex justify-center mb-4">
+            <div className="relative">
+                <img src={avatarPreview} alt="Avatar" className="w-24 h-24 rounded-full object-cover border-4 border-white shadow-md" />
+                <label htmlFor="avatar-upload" className="absolute -bottom-1 -right-1 bg-primary text-white p-2 rounded-full cursor-pointer hover:bg-primary/90 transition-colors">
+                    <Edit2 size={16}/>
+                </label>
+                <input id="avatar-upload" type="file" accept="image/*" onChange={handleAvatarChange} className="hidden" />
+            </div>
+        </div>
+
+        <div className="grid grid-cols-2 gap-4">
+          <Input field="firstname" value={firstname} onChange={setFirstname} placeholder="John" />
+          <Input field="lastname" value={lastname} onChange={setLastname} placeholder="Doe" />
+        </div>
+        <Input field="email" type="email" value={email} onChange={setEmail} placeholder="your.email@example.com" />
+        <Input field="password" type="password" value={password} onChange={setPassword} placeholder="Create a password" />
+        <div className="grid grid-cols-2 gap-4">
+            <Input field="phone" type="tel" value={phone} onChange={setPhone} placeholder="Phone Number" />
+            <Select field="gender" value={gender} onChange={setGender}>
+                <option value="">Gender</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">Other</option>
+            </Select>
+        </div>
+
+        <button
+          disabled={loading}
+          className="w-full flex items-center justify-center gap-2 bg-primary text-white py-3 rounded-lg font-semibold hover:bg-primary/90 transition-colors disabled:bg-primary/70 mt-4 cursor-pointer"
         >
-          <ArrowLeftCircle className="size-10 sm:size-8" strokeWidth={1} />
-        </span>
-
-        {/* Left or Right: Login or Signup */}
-        {step === 1 ? (
-          <>
-            <div className="flex flex-col justify-center px-8 py-12 md:px-12 backdrop-blur-sm overflow-y-auto">
-              <form onSubmit={handleLogin} className="space-y-6">
-                <h1 className="text-3xl flex flex-col items-start font-bold mb-6 ">
-                  <span>Welcome back to </span>
-                  <span className="text-orange-700 font-medium">
-                    Elegant Gifts 🎁
-                  </span>
-                </h1>
-                <input
-                  type="email"
-                  placeholder="Email"
-                  value={email}
-                  pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
-                  title="Please enter a valid email address"
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full p-2 border rounded-md focus:border-orange-500 focus:outline-none"
-                  required
-                />
-                <input
-                  type="password"
-                  placeholder="Password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full p-2 border rounded-md focus:border-orange-500 focus:outline-none"
-                  required
-                />
-                <button
-                  disabled={loading}
-                  className={`w-full flex items-center justify-center gap-3 ${
-                    loading ? "bg-orange-400" : "bg-orange-600"
-                  } cursor-pointer text-white py-2 rounded-md`}
-                >
-                  {loading ? (
-                    <>
-                      <Loader2 className="animate-spin" />
-                    </>
-                  ) : (
-                    "Login"
-                  )}
-                </button>
-                <p className="text-sm text-center">
-                  Don't have an account?{" "}
-                  <span
-                    className="text-orange-500 cursor-pointer"
-                    onClick={() => setStep(2)}
-                  >
-                    Sign Up
-                  </span>
-                </p>
-              </form>
-            </div>
-            <div className="hidden md:flex items-center justify-center">
-              <img
-                src="/bgs/gpt.png"
-                alt="Authentication"
-                className="w-full h-full object-cover transform -scale-x-100"
-              />
-            </div>
-          </>
-        ) : (
-          <>
-            <div className="hidden md:flex items-center justify-center">
-              <img
-                src="/bgs/gpt.png"
-                alt="Authentication"
-                className="w-full h-full object-cover transform -scale-x-100"
-              />
-            </div>
-            {/* -------------------------- */}
-            <div className="flex flex-col justify-center px-8 py-12 md:px-12 backdrop-blur-lg overflow-y-auto">
-              <form onSubmit={handleSignup} className="space-y-4">
-                <h1 className="text-2xl sm:text-3xl font-bold mb-4">
-                  <span>Create your account on </span>
-                  <span className="text-orange-700 font-semibold">
-                    Elegant Gifts 🎁
-                  </span>
-                </h1>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <input
-                    type="text"
-                    placeholder="John"
-                    value={firstname}
-                    onChange={(e) => setFirstname(e.target.value)}
-                    className="p-2 border rounded-md focus:border-orange-500 focus:outline-none"
-                    required
-                  />
-                  <input
-                    type="text"
-                    placeholder="Doe"
-                    value={lastname}
-                    onChange={(e) => setLastname(e.target.value)}
-                    className="p-2 border rounded-md focus:border-orange-500 focus:outline-none"
-                    required
-                  />
-                  <input
-                    type="email"
-                    placeholder="eg. johnDoe@xyz.com"
-                    pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
-                    title="Please enter a valid email address"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="sm:col-span-2 p-2 border rounded-md focus:border-orange-500 focus:outline-none"
-                    required
-                  />
-                  <input
-                    type="password"
-                    placeholder="Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="p-2 border rounded-md focus:border-orange-500 focus:outline-none"
-                    minLength={6}
-                    maxLength={20}
-                    required
-                  />
-                  <input
-                    type="tel"
-                    placeholder="Phone"
-                    value={phone}
-                    pattern="[0-9]{10}"
-                    title="Please enter a valid 10-digit phone number"
-                    onChange={(e) => setPhone(e.target.value)}
-                    className="p-2 border rounded-md focus:border-orange-500 focus:outline-none"
-                    required
-                  />
-                  <input
-                    type="file"
-                    accept="image/*"
-                    id="avatar"
-                    name="avatar"
-                    onChange={handleAvatarChange}
-                    className="p-2 border rounded-md focus:border-orange-500 focus:outline-none hidden"
-                  />
-                  <div className="flex items-center gap-4 flex-wrap sm:col-span-2">
-                    <select
-                      value={gender}
-                      onChange={(e) => setGender(e.target.value)}
-                      className="p-2 h-fit border rounded-md focus:border-orange-500 focus:outline-none"
-                      required
-                    >
-                      <option value="">Select Gender</option>
-                      <option value="male">Male</option>
-                      <option value="female">Female</option>
-                      <option value="other">Other</option>
-                    </select>
-                    <div className="relative size-18 mt-2">
-                      {/* Avatar Image */}
-                      {avatar && (
-                        <img
-                          src={avatar}
-                          alt="Avatar"
-                          className="w-full h-full rounded-full object-cover border"
-                        />
-                      )}
-
-                      {/* Pen Icon as Label */}
-                      <label
-                        htmlFor="avatar"
-                        className="absolute bottom-0 right-0 bg-white rounded-full p-1 shadow-md cursor-pointer hover:bg-gray-100 transition"
-                      >
-                        <Pen className="w-4 h-4 text-gray-700" />
-                      </label>
-                    </div>
-                  </div>
-                </div>
-                <button
-                  disabled={loading}
-                  className={`w-full flex items-center justify-center gap-3 ${
-                    loading ? "bg-orange-400" : "bg-orange-600"
-                  } cursor-pointer text-white py-2 rounded-md`}
-                >
-                  {loading ? (
-                    <>
-                      <Loader2 className="animate-spin" />
-                    </>
-                  ) : (
-                    "Create Account"
-                  )}
-                </button>
-                <p className="text-sm text-center">
-                  Already have an account?{" "}
-                  <span
-                    className="text-orange-500 cursor-pointer"
-                    onClick={() => setStep(1)}
-                  >
-                    Login
-                  </span>
-                </p>
-              </form>
-            </div>
-          </>
-        )}
-      </div>
-    </main>
+          {loading ? <Loader2 className="animate-spin" /> : <UserPlus size={20} />}
+          <span>Create Account</span>
+        </button>
+      </form>
+      <p className="text-sm text-center text-gray-500 mt-6">
+        Already have an account?{" "}
+        <button onClick={onSwitch} className="font-semibold text-primary hover:underline cursor-pointer">
+          Sign In
+        </button>
+      </p>
+    </motion.div>
   );
 };
+
+// --- Reusable Input Component ---
+const Input = ({ field, value, onChange, type = "text", placeholder }) => (
+    <div>
+        <label htmlFor={field} className="text-sm font-medium text-gray-700 sr-only">{placeholder}</label>
+        <input
+            id={field}
+            name={field}
+            type={type}
+            value={value}
+            onChange={(e) => onChange(e.target.value)}
+            placeholder={placeholder}
+            required
+            className="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-colors"
+        />
+    </div>
+);
+
+// --- Reusable Select Component ---
+const Select = ({ field, value, onChange, children }) => (
+    <div>
+        <label htmlFor={field} className="text-sm font-medium text-gray-700 sr-only">{field}</label>
+        <select
+            id={field}
+            name={field}
+            value={value}
+            onChange={(e) => onChange(e.target.value)}
+            required
+            className="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-colors"
+        >
+            {children}
+        </select>
+    </div>
+);
+
 
 export default Auth;

@@ -1,158 +1,145 @@
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import { addProductToWishList, addToCart } from "../features/cart/cartSlice";
-import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
-import { Heart, Plus } from "lucide-react";
+import { Heart, ShoppingCart, Star } from "lucide-react";
 
-const ProductCard = ({ product, onImageLoad }) => {
+
+const ProductCard = ({ product = mockProduct, onImageLoad }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const session = useSelector((state) => state.cart.session);
+  const wishlist = useSelector((state) => state.cart.wishList);
+  const [wishList, setWishList] = useState([]);
 
-  const imagesArr = product.images.split(", ");
-  const [quantity, setQuantity] = useState(product.quantity || 1);
-  const [activeImage, setActiveImage] = useState(product?.thumbnail);
+
+  const imagesArr = product.images ? product.images.split(", ") : [product.thumbnail];
   const [activeImageIndex, setActiveImageIndex] = useState(0);
 
-  const wishList = useSelector((state) => state.cart.wishList);
   const isProductInWishlist = wishList.some((item) => item.id === product.id);
 
-  const handleWishlistToggle = () => {
+  const handleWishlistToggle = (e) => {
+    e.stopPropagation(); // Prevent event bubbling
+    e.preventDefault(); // Prevent navigation
     if (!session) {
       toast.error("Please login to add products to wishlist!");
-      navigate("/auth");
+      navigate("/auth"); 
       return;
     }
     dispatch(addProductToWishList(product));
+    setWishList(prev => 
+        isProductInWishlist 
+            ? prev.filter(item => item.id !== product.id)
+            : [...prev, product]
+    );
+    toast.success(isProductInWishlist ? "Removed from Wishlist" : "Added to Wishlist!");
   };
 
-  const addtoCart = () => {
+  const handleAddToCart = (e) => {
+    e.stopPropagation();
+    e.preventDefault();
     if (!session) {
       toast.error("Please login to add products to cart!");
       navigate("/auth");
       return;
-    } else {
-      const productToAdd = {
-        ...product,
-        quantity: quantity,
-      };
-      dispatch(addToCart(productToAdd));
     }
+    const productToAdd = { ...product, quantity: 1 };
+    dispatch(addToCart(productToAdd));
   };
 
   return (
-    <div className="card flex flex-col justify-between text-text bg-background max-w-xs shadow-md sm:rounded-2xl p-0 sm:p-3 border border-primary hover:shadow-lg duration-300 hover:-translate-y-1 transition-all">
-      <div className="images">
-        <Link
-          to={`/product/${product.id}`}
-          className="relative sm:rounded-2xl overflow-hidden block sm:border border-b border-primary shadow-md shadow-black/20 transition-all hover:scale-[101%]"
-        >
-          <img
-            src={activeImage}
-            alt="image"
-            draggable="false"
-            onLoad={onImageLoad}
-            className="aspect-square bg-secondary/50 hover:bg-accent/50 transition-all w-full object-cover"
-          />
-          <div className="absolute text-sm sm:text-md top-0 left-0 bg-primary text-white font-medium px-2 sm:pl-6 py-1 flex items-center gap-1">
-            {product.discountPercentage}% OFF
-          </div>
-        </Link>
-
-        {imagesArr.length > 0 && (
-          <div className="px-2 hidden sm:flex gap-2 mt-3 overflow-x-auto no-scrollbar text-text">
-            {imagesArr.slice(0, 5).map((image, index) => (
-              <img
-                key={index}
-                src={image}
-                onClick={() => {
-                  setActiveImage(image);
-                  setActiveImageIndex(index);
-                }}
-                alt={`image-${index + 1}`}
+    <Link to={`/product/${product.id}`} className="group block w-full max-w-[280px] bg-white rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 ">
+        <div className="relative overflow-hidden rounded-t-lg">
+            {/* --- Image & Hover Effects --- */}
+            <img
+                src={imagesArr[activeImageIndex]}
+                alt={product.title}
                 draggable="false"
                 onLoad={onImageLoad}
-                className={`size-14 object-cover rounded-md sm:rounded-lg border ${
-                  activeImageIndex == index || activeImage === image
-                    ? "border-primary"
-                    : "border-secondary"
-                } hover:border-primary hover:bg-accent/50 cursor-pointer`}
-              />
-            ))}
-          </div>
-        )}
-        <div className="details my-2 sm:my-5">
-          <div className="title font-medium text-md sm:text-xl">
-            {product.title}
-          </div>
-          <div className="flex flex-wrap items-center gap-2 sm:gap-3">
-            <div className="tag text-xs font-medium bg-primary/90 w-fit px-2 py-[3px] rounded-full text-white">
-              {product.tags.split(", ")[0].toUpperCase()}
-            </div>
-            <div className="tag text-xs font-medium bg-yellow-100 mb-1 w-fit px-2 py-[3px] rounded-full text-yellow-600">
-              {product.rating} ★
-            </div>
-          </div>
-        </div>
-      </div>
+                className="aspect-square bg-gradient-to-br from-primary/60 via-primary/40 to-primary/60 w-full object-cover transition-transform duration-500 group-hover:scale-105"
+            />
 
-      <div className="p-2 sm:p-0">
-        <div className="price">
-          <div className="flex items-center gap-2 flex-wrap sm:gap-5">
-            <span className="text-lg font-bold">
-              ${product.price.toFixed(2)}
-            </span>
-            <span className="text-gray-500 line-through">
-              $
-              {(product.price * (1 + product.discountPercentage / 100)).toFixed(
-                2
-              )}
-            </span>
-          </div>
-        </div>
+            {/* --- Gradient Overlay for Action Button --- */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
-        <div>
-          <div className="button hidden sm:flex gap-0 sm:gap-3 mt-5">
+            {/* --- Wishlist Button (Top Right) --- */}
             <button
-              onClick={() => addtoCart()}
-              className="bg-primary shadow-md hover:-translate-y-1 shadow-black/20 hover:bg-primary/90 transition-all w-full cursor-pointer text-white font-medium rounded-md sm:rounded-xl py-3"
+                onClick={handleWishlistToggle}
+                className="absolute top-2.5 right-2.5 bg-white/80 dark:bg-gray-900/70 backdrop-blur-sm p-2 rounded-full shadow-sm hover:bg-white dark:hover:bg-gray-900 cursor-pointer transition-all duration-300 transform hover:scale-110"
+                aria-label="Toggle Wishlist"
             >
-              ADD TO CART
-            </button>
-
-            <button onClick={handleWishlistToggle}>
-              <div className="p-2 sm:p-3 hover:bg-accent hover:-translate-y-1 transition-all shadow-md cursor-pointer border border-primary rounded-md hover:shadow-xl sm:rounded-xl">
                 <Heart
-                  className="text-gray-400"
-                  strokeWidth={0}
-                  fill={isProductInWishlist ? "#ba8c16" : "gray"}
+                    className="text-primary"
+                    size={18}
+                    fill={isProductInWishlist ? "transparent" : "currentColor"}
                 />
-              </div>
             </button>
-          </div>
+            
+            {/* --- Discount Badge (Top Left) --- */}
+            {product.discountPercentage > 0 && (
+                <div className="absolute top-2.5 left-2.5 bg-primary text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-md">
+                    -{product.discountPercentage}%
+                </div>
+            )}
 
-          <div className="smbtn sm:hidden flex items-center justify-between gap-0 sm:gap-3 mt-2 sm:mt-5">
-            <button onClick={addtoCart}>
-              <div className="p-2 sm:p-3 md:p-4 shadow-md shadow-black/20 transition-all cursor-pointer border border-primary rounded-md sm:rounded-xl">
-                <Plus className="text-primary" strokeWidth={2} />
-              </div>
-            </button>
+            {/* --- Add to Cart Button (Reveals on Hover) --- */}
+            <div className="absolute bottom-0 left-0 right-0 p-2 transform translate-y-4 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+                <button
+                    onClick={handleAddToCart}
+                    className="flex items-center justify-center gap-2 w-full bg-primary text-white text-sm font-bold py-2.5 rounded-md shadow-lg hover:bg-primary/50 cursor-pointer transition-colors"
+                    aria-label="Add to Cart"
+                >
+                    <ShoppingCart size={16} />
+                    Add to Cart
+                </button>
+            </div>
 
-            <button onClick={handleWishlistToggle}>
-              <div className="p-2 sm:p-3 md:p-4 shadow-md shadow-black/20 cursor-pointer border border-primary rounded-md sm:rounded-xl">
-                <Heart
-                  className="text-primary"
-                  strokeWidth={0}
-                  fill={isProductInWishlist ? "#ba8c16" : "gray"}
-                />
-              </div>
-            </button>
-          </div>
+            {/* --- Image Navigation Dots --- */}
+            {imagesArr.length > 1 && (
+                <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5 opacity-50 group-hover:opacity-100 transition-opacity">
+                    {imagesArr.slice(0, 5).map((_, index) => (
+                    <button
+                        key={index}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            e.preventDefault();
+                            setActiveImageIndex(index);
+                        }}
+                        className={`h-1.5 w-1.5 rounded-full transition-all duration-300 ${
+                        activeImageIndex === index ? "bg-white scale-125" : "bg-white/60"
+                        }`}
+                        aria-label={`View image ${index + 1}`}
+                    />
+                    ))}
+                </div>
+            )}
         </div>
-      </div>
-    </div>
+
+        {/* --- Details Section --- */}
+        <div className="p-3">
+            <div className="flex justify-between items-center gap-2">
+                <span className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    {product.tags.split(",")[0].trim()}
+                </span>
+                <div className="flex items-center gap-1 text-sm text-yellow-500 font-bold">
+                    <span>{product.rating}</span>
+                    <Star size={16} fill="yellow" />
+                </div>
+            </div>
+            <h3 className="text-base font-bold text-primary mt-1.5 truncate" title={product.title}>
+                {product.title}
+            </h3>
+            <div className="flex items-baseline gap-2 mt-2">
+                <span className="text-xl font-extrabold text-primary">
+                    ${product.price.toFixed(2)}
+                </span>
+                <span className="text-sm text-gray-400 line-through">
+                    ${(product.price * (1 + product.discountPercentage / 100)).toFixed(2)}
+                </span>
+            </div>
+        </div>
+    </Link>
   );
 };
 

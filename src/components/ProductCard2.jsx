@@ -1,10 +1,9 @@
-import { Link } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { addProductToWishList, addToCart } from "../features/cart/cartSlice";
-import { Heart, Plus } from "lucide-react";
+import { Heart } from "lucide-react";
 
 const ProductCard2 = ({ product, onImageLoad }) => {
   const dispatch = useDispatch();
@@ -19,7 +18,16 @@ const ProductCard2 = ({ product, onImageLoad }) => {
 
   const isInWishlist = wishList.some((item) => item.id === product.id);
 
-  const handleWishlistToggle = () => {
+  // --- Event Handlers ---
+
+  // Main navigation handler for the card
+  const handleCardClick = () => {
+    navigate(`/product/${product.id}`);
+  };
+
+  // Wishlist button handler
+  const handleWishlistToggle = (e) => {
+    e.stopPropagation(); // Prevents the card's onClick from firing
     if (!session) {
       toast.error("Login to use wishlist");
       navigate("/auth");
@@ -28,7 +36,9 @@ const ProductCard2 = ({ product, onImageLoad }) => {
     dispatch(addProductToWishList(product));
   };
 
-  const handleAddToCart = () => {
+  // Add to cart button handler
+  const handleAddToCart = (e) => {
+    e.stopPropagation(); // Prevents the card's onClick from firing
     if (!session) {
       toast.error("Login to add to cart");
       navigate("/auth");
@@ -36,28 +46,37 @@ const ProductCard2 = ({ product, onImageLoad }) => {
     }
     dispatch(addToCart({ ...product, quantity: 1 }));
   };
+  
+  // Thumbnail image click handler
+  const handleThumbnailClick = (e, image) => {
+    e.stopPropagation(); // Prevents the card's onClick from firing
+    setActiveImage(image);
+  };
+
 
   return (
-    <div className="w-full max-w-xs flex flex-col justify-between rounded-lg shadow-md overflow-hidden relative group bg-white transition-all duration-300 hover:shadow-xl sm:max-w-sm md:max-w-md">
+    // The entire card is now clickable
+    <div
+      onClick={handleCardClick}
+      className="w-full max-w-xs flex flex-col justify-between rounded-lg shadow-md overflow-hidden relative group bg-white transition-all duration-300 hover:shadow-xl sm:max-w-sm md:max-w-md cursor-pointer"
+    >
       {/* Image Section */}
       <div className="relative">
-        <Link to={`/product/${product.id}`} className="block">
-          <img
-            src={activeImage}
-            alt={product.name}
-            className="w-full h-52 object-contain rounded-t-lg bg-gradient-to-br from-primary/60 via-primary/20 to-primary/40 transition-transform duration-300 hover:scale-105 hover:brightness-95 border-b-2 border-primary"
-            onLoad={onImageLoad}
-          />
-        </Link>
+        <img
+          src={activeImage}
+          alt={product.name}
+          className="w-full h-52 object-contain rounded-t-lg bg-gradient-to-br from-primary/60 via-primary/20 to-primary/40 transition-transform duration-300 group-hover:scale-105 group-hover:brightness-95 border-b-2 border-primary"
+          onLoad={onImageLoad}
+        />
         {/* Discount Tag */}
-        <div className="absolute top-2 left-2 bg-gray-200 px-3 py-1 text-xs rounded font-medium text-gray-800">
+        <div className="absolute top-2 left-2 px-3 py-1 text-xs rounded font-medium bg-yellow-100 text-yellow-800">
           {product.discountPercentage}% OFF
         </div>
 
         {/* Like Button */}
         <button
           onClick={handleWishlistToggle}
-          className="absolute top-2 right-2 cursor-pointer bg-white/90 backdrop-blur-sm p-1.5 rounded-full shadow hover:bg-white transition"
+          className="absolute top-2 right-2 bg-white/90 backdrop-blur-sm p-1.5 rounded-full shadow hover:bg-white transition"
         >
           <Heart
             className={`size-5 transition-colors ${
@@ -68,7 +87,7 @@ const ProductCard2 = ({ product, onImageLoad }) => {
       </div>
 
       {/* Thumbnail Slider */}
-      {
+      {imagesArr.length >= 1 && (
         <div className="flex gap-2 px-2 pt-2 overflow-x-auto no-scrollbar">
           {imagesArr.map((image, index) => (
             <img
@@ -78,20 +97,19 @@ const ProductCard2 = ({ product, onImageLoad }) => {
               className={`size-10 sm:size-12 object-cover rounded cursor-pointer border ${
                 activeImage === image ? "border-primary" : "border-transparent"
               }`}
-              onClick={() => setActiveImage(image)}
+              onClick={(e) => handleThumbnailClick(e, image)}
             />
           ))}
         </div>
-      }
+      )}
 
       {/* Details */}
       <div className="p-3">
-        <Link
-          to={`/product/${product.id}`}
-          className="text-base sm:text-lg hover:underline font-semibold text-gray-800 line-clamp-1"
+        <h3
+          className="text-base sm:text-lg group-hover:underline font-semibold text-gray-800 line-clamp-1"
         >
           {product.title}
-        </Link>
+        </h3>
         <p className="text-sm text-gray-600 mt-1 line-clamp-2">
           {product.description}
         </p>
