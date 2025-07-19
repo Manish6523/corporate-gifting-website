@@ -1,0 +1,170 @@
+import { Mail, MapPin, Phone, PhoneIcon } from "lucide-react";
+import { useState } from "react";
+import { supabase } from "../../utils/Contactusbase.js";
+
+
+const ContactInfoItem = ({ iconText, title, subtitle }) => (
+  <div className="flex items-start gap-4">
+    <div className="flex justify-center items-center rounded-full bg-primary w-12 h-12 mt-1 text-white text-xl">
+      {iconText}
+    </div>
+    <div>
+      <p className="font-semibold text-gray-700">{title}</p>
+      <p className="text-gray-500 text-sm whitespace-pre-line">{subtitle}</p>
+    </div>
+  </div>
+);
+
+const InputField = ({ id, label, placeholder, type = "text", value, onChange }) => (
+  <div className="flex-1">
+    <label htmlFor={id} className="block mb-1 text-gray-700 font-medium">
+      {label}
+    </label>
+    <input
+      type={type}
+      id={id}
+      placeholder={placeholder}
+      value={value}
+      onChange={onChange}
+      className="w-full border border-gray-300 rounded-md px-3 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary"
+      required
+    />
+  </div>
+);
+
+const Contact = () => {
+  const [formData, setFormData] = useState({
+    fullName: "",
+    email: "",
+    subject: "",
+    message: "",
+  });
+
+  const handleChange = (e) => {
+    const { id, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [id]: value,
+    }));
+  };
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  const { fullName, email, subject, message } = formData;
+
+  const { error } = await supabase.from("inquiries").insert([
+    {
+      full_name: fullName,
+      email,
+      subject,
+      message,
+    },
+  ]);
+
+  if (error) {
+    console.error("Supabase insert error:", error.message);
+    alert("Failed to send inquiry. Please try again.");
+    return;
+  }
+
+  setFormData({
+    fullName: "",
+    email: "",
+    subject: "",
+    message: "",
+  });
+
+  alert("Inquiry sent!");
+};
+
+
+
+  return (
+    <div className="bg-gray-100 min-h-screen p-0 flex justify-center items-start">
+      <div className="max-w-6xl w-full grid grid-cols-1 md:grid-cols-2 gap-10 bg-gray-50 p-10 rounded-lg shadow-md">
+        {/* Contact Info */}
+        <div className="space-y-10">
+          <h2 className="text-xl font-semibold text-gray-800 mb-6">
+            Contact Information
+          </h2>
+
+          <ContactInfoItem
+            iconText=<PhoneIcon />
+            title="Phone"
+            subtitle="+91 98765 43210"
+          />
+          <ContactInfoItem
+            iconText=<Mail />
+            title="Email"
+            subtitle="info@legacygifts.com"
+          />
+          <ContactInfoItem
+            iconText=<MapPin />
+            title="Office"
+            subtitle={`123 Builder Avenue\nLos Angeles, LA 10001`}
+          />
+        </div>
+
+        {/* Contact Form */}
+        <form
+          className="bg-white p-8 rounded-lg shadow-md space-y-5"
+          onSubmit={handleSubmit}
+        >
+          <div className="flex gap-5">
+            <InputField
+              id="fullName"
+              label="Full Name"
+              placeholder="John Doe"
+              value={formData.fullName}
+              onChange={handleChange}
+            />
+            <InputField
+              id="email"
+              label="Email Address"
+              placeholder="john@example.com"
+              type="email"
+              value={formData.email}
+              onChange={handleChange}
+            />
+          </div>
+
+          <InputField
+            id="subject"
+            label="Subject"
+            placeholder="Product Inquiry"
+            value={formData.subject}
+            onChange={handleChange}
+          />
+
+          <div>
+            <label
+              htmlFor="message"
+              className="block mb-1 text-gray-700 font-medium"
+            >
+              Your Message
+            </label>
+            <textarea
+              id="message"
+              placeholder="Tell us about your issue or inquiry..."
+              rows="5"
+              value={formData.message}
+              onChange={handleChange}
+              className="w-full border border-gray-300 rounded-md px-3 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary"
+              required
+            ></textarea>
+          </div>
+
+          <button
+            type="submit"
+            className="w-full bg-primary hover:bg-primary transition-colors text-white font-semibold py-3 rounded-md"
+          >
+            Send Inquiry →
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+export default Contact;

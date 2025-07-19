@@ -10,6 +10,7 @@ import Auth from "./components/Auth.jsx";
 import Dashboard from "./components/Dashboard.jsx";
 import CategoryPage from "./components/CategoryPage.jsx";
 import AboutUs from "./components/AboutUs.jsx";
+import Contact from "./components/Contact.jsx";
 import {
   fetchCartFromSupaBase,
   fetchWishListFromSupaBase,
@@ -108,6 +109,7 @@ function App() {
           <Route path="/auth" element={<Auth />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/about" element={<AboutUs />} />
+          <Route path="/contact" element={<Contact />} />
 
           <Route path="/product" element={<ProductsList />} />
           <Route path="/orderConfirmation" element={<OrderConfirmation />} />
