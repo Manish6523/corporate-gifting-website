@@ -1,5 +1,6 @@
 import { Mail, MapPin, Phone, PhoneIcon } from "lucide-react";
 import { useState } from "react";
+import { motion, useInView } from "framer-motion";
 import { supabase } from "../../utils/Contactusbase.js";
 
 
@@ -48,122 +49,169 @@ const Contact = () => {
     }));
   };
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  const { fullName, email, subject, message } = formData;
+    const { fullName, email, subject, message } = formData;
 
-  const { error } = await supabase.from("inquiries").insert([
-    {
-      full_name: fullName,
-      email,
-      subject,
-      message,
-    },
-  ]);
+    const { error } = await supabase.from("inquiries").insert([
+      {
+        full_name: fullName,
+        email,
+        subject,
+        message,
+      },
+    ]);
 
-  if (error) {
-    console.error("Supabase insert error:", error.message);
-    alert("Failed to send inquiry. Please try again.");
-    return;
-  }
+    if (error) {
+      console.error("Supabase insert error:", error.message);
+      alert("Failed to send inquiry. Please try again.");
+      return;
+    }
 
-  setFormData({
-    fullName: "",
-    email: "",
-    subject: "",
-    message: "",
-  });
+    setFormData({
+      fullName: "",
+      email: "",
+      subject: "",
+      message: "",
+    });
 
-  alert("Inquiry sent!");
-};
+    alert("Inquiry sent!");
+  };
 
 
 
   return (
-    <div className="bg-gray-100 min-h-screen p-0 flex justify-center items-start">
-      <div className="max-w-6xl w-full grid grid-cols-1 md:grid-cols-2 gap-10 bg-gray-50 p-10 rounded-lg shadow-md">
-        {/* Contact Info */}
-        <div className="space-y-10">
-          <h2 className="text-xl font-semibold text-gray-800 mb-6">
-            Contact Information
-          </h2>
-
-          <ContactInfoItem
-            iconText=<PhoneIcon />
-            title="Phone"
-            subtitle="+91 98765 43210"
+    <>
+      <section
+        className="relative bg-black text-white py-55 px-4 overflow-hidden"
+        id="hero"
+      >
+        <div className="absolute inset-0 z-0">
+          <img
+            src="https://i.ibb.co/TBSXd7hQ/mia-golic-6-Jtu-Gv-Lzh20-unsplash-1.jpg"
+            alt="Background"
+            className="w-full h-full object-cover opacity-40"
           />
-          <ContactInfoItem
-            iconText=<Mail />
-            title="Email"
-            subtitle="info@legacygifts.com"
-          />
-          <ContactInfoItem
-            iconText=<MapPin />
-            title="Office"
-            subtitle={`123 Builder Avenue\nLos Angeles, LA 10001`}
-          />
+          <div className="absolute inset-0 bg-black opacity-40"></div>
         </div>
 
-        {/* Contact Form */}
-        <form
-          className="bg-white p-8 rounded-lg shadow-md space-y-5"
-          onSubmit={handleSubmit}
-        >
-          <div className="flex gap-5">
-            <InputField
-              id="fullName"
-              label="Full Name"
-              placeholder="John Doe"
-              value={formData.fullName}
-              onChange={handleChange}
-            />
-            <InputField
-              id="email"
-              label="Email Address"
-              placeholder="john@example.com"
-              type="email"
-              value={formData.email}
-              onChange={handleChange}
-            />
-          </div>
-
-          <InputField
-            id="subject"
-            label="Subject"
-            placeholder="Product Inquiry"
-            value={formData.subject}
-            onChange={handleChange}
-          />
-
-          <div>
-            <label
-              htmlFor="message"
-              className="block mb-1 text-gray-700 font-medium"
-            >
-              Your Message
-            </label>
-            <textarea
-              id="message"
-              placeholder="Tell us about your issue or inquiry..."
-              rows="5"
-              value={formData.message}
-              onChange={handleChange}
-              className="w-full border border-gray-300 rounded-md px-3 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary"
-              required
-            ></textarea>
-          </div>
-
-          <button
-            type="submit"
-            className="w-full bg-primary hover:bg-primary transition-colors text-white font-semibold py-3 rounded-md"
+        <div className="max-w-5xl mx-auto text-center relative z-10">
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="text-4xl md:text-5xl lg:text-6xl font-bold  flex flex-col gap-2"
           >
-            Send Inquiry →
-          </button>
-        </form>
+            <div className="text-primary">
+              Contact <span className="text-primary">Us</span>
+            </div>
+            <p className="mt-4 text-lg md:text-2xl text-gray-300 font-light">
+              We’re here to help! Whether you have a question, need support, or just want to say hello, feel free to reach out.
+              You can contact us by sending us an email, or giving us a call.
+              Our team will get back to you as soon as possible.
+            </p>
+          </motion.h1>
+
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="mt-4 text-xl text-gray-300"
+          ></motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            className="mt-8 flex justify-center gap-4 flex-wrap"
+          ></motion.div>
+        </div>
+      </section>
+      <div className="bg-gray-100 min-h-screen p-0 flex justify-center items-start">
+        <div className="max-w-6xl w-full grid grid-cols-1 md:grid-cols-2 gap-10 bg-gray-50 p-10 rounded-lg shadow-md">
+          {/* Contact Info */}
+          <div className="space-y-10">
+            <h2 className="text-xl font-semibold text-gray-800 mb-6">
+              Contact Information
+            </h2>
+
+            <ContactInfoItem
+              iconText=<PhoneIcon />
+              title="Phone"
+              subtitle="+91 98765 43210"
+            />
+            <ContactInfoItem
+              iconText=<Mail />
+              title="Email"
+              subtitle="info@legacygifts.com"
+            />
+            <ContactInfoItem
+              iconText=<MapPin />
+              title="Office"
+              subtitle={`123 Builder Avenue\nLos Angeles, LA 10001`}
+            />
+          </div>
+
+          {/* Contact Form */}
+          <form
+            className="bg-white p-8 rounded-lg shadow-md space-y-5"
+            onSubmit={handleSubmit}
+          >
+            <div className="flex gap-5">
+              <InputField
+                id="fullName"
+                label="Full Name"
+                placeholder="John Doe"
+                value={formData.fullName}
+                onChange={handleChange}
+              />
+              <InputField
+                id="email"
+                label="Email Address"
+                placeholder="john@example.com"
+                type="email"
+                value={formData.email}
+                onChange={handleChange}
+              />
+            </div>
+
+            <InputField
+              id="subject"
+              label="Subject"
+              placeholder="Product Inquiry"
+              value={formData.subject}
+              onChange={handleChange}
+            />
+
+            <div>
+              <label
+                htmlFor="message"
+                className="block mb-1 text-gray-700 font-medium"
+              >
+                Your Message
+              </label>
+              <textarea
+                id="message"
+                placeholder="Tell us about your issue or inquiry..."
+                rows="5"
+                value={formData.message}
+                onChange={handleChange}
+                className="w-full border border-gray-300 rounded-md px-3 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary"
+                required
+              ></textarea>
+            </div>
+
+            <button
+              type="submit"
+              className="w-full bg-primary hover:bg-primary transition-colors text-white font-semibold py-3 rounded-md"
+            >
+              Send Inquiry →
+            </button>
+          </form>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
