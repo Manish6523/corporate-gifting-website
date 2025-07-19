@@ -24,6 +24,7 @@ import { setCart, setWishlist } from "./features/cart/cartSlice.js";
 import OrderConfirmation from "./components/OrderConfirmation.jsx";
 import Cart from "./components/Cart.jsx";
 import { Footer } from "./components/Footer.jsx";
+import A from "./components/A.jsx";
 
 function App() {
   const location = useLocation();
@@ -120,6 +121,7 @@ function App() {
 
           <Route path="/user/enquiry" element={<EnquiryPage />} />
           <Route path="/user/cart" element={<Cart />} />
+          <Route path="/a" element={<A />} />
         </Routes>
         <Footer />
         <Toaster

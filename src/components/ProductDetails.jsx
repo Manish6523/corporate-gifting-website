@@ -125,7 +125,7 @@ const ProductDetails = () => {
               <img
                 src={activeImage}
                 alt={product.title}
-                className="max-w-full max-h-full object-contain"
+                className="max-w-full object-cover"
               />
             </div>
             <div className="flex gap-3 overflow-x-auto">
@@ -254,9 +254,9 @@ const ProductDetails = () => {
                 <p>{product.description}</p>
                 <h3 className="text-text font-semibold mt-6">Dimensions</h3>
                 <ul className="list-disc pl-5">
-                  <li>Width: {product?.dimensions?.width} cm</li>
-                  <li>Height: {product?.dimensions?.height} cm</li>
-                  <li>Depth: {product?.dimensions?.depth} cm</li>
+                  <li>Width: {product?.dimensions_width} cm</li>
+                  <li>Height: {product?.dimensions_height} cm</li>
+                  <li>Depth: {product?.dimensions_depth} cm</li>
                 </ul>
                 <h3 className="text-text font-semibold mt-6">More Info</h3>
                  <ul className="list-disc pl-5">

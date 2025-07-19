@@ -32,7 +32,7 @@ const AboutUs = () => {
             <div className="text-primary">
               About <span className="text-primary">Us</span>
             </div>
-            <p className="mt-4 text-lg md:text-2xl text-gray-300 font-light">
+            <p className="mt-4  md:text-xl text-gray-300 font-semibold">
               At Legacy Gifts, we turn thoughtful ideas into memorable
               experiences. Our mission is to help businesses build stronger
               relationships through premium, customized gifting solutions that
@@ -67,10 +67,10 @@ const AboutUs = () => {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
             >
-              <h1 className="text-black text-3xl md:text-4xl font-semibold">
-                About Legacy Gifts
+              <h1 className="text-primary text-3xl md:text-4xl font-bold">
+                About <span className="text-[#5C4400]">Legacy Gifts</span>
               </h1>
-              <p className="text-gray-600 max-w-[640px] mx-auto lg:mx-0 text-base md:text-lg">
+              <p className="text-gray-600 max-w-[640px] mx-auto lg:mx-0 text-lg md:text-lg">
                 Established in 2021, Legacy Gifts is India's trusted corporate
                 gifting partner, delivering thoughtful, high-quality gifts that
                 make a lasting impression. We specialize in premium, customized
@@ -106,8 +106,8 @@ const AboutUs = () => {
           <div className="flex flex-col md:flex-row justify-between items-center max-w-7xl mx-auto gap-10">
             {/* Left Text */}
             <div className="md:w-1/2">
-              <h2 className="text-3xl md:text-4xl font-semibold  text-black mb-3">
-                Gifting That Reflects Your Brand
+              <h2 className="text-3xl md:text-4xl font-bold  text-primary mb-3">
+                Gifting That Reflects  <span className="text-[#5C4400]">Your Brand</span>
               </h2>
               <p className="text-gray-600 text-base md:text-lg">
                 At Legacy Gifts, we believe that a gift is more than just a
@@ -165,8 +165,8 @@ const AboutUs = () => {
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.8 }}
           >
-            <h1 className="text-black text-3xl md:text-4xl font-semibold">
-              About our products
+            <h1 className="text-primary text-3xl md:text-4xl font-bold">
+              About our  <span className="text-[#5C4400]">products</span>
             </h1>
             <p className="text-gray-600 max-w-[640px] text-base md:text-lg">
               We offer a wide range of high-end products that are both
