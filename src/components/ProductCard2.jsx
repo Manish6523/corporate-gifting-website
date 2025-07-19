@@ -46,13 +46,12 @@ const ProductCard2 = ({ product, onImageLoad }) => {
     }
     dispatch(addToCart({ ...product, quantity: 1 }));
   };
-  
+
   // Thumbnail image click handler
   const handleThumbnailClick = (e, image) => {
     e.stopPropagation(); // Prevents the card's onClick from firing
     setActiveImage(image);
   };
-
 
   return (
     // The entire card is now clickable
@@ -65,11 +64,11 @@ const ProductCard2 = ({ product, onImageLoad }) => {
         <img
           src={activeImage}
           alt={product.name}
-          className="w-full h-52 object-contain rounded-t-lg bg-gradient-to-br from-primary/60 via-primary/20 to-primary/40 transition-transform duration-300 group-hover:scale-105 group-hover:brightness-95 border-b-2 border-primary"
+          className="w-full h-52 object-contain rounded-t-lg bg-gradient-to-br from-primary/40 via-primary/20 to-primary/40 transition-transform duration-300 group-hover:scale-105 group-hover:brightness-95 border-b-2 border-primary"
           onLoad={onImageLoad}
         />
         {/* Discount Tag */}
-        <div className="absolute top-2 left-2 px-3 py-1 text-xs rounded font-medium bg-yellow-100 text-yellow-800">
+        <div className="absolute top-2 -left-1 px-3 py-1 text-xs rounded font-medium bg-yellow-100 text-yellow-800 hover:text-yellow-900">
           {product.discountPercentage}% OFF
         </div>
 
@@ -94,9 +93,7 @@ const ProductCard2 = ({ product, onImageLoad }) => {
               key={index}
               src={image}
               alt={`Thumb ${index}`}
-              className={`size-10 sm:size-12 object-cover rounded cursor-pointer border ${
-                activeImage === image ? "border-primary" : "border-transparent"
-              }`}
+              className={`size-10 sm:size-12 object-cover rounded cursor-pointer border border-primary/50 hover:border-primary`}
               onClick={(e) => handleThumbnailClick(e, image)}
             />
           ))}
@@ -105,9 +102,7 @@ const ProductCard2 = ({ product, onImageLoad }) => {
 
       {/* Details */}
       <div className="p-3">
-        <h3
-          className="text-base sm:text-lg group-hover:underline font-semibold text-gray-800 line-clamp-1"
-        >
+        <h3 className="text-base sm:text-lg group-hover:underline font-semibold text-gray-700 line-clamp-1">
           {product.title}
         </h3>
         <p className="text-sm text-gray-600 mt-1 line-clamp-2">
@@ -117,7 +112,7 @@ const ProductCard2 = ({ product, onImageLoad }) => {
         {/* Price and Add to Cart */}
         <div className="flex flex-wrap items-center justify-between mt-3">
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-lg font-bold text-primary">
+            <span className="text-lg font-bold text-gray-700">
               ${product.price.toLocaleString("en-IN")}
             </span>
             <span className="text-sm line-through font-medium text-gray-400">
@@ -126,13 +121,38 @@ const ProductCard2 = ({ product, onImageLoad }) => {
                 product.price / (1 - product.discountPercentage / 100)
               )}
             </span>
+
+            {/* discount price tag */}
+            {/* <div className=" px-3 py-1 text-xs rounded-full font-medium bg-yellow-100 text-yellow-900 ml-2">
+              {product.discountPercentage.toFixed(2)}% OFF
+            </div> */}
           </div>
 
-          <button
+          {/* <button
             onClick={handleAddToCart}
-            className="p-2 px-4 w-full cursor-pointer hover:bg-gradient-to-br bg-gradient-to-bl from-primary via-primary/80 to-primary rounded-md text-white transition duration-200 mt-3"
+            className="p-2 px-4 w-full cursor-pointer hover:bg-gradient-to-br bg-gradient-to-bl from-primary via-primary/80 to-primary rounded-md text-white font-semibold transition duration-200 mt-3"
           >
             Add to Cart
+          </button> */}
+
+          {/* Browse btn animation */}
+
+          {/* <div className="relative group w-full">
+            <button onClick={handleAddToCart} className="bg-[#bc8f14] hover:shadow-md text-white font-bold py-2 px-6 rounded-lg overflow-hidden relative z-10 mt-3 w-full ">
+              <span className="relative z-20">Add to Cart</span>
+              <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent translate-x-[-100%] group-hover:translate-x-full transition-transform duration-1000 ease-in-out z-10" />
+            </button>
+          </div> */}
+
+          {/* Popular product btn animation */}
+          <button
+            onClick={handleAddToCart}
+            className="relative cursor-pointer text-primary font-semibold py-2 px-6 border-2 border-primary overflow-hidden group w-full rounded-md mt-3"
+          >
+            <span className="relative z-10 group-hover:text-white">
+              Add to Cart
+            </span>
+            <span className="absolute inset-0 bg-primary scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
           </button>
         </div>
       </div>

@@ -92,7 +92,7 @@ const ProductList = () => {
       }`}
     >
       <h2
-        className={`font-bold text-gray-800 ${
+        className={`font-bold text-primary ${
           isMobile
             ? "text-xl border-b pb-4 mb-2"
             : "text-2xl border-b pb-4 mb-4"
@@ -105,7 +105,7 @@ const ProductList = () => {
       <div className="space-y-3">
         <label
           htmlFor="category-select"
-          className="block text-base font-semibold text-gray-700"
+          className="block text-base font-semibold text-primary"
         >
           Category
         </label>
@@ -132,7 +132,7 @@ const ProductList = () => {
 
       {/* Price Range Filter */}
       <div className="space-y-4">
-        <label className="block text-base font-semibold text-gray-700">
+        <label className="block text-base font-semibold text-primary">
           Price Range
         </label>
         <input
@@ -153,7 +153,7 @@ const ProductList = () => {
       <div className="space-y-3">
         <label
           htmlFor="sort-by-select"
-          className="block text-base font-semibold text-gray-700"
+          className="block text-base font-semibold text-primary"
         >
           Sort By
         </label>
@@ -177,7 +177,7 @@ const ProductList = () => {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary/50 via-primary/10 to-primary/30  text-text">
+    <div className="min-h-screen  text-text">
       {/* Hero */}
       <div className="relative w-full h-[400px] md:h-[550px] overflow-hidden">
         <motion.img
@@ -246,7 +246,7 @@ const ProductList = () => {
       {/* Main Content */}
       <div className="grid grid-cols-1 md:grid-cols-[280px_1fr] gap-6 px-2 md:px-8 lg:px-12 py-4">
         {/* Desktop Filters */}
-        <aside className="hidden md:block sticky  top-30 h-fit bg-gradient-to-br from-primary/60 via-primary/30 to-primary/60  border border-primary/70 backdrop-blur-md rounded-2xl shadow-lg p-6">
+        <aside className="hidden md:block sticky  top-30 h-fit backdrop-blur-md rounded-2xl shadow-lg p-6">
           <FiltersPanel />
         </aside>
 
@@ -291,7 +291,7 @@ const ProductList = () => {
                 <div className="text-center mt-10">
                   <button
                     onClick={() => setPage((prev) => prev + 1)}
-                    className="px-6 py-2 cursor-pointer text-sm bg-primary text-white rounded-lg hover:bg-primary/90 transition"
+                    className="px-6 py-2 cursor-pointer text-sm bg-primary text-white font-semibold rounded-lg hover:bg-primary/90 transition"
                   >
                     {fetching ? "Loading..." : "Load More"}
                   </button>

@@ -104,7 +104,7 @@ const ProductDetails = () => {
 
   // --- Main Component Render ---
   return (
-    <main className="bg-gradient-to-br from-primary/50 via-primary/10 to-primary/30 text-text pt-15 min-h-screen">
+    <main className=" text-text pt-15 min-h-screen">
       <div className="container mx-auto px-4 py-8 md:py-12">
         {/* Breadcrumbs */}
         <div className="text-sm text-text/60 mb-6">
@@ -121,7 +121,7 @@ const ProductDetails = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* ## Image Gallery */}
           <section>
-            <div className="border border-primary bg-gradient-to-bl from-primary/60 via-primary/30 to-primary/60 rounded-lg mb-4 flex items-center justify-center p-4 h-96">
+            <div className="border border-primary bg-gradient-to-bl from-[#fff7e0] to-[#f5d58c]/10 rounded-lg mb-4 flex items-center justify-center p-4 h-96">
               <img
                 src={activeImage}
                 alt={product.title}
