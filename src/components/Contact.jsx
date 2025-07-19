@@ -89,7 +89,7 @@ const Contact = () => {
       >
         <div className="absolute inset-0 z-0">
           <img
-            src="https://i.ibb.co/TBSXd7hQ/mia-golic-6-Jtu-Gv-Lzh20-unsplash-1.jpg"
+            src="src/images/1752942401268.jpg"
             alt="Background"
             className="w-full h-full object-cover opacity-40"
           />
@@ -109,7 +109,7 @@ const Contact = () => {
             <p className="mt-4 text-lg md:text-2xl text-gray-300 font-light">
               We’re here to help! Whether you have a question, need support, or just want to say hello, feel free to reach out.
               You can contact us by sending us an email, or giving us a call.
-              Our team will get back to you as soon as possible.
+              Our team will get back to you as soon as possible.            
             </p>
           </motion.h1>
 
@@ -128,7 +128,7 @@ const Contact = () => {
           ></motion.div>
         </div>
       </section>
-      <div className="bg-gray-100 min-h-screen p-0 flex justify-center items-start">
+      <div className="bg-gray-100 min-h-screen p-10 flex justify-center items-start">
         <div className="max-w-6xl w-full grid grid-cols-1 md:grid-cols-2 gap-10 bg-gray-50 p-10 rounded-lg shadow-md">
           {/* Contact Info */}
           <div className="space-y-10">
@@ -197,7 +197,7 @@ const Contact = () => {
                 rows="5"
                 value={formData.message}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded-md px-3 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary"
+                className="height-250 resize-none w-full border border-gray-300 rounded-md px-3 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary"
                 required
               ></textarea>
             </div>
