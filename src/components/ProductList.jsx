@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { supabase } from "../../utils/supabase";
 import { motion, AnimatePresence } from "framer-motion";
 import ProductCard2 from "./ProductCard2";
-import { X } from "lucide-react";
+import { X, SlidersHorizontal, ChevronDown } from "lucide-react";
+import { Link } from "react-router";
 
 const categories = [
   "All",
@@ -31,7 +32,7 @@ const categories = [
   "womens-watches",
 ];
 
-const LIMIT = 8;
+const LIMIT = 16;
 
 const ProductList = () => {
   const [range, setRange] = useState([0, 10000]);
@@ -85,54 +86,98 @@ const ProductList = () => {
   }, [page]);
 
   const FiltersPanel = ({ isMobile = false }) => (
-    <div className={`space-y-6 ${isMobile ? "p-6" : ""}`}>
-      <h2 className="text-xl font-semibold">Filters</h2>
-      <div className="space-y-2">
-        <label className="block font-medium text-sm">Category</label>
-        <select
-          className="w-full p-2 rounded-lg bg-white/80 text-sm shadow-inner"
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
+    <div
+      className={`space-y-6 ${isMobile ? "p-6" : "p-0"} ${
+        isMobile ? "" : "md:space-y-8"
+      }`}
+    >
+      <h2
+        className={`font-bold text-gray-800 ${
+          isMobile
+            ? "text-xl border-b pb-4 mb-2"
+            : "text-2xl border-b pb-4 mb-4"
+        }`}
+      >
+        Filters
+      </h2>
+
+      {/* Category Filter */}
+      <div className="space-y-3">
+        <label
+          htmlFor="category-select"
+          className="block text-base font-semibold text-gray-700"
         >
-          {categories.map((cat) => (
-            <option key={cat} value={cat}>
-              {cat.replace(/-/g, " ").replace(/\b\w/g, (l) => l.toUpperCase())}
-            </option>
-          ))}
-        </select>
+          Category
+        </label>
+        <div className="relative">
+          <select
+            id="category-select"
+            className="block w-full cursor-pointer px-4 py-3 rounded-lg bg-gray-50 border border-primary text-base text-gray-800 shadow-sm focus:border-primary focus:ring-1 focus:ring-primary focus:ring-opacity-50 appearance-none pr-10 transition duration-200 ease-in-out"
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+          >
+            {categories.map((cat) => (
+              <option className="cursor-pointer " key={cat} value={cat}>
+                {cat
+                  .replace(/-/g, " ")
+                  .replace(/\b\w/g, (l) => l.toUpperCase())}
+              </option>
+            ))}
+          </select>
+          <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-700">
+            <ChevronDown className="h-5 w-5" />
+          </div>
+        </div>
       </div>
-      <div className="space-y-2">
-        <label className="block font-medium text-sm">Price Range</label>
+
+      {/* Price Range Filter */}
+      <div className="space-y-4">
+        <label className="block text-base font-semibold text-gray-700">
+          Price Range
+        </label>
         <input
           type="range"
           value={range[1]}
           min="0"
           max="10000"
-          className="w-full"
+          className="w-full h-2 bg-primary/70 rounded-lg appearance-none cursor-pointer accent-primary shadow-sm"
           onChange={(e) => setRange([range[0], parseInt(e.target.value)])}
         />
-        <div className="flex justify-between text-sm text-gray-500">
+        <div className="flex justify-between text-sm font-medium text-gray-600 mt-2">
           <span>₹{range[0]}</span>
           <span>₹{range[1]}</span>
         </div>
       </div>
-      <div className="space-y-2">
-        <label className="block font-medium text-sm">Sort By</label>
-        <select
-          className="w-full p-2 rounded-lg bg-white/80 text-sm shadow-inner"
-          value={sortBy}
-          onChange={(e) => setSortBy(e.target.value)}
+
+      {/* Sort By Filter */}
+      <div className="space-y-3">
+        <label
+          htmlFor="sort-by-select"
+          className="block text-base font-semibold text-gray-700"
         >
-          <option>Price: Low to High</option>
-          <option>Price: High to Low</option>
-          <option>Newest</option>
-        </select>
+          Sort By
+        </label>
+        <div className="relative">
+          <select
+            id="sort-by-select"
+            className="block w-full cursor-pointer px-4 py-3 rounded-lg bg-gray-50 border border-primary text-base text-gray-800 shadow-sm focus:border-primary focus:ring-1 focus:ring-primary focus:ring-opacity-50 appearance-none pr-10 transition duration-200 ease-in-out"
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value)}
+          >
+            <option>Price: Low to High</option>
+            <option>Price: High to Low</option>
+            <option>Newest</option>
+          </select>
+          <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-700">
+            <ChevronDown className="h-5 w-5" />
+          </div>
+        </div>
       </div>
     </div>
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background to-muted text-text">
+    <div className="min-h-screen bg-gradient-to-br from-primary/50 via-primary/10 to-primary/30  text-text">
       {/* Hero */}
       <div className="relative w-full h-[400px] md:h-[550px] overflow-hidden">
         <motion.img
@@ -181,16 +226,27 @@ const ProductList = () => {
       <div className="md:hidden px-4 py-2 mt-4">
         <button
           onClick={() => setShowMobileFilters(true)}
-          className="w-full cursor-pointer px-4 py-2 text-sm bg-white/30 text-primary border border-primary rounded-lg"
+          className="w-full flex items-center justify-center gap-2 cursor-pointer px-4 py-3 text-base bg-primary text-white border border-primary rounded-lg shadow-sm hover:bg-primary/90 transition-colors duration-200"
         >
-          Show Filters
+          <SlidersHorizontal className="w-5 h-5" /> Show Filters
         </button>
       </div>
 
+      {/* Breadcrumbs */}
+      <div className="text-text/60 px-2 md:px-8 lg:px-12 py-3 md:py-7 ">
+        <Link to="/" className="hover:text-primary">
+          Home
+        </Link>{" "}
+        /{" "}
+        <Link to="/product" className="hover:text-primary text-black">
+          Products
+        </Link>{" "}
+      </div>
+
       {/* Main Content */}
-      <div className="grid grid-cols-1 md:grid-cols-[280px_1fr] gap-6 px-2 md:px-8 lg:px-12 py-4 md:py-12">
+      <div className="grid grid-cols-1 md:grid-cols-[280px_1fr] gap-6 px-2 md:px-8 lg:px-12 py-4">
         {/* Desktop Filters */}
-        <aside className="hidden md:block sticky top-30 h-fit bg-white/30 border border-white/10 backdrop-blur-md rounded-2xl shadow-lg p-6">
+        <aside className="hidden md:block sticky  top-30 h-fit bg-gradient-to-br from-primary/60 via-primary/30 to-primary/60  border border-primary/70 backdrop-blur-md rounded-2xl shadow-lg p-6">
           <FiltersPanel />
         </aside>
 
@@ -216,7 +272,7 @@ const ProductList = () => {
             <>
               <motion.div
                 layout
-                className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-1 sm:gap-4"
+                className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-2 lg:grid-cols-4 gap-1 sm:gap-4"
               >
                 {products.map((product) => (
                   <motion.div
@@ -257,16 +313,19 @@ const ProductList = () => {
             className="fixed inset-0 z-50 bg-white text-black p-4 overflow-y-auto"
           >
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-lg font-semibold">Filters</h2>
-              <button className="cursor-pointer" onClick={() => setShowMobileFilters(false)}>
-                <X className="w-6 h-6" />
+              <h2 className="text-xl font-semibold">Filters</h2>
+              <button
+                className="cursor-pointer text-gray-600 hover:text-gray-900 transition-colors"
+                onClick={() => setShowMobileFilters(false)}
+              >
+                <X className="w-7 h-7" />
               </button>
             </div>
             <FiltersPanel isMobile />
             <div className="mt-6">
               <button
                 onClick={() => setShowMobileFilters(false)}
-                className="w-full px-4 py-2 bg-primary text-white rounded-lg"
+                className="w-full px-4 py-3 bg-primary text-white rounded-lg font-semibold shadow-md hover:bg-primary/90 transition-colors duration-200"
               >
                 Apply Filters
               </button>

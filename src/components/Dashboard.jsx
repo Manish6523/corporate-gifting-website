@@ -1,615 +1,475 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import WishlistCard from "./WishlistCard";
+import { Link, useNavigate } from "react-router-dom";
 import {
-  AddAddress,
-  DeleteAddress,
-  fetchOrders,
-  Logout,
-} from "../../utils/Authentication";
-import { Link, useNavigate } from "react-router";
-import {
-  CalendarDays,
-  CheckCircle2,
-  DollarSign,
-  Eye,
-  Hash,
-  Heart,
-  Home,
-  Loader,
-  Loader2,
-  LogOut,
-  LogOutIcon,
-  MapPin,
-  MapPinIcon,
-  Phone,
-  Plus,
-  ShoppingBasket,
-  Trash2,
-  User,
-  User2,
+  LayoutGrid, ShoppingBasket, MapPin, Heart, LogOut, User, Plus, Trash2, Menu, X, Phone,
+  Home
 } from "lucide-react";
 import toast from "react-hot-toast";
-import ProductCard from "./ProductCard";
-import { div } from "framer-motion/client";
+import { motion, AnimatePresence } from "framer-motion";
 
+// Assuming these utility functions exist and work as intended
+import { fetchOrders, AddAddress, DeleteAddress, Logout } from "../../utils/Authentication";
+import ProductCard from "./ProductCard"; // Assuming this component exists
+
+// --- Main Dashboard Component ---
 const Dashboard = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const sessionUser = useSelector((state) => state.cart.session);
   const wishlist = useSelector((state) => state.cart.wishList);
 
+  const [activeTab, setActiveTab] = useState("overview");
   const [orders, setOrders] = useState([]);
-  const [toggleAddress, setToggleAddress] = useState(false);
-  const [newAddress, setnewAddress] = useState({
-    firstname: "",
-    lastname: "",
-    phone: "",
-    address: "",
-  });
+  const [loading, setLoading] = useState(true);
+  const [isSidebarOpen, setSidebarOpen] = useState(false);
 
-  const user = {
-    id: sessionUser?.id,
-    username: sessionUser?.firstname + " " + sessionUser?.lastname,
-    email: sessionUser?.email,
-    phone: sessionUser?.phone,
-    address: sessionUser?.address,
-    gender: sessionUser?.gender,
-    avatar: sessionUser?.avatar,
-    member_since: new Date(sessionUser?.created_at).toLocaleDateString("en-GB"),
-  };
+  const user = sessionUser ? {
+    id: sessionUser.id,
+    username: `${sessionUser.firstname} ${sessionUser.lastname}`,
+    email: sessionUser.email,
+    avatar: sessionUser.avatar,
+    address: sessionUser.address || [],
+    member_since: new Date(sessionUser.created_at).toLocaleDateString("en-US", { year: 'numeric', month: 'long' }),
+  } : null;
 
   useEffect(() => {
     if (!sessionUser) {
       navigate("/auth");
-    }
-    const fetchSession = async () => {
-      const response = await fetchOrders(user?.id);
-      if (response.success) {
-        setOrders(response.orders);
-      } else {
-        toast.error(response.message);
-      }
-    };
-
-    fetchSession();
-  }, [sessionUser]);
-
-  useEffect(() => {
-    if (sessionUser?.address?.length === 0) {
-      setToggleAddress(false);
     } else {
-      setToggleAddress(true);
+      const loadOrders = async () => {
+        setLoading(true);
+        const response = await fetchOrders(user.id);
+        if (response.success) {
+          setOrders(response.orders);
+        } else {
+          toast.error(response.message || "Failed to fetch orders.");
+        }
+        setLoading(false);
+      };
+      loadOrders();
     }
-  }, [sessionUser?.address]);
+  }, [sessionUser, navigate]);
 
-  const handleAddress = async () => {
-    const dialog = document.querySelector("dialog");
-    if (
-      !newAddress.address ||
-      !newAddress.phone ||
-      !newAddress.firstname ||
-      !newAddress.lastname
-    ) {
-      toast.error("Please fill all the fields");
-      return;
-    }
-
-    const response = await AddAddress(
-      newAddress.address,
-      newAddress.phone,
-      newAddress.firstname,
-      newAddress.lastname,
-      dispatch
+  if (!user) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-slate-100">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      </div>
     );
-    dialog.close();
+  }
 
-    setnewAddress({
-      firstname: "",
-      lastname: "",
-      phone: "",
-      address: "",
-    });
-  };
-
-  const handleDeleteAddress = (index) => {
-    DeleteAddress(index, dispatch);
+  const renderContent = () => {
+    switch (activeTab) {
+      case "overview":
+        return <OverviewPanel user={user} ordersCount={orders.length} wishlistCount={wishlist.length} />;
+      case "orders":
+        return <OrdersPanel orders={orders} loading={loading} />;
+      case "addresses":
+        return <AddressPanel addresses={user.address} dispatch={dispatch} />;
+      case "wishlist":
+        return <WishlistPanel wishlist={wishlist} />;
+      default:
+        return <OverviewPanel user={user} ordersCount={orders.length} wishlistCount={wishlist.length} />;
+    }
   };
 
   return (
-    <>
-      <main className="container mx-auto p-1 sm:p-4 md:p-8 text-text">
-        <header className="mt-24">
-          <h1 className="text-3xl font-bold mb-4 flex items-center gap-3">
-            <User2 strokeWidth={0.5} size={50} fill="#996f04" /> My Profile
-          </h1>
-          <div className="flex justify-between items-center p-4 bg-accent/20 rounded-lg shadow-lg">
-            <div className="content flex items-center gap-5">
-              <img
-                src={user.avatar}
-                alt="avatar"
-                className="rounded-full size-16 bg-primary p-1"
-              />
-              <div>
-                <h2 className="text-md sm:text-lg font-semibold">
-                  {user.username}
-                </h2>
-                <p className="text-xs sm:text-sm text-gray-600">{user.email}</p>
-              </div>
-            </div>
-            <button onClick={()=>Logout(navigate, dispatch)} className="btn bg-gradient-to-r from-primary to-primary/80  hover:from-primary/80 hover:to-primary/90 hover:-translate-y-0.5 transition-all cursor-pointer shadow-md text-sm sm:text-base text-white font-medium px-4 py-2 rounded-lg flex items-center gap-2">
-              <LogOutIcon size={17} />
-              Log out
+    <div className="min-h-screen pt-17 bg-slate-50 font-sans">
+      <div className="flex">
+        <DashboardSidebar user={user} activeTab={activeTab} setActiveTab={setActiveTab} isOpen={isSidebarOpen} setOpen={setSidebarOpen} />
+        <div className="flex-1 flex flex-col">
+          <MobileHeader onMenuClick={() => setSidebarOpen(true)} />
+          <main className="flex-1 p-4 sm:p-6 md:p-8">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeTab}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.3 }}
+              >
+                {renderContent()}
+              </motion.div>
+            </AnimatePresence>
+          </main>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// --- Mobile Header ---
+const MobileHeader = ({ onMenuClick }) => (
+    <header className="md:hidden sticky top-0 bg-white/80 backdrop-blur-sm z-10 p-4 border-b border-slate-200 flex items-center justify-between">
+        <h2 className="text-xl font-bold text-primary">Dashboard</h2>
+        <button onClick={onMenuClick} className="p-2">
+            <Menu className="text-slate-700" />
+        </button>
+    </header>
+);
+
+
+// --- Sidebar Component ---
+const DashboardSidebar = ({ user, activeTab, setActiveTab, isOpen, setOpen }) => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const navItems = [
+    { id: "overview", label: "Overview", icon: LayoutGrid },
+    { id: "orders", label: "My Orders", icon: ShoppingBasket },
+    { id: "addresses", label: "Address Book", icon: MapPin },
+    { id: "wishlist", label: "Wishlist", icon: Heart },
+  ];
+  
+  const handleItemClick = (tabId) => {
+      setActiveTab(tabId);
+      setOpen(false);
+  }
+
+  const SidebarContent = () => (
+    <div className="flex flex-col md:h-[90%] h-full bg-white">
+        {/* <div className="p-6 border-b border-slate-200 flex items-center justify-between">
+            <h2 className="text-2xl font-bold text-primary">Dashboard</h2>
+            <button onClick={() => setOpen(false)} className="md:hidden p-1">
+                <X size={20} />
             </button>
-          </div>
-        </header>
-        <section className="mt-8">
-          <div className="bg-accent/20 px-2 md:px-12 py-4 rounded-lg shadow-lg">
-            {/* ---------- heading ---------- */}
-            {orders.length !== 0 && (
-              <>
-                <div className="heading flex items-center mb-5 gap-3 px-4">
-                  <div className="p-2 w-fit rounded-full bg-primary/30">
-                    <ShoppingBasket
-                      strokeWidth={1.5}
-                      className="text-primary size-7"
-                    />
-                  </div>
-                  <h1 className="text-xl sm:text-2xl font-bold text-text">
-                    Recent Orders
-                  </h1>
-                </div>
-                {/* ---------- Cards for mobile ---------- */}
-                <div className="grid grid-cols-1 gap-4 md:hidden text-text">
-                  {orders.map((order) => (
-                    <div
-                      key={order.id}
-                      className="rounded-xl overflow-hidden border border-primary shadow bg-accent/20 space-y-4"
-                    >
-                      <div className="flex items-center justify-between bg-primary/50 p-4">
-                        <div>
-                          <div className="flex items-center gap-2 mb-1">
-                            <p className="text-xs font-semibold">ORDER</p>
-                            {order.status === "pending" && (
-                              <span className="text-amber-700 bg-amber-100 text-xs font-medium px-2 py-1 rounded-full">
-                                Pending
-                              </span>
-                            )}
-                            {order.status === "processing" && (
-                              <span className="text-blue-700 bg-blue-100 text-xs font-medium px-2 py-1 rounded-full">
-                                Processing
-                              </span>
-                            )}
-                            {order.status === "completed" && (
-                              <span className="text-green-700 bg-green-100 text-xs font-medium px-2 py-1 rounded-full">
-                                Completed
-                              </span>
-                            )}
-                            {order.status === "cancelled" && (
-                              <span className="text-red-700 bg-red-100 text-xs font-medium px-2 py-1 rounded-full">
-                                Cancelled
-                              </span>
-                            )}
-                          </div>
-
-                          <div className="flex items-center gap-2">
-                            <span className="font-semibold text-sm">
-                              #{order.id}
-                            </span>
-                          </div>
-                        </div>
-                        <div className="text-right">
-                          <p className="text-2xl font-bold text-black">
-                            ₹{order.order_pricing.total}
-                          </p>
-                          <p className="text-xs text-white">Total amount</p>
-                        </div>
-                      </div>
-
-                      <div className="flex items-center px-4 justify-between text-sm text-gray-600">
-                        <div className="flex items-center gap-1">
-                          <CalendarDays size={16} />
-                          {new Date(order.created_at).toLocaleDateString(
-                            "en-GB",
-                            {
-                              day: "2-digit",
-                              month: "long",
-                              year: "numeric",
-                            }
-                          )}
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <ShoppingBasket size={16} />
-                          {order.products?.length || 3} items
-                        </div>
-                      </div>
-
-                      <div className="px-4">
-                        <p className="text-green-600 font-medium text-sm mb-1">
-                          Order Progress
-                        </p>
-                        <div className="w-full bg-gray-200 rounded-full h-2">
-                          <div
-                            className={`h-2 rounded-full ${
-                              order.status === "pending"
-                                ? "w-[25%] bg-green-500"
-                                : order.status === "processing"
-                                ? "w-[50%] bg-blue-500"
-                                : order.status === "completed"
-                                ? "w-[100%] bg-green-600"
-                                : "w-[0%]"
-                            }`}
-                          ></div>
-                        </div>
-                        <div className="flex justify-between text-xs mt-1 text-text">
-                          <span>Pending</span>
-                          <span>Shipped</span>
-                          <span>Delivered</span>
-                        </div>
-                      </div>
-                      <div className="px-4 pb-4">
-                        <button className="w-full mt-2 flex items-center justify-center gap-2 px-4 py-2 text-white bg-primary cursor-pointer hover:bg-primary/90 text-sm font-medium rounded-lg shadow">
-                          <Eye size={18} />
-                          View Order Details
-                        </button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                {/* ---------- Table for md+ screens ---------- */}
-                <div className="hidden md:block overflow-x-auto rounded-xl border border-b-0 border-primary bg-secondary/30 overflow-hidden shadow-md">
-                  <table className="w-full text-white ">
-                    <thead>
-                      <tr className="bg-primary">
-                        <th className="py-4 px-6">
-                          <div className="flex items-center justify-center gap-2">
-                            <Hash size={18} />
-                            <span className="font-semibold text-sm uppercase tracking-wider">
-                              <span className="hidden lg:inline">Order</span> ID
-                            </span>
-                          </div>
-                        </th>
-                        <th className="py-4 px-6">
-                          <div className="flex items-center justify-center gap-2">
-                            <CalendarDays size={18} />
-                            <span className="font-semibold text-sm uppercase tracking-wider">
-                              Date
-                            </span>
-                          </div>
-                        </th>
-                        <th className="py-4 px-6">
-                          <div className="flex items-center justify-center gap-2">
-                            <DollarSign size={18} />
-                            <span className="font-semibold text-sm uppercase tracking-wider">
-                              Total
-                            </span>
-                          </div>
-                        </th>
-                        <th className="py-4 px-6">
-                          <div className="flex items-center justify-center gap-2">
-                            <CheckCircle2 size={18} />
-                            <span className="font-semibold text-sm uppercase tracking-wider">
-                              Status
-                            </span>
-                          </div>
-                        </th>
-                        <th className="py-4 px-6 text-right">
-                          <div className="flex items-center justify-center gap-2">
-                            <Eye size={18} />
-                            <span className="font-semibold text-sm uppercase tracking-wider">
-                              Action
-                            </span>
-                          </div>
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-200 text-text border-b border-primary">
-                      {orders.map((order, index) => (
-                        <tr
-                          className="hover:bg-primary/20 border-b-primary transition-all duration-200"
-                          key={index}
-                        >
-                          <td className="py-4 px-6 text-center">#{order.id}</td>
-                          <td className="py-4 px-6 text-center">
-                            {order.created_at
-                              .split("T")[0]
-                              .split("-")
-                              .reverse()
-                              .join("-")}
-                          </td>
-                          <td className="py-4 px-6 text-center">
-                            ₹{order?.order_pricing?.total ?? "N/A"}
-                          </td>
-                          <td className="py-4 px-6 text-center capitalize">
-                            {order.status === "pending" && (
-                              <span className="inline-flex items-center gap-1.5 px-5 py-1.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-700 ring-1 ring-amber-200">
-                                <Loader2 size={18} className="animate-spin" />
-                                Pending
-                              </span>
-                            )}
-                            {order.status === "processing" && (
-                              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-blue-100 text-blue-700 ring-1 ring-blue-200">
-                                <Loader2 size={18} className="animate-spin" />
-                                Processing
-                              </span>
-                            )}
-                            {order.status === "completed" && (
-                              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-green-100 text-green-700 ring-1 ring-green-200">
-                                <CheckCircle2 size={18} />
-                                Completed
-                              </span>
-                            )}
-                            {order.status === "cancelled" && (
-                              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-red-100 text-red-700 ring-1 ring-red-200">
-                                <Trash2 size={18} />
-                                Cancelled
-                              </span>
-                            )}
-                          </td>
-                          <td className="py-4 px-6 text-center">
-                            <button className="inline-flex text-text cursor-pointer items-center gap-2 px-4 py-2 bg-primary/50 border border-primary/60 rounded-lg hover:bg-primary/90 hover:text-white transition-all duration-200 text-sm font-medium shadow-sm hover:shadow">
-                              <Eye size={18} />
-                              View{" "}
-                              <span className="hidden lg:flex">Details</span>
-                            </button>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-
-                {/* ---------- Divider ---------- */}
-                <div className="w-full flex md:hidden my-3 h-[1px] bg-primary" />
-              </>
-            )}
-
-            {/* ---------- Addresses ---------- */}
-
-            <div className="bg-secondary/30 my-9 rounded-xl sm:rounded-2xl shadow-lg p-4 sm:p-6 transition-all duration-300 hover:shadow-xl">
-              <div className="border-b border-primary pb-3 sm:pb-4 mb-4 sm:mb-6">
-                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-4">
-                  <div className="flex items-center gap-2 sm:gap-3">
-                    <div className="size-8 sm:w-10 sm:h-10 bg-primary/30 rounded-full flex items-center justify-center">
-                      <MapPinIcon className="text-primary" />
-                    </div>
-                    <div>
-                      <h2 className="text-xl sm:text-2xl font-bold text-gray-900">
-                        Saved Addresses
-                      </h2>
-                      <p className="text-xs sm:text-sm text-gray-500 mt-0.5 sm:mt-1">
-                        Manage your delivery locations
-                      </p>
-                    </div>
-                  </div>
-                  <button
-                    onClick={() => document.querySelector("dialog").showModal()}
-                    className="cursor-pointer bg-gradient-to-r from-primary to-primary/80 text-white px-3 sm:px-5 py-2 sm:py-2.5 rounded-lg sm:rounded-xl hover:from-primary/80 hover:to-primary/90 transition-all duration-200 shadow-sm sm:shadow-md hover:shadow-lg transform hover:-translate-y-0.5 flex items-center gap-1 sm:gap-2 text-sm sm:text-base w-full sm:w-auto justify-center"
-                  >
-                    <Plus />
-                    Add New Address
-                  </button>
-                </div>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
-                {/* Single Address Card */}
-
-                {sessionUser?.address.map((address, index) => (
-                  <div key={index} className="group relative border-2 border-primary/20 rounded-lg sm:rounded-2xl p-4 sm:p-5 hover:-translate-y-1 hover:border-primary hover:shadow-xl transition-all duration-300 bg-gradient-to-br from-primary/10 to-secondary/10 hover:from-primary/20 hover:to-secondary/20">
-                    {/* Delete Button */}
-                    <div className="absolute top-3 sm:top-4 right-3 sm:right-4 flex gap-1 sm:gap-2">
-                      <button
-                        onClick={() => handleDeleteAddress(index)}
-                        className="p-1.5 sm:p-2 cursor-pointer bg-primary rounded-lg shadow-md hover:shadow-lg hover:bg-primary/50 transition-all duration-200"
-                      >
-                        <Trash2 className="w-4 h-4 text-white" />
-                      </button>
-                    </div>
-
-                    {/* Content */}
-                    <div className="pr-6 sm:pr-8">
-                      <h3 className="flex items-center gap-2 font-bold text-gray-900 text-base sm:text-lg mb-1">
-                        <User2 className="w-5 h-5" />
-                        {address.firstname} {address.lastname}
-                      </h3>
-                      <div className="space-y-2 mt-3">
-                        <div className="flex items-start gap-2">
-                          <MapPin className="w-4 h-4 mt-0.5" />
-                          <p className="leading-relaxed">{address.address}</p>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <Phone className="w-4 h-4" />
-                          <p>{address.phone}</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              {sessionUser?.address.length == 0 && (
-                <div className="text-center py-8 sm:py-12">
-                  {/* Icon Container */}
-                  <div className="w-16 h-16 sm:w-20 sm:h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
-                    <Home className="w-8 h-8 sm:w-10 sm:h-10" />
-                  </div>
-
-                  {/* Heading */}
-                  <h3 className="text-base sm:text-lg font-semibold mb-1 sm:mb-2">
-                    No saved addresses yet
-                  </h3>
-
-                  {/* Description */}
-                  <p className="text-xs sm:text-sm mb-4 sm:mb-6">
-                    Add your first address to get started
-                  </p>
-
-                  {/* Button */}
-                  <button
-                    onClick={() => {
-                      const dialog = document
-                        .querySelector("dialog")
-                        .showModal();
-                    }}
-                    className="inline-flex cursor-pointer items-center gap-1 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 bg-primary/20 text-primary rounded-lg hover:bg-primary/30 transition-colors text-sm sm:text-base"
-                  >
-                    <Plus className="w-4 h-4 sm:w-5 sm:h-5" />
-                    Add Your First Address
-                  </button>
-                </div>
-              )}
-            </div>
-            {/* ---------- wishlist ---------- */}
+        </div> */}
+        <div className="p-6 flex items-center gap-4 border-b border-slate-200">
+            <img src={user.avatar} alt="User Avatar" className="w-14 h-14 rounded-full object-cover" />
             <div>
-              <div className="flex items-center justify-between mb-5 gap-3 px-4">
-                <div className="flex items-center gap-2">
-                  <Heart size={30} fill="red" strokeWidth={0} />
-                  <span className="text-2xl font-bold">My Wishlist</span>
-                </div>
-                <Link to={'/product'} className="flex items-center gap-1">
-                  <Plus size={18} /> Add more
-                </Link>
-              </div>
-              <div className={`grid ${wishlist.length > 1 ? "grid-cols-2" : "grid-cols-1"} lg:grid-cols-4 gap-1 md:gap-2 sm:gap-4`}>
-                {wishlist.length > 0
-                  ? wishlist.map((item, index) => (
-                      <ProductCard key={index} product={item} />
-                    ))
-                  : wishlist?.length === 0 && (
-                      <div className="w-full col-span-2 lg:col-span-4">
-                        <div className="mx-auto text-center py-8 sm:py-12 text-text">
-                          {/* Icon */}
-                          <div className="w-16 h-16 sm:w-20 sm:h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
-                            <Heart className="text-primary size-8" />
-                          </div>
-
-                          {/* Heading */}
-                          <h3 className="text-base sm:text-lg font-semibold mb-1 sm:mb-2">
-                            Your wishlist is empty
-                          </h3>
-
-                          {/* Description */}
-                          <p className="text-xs sm:text-sm mb-4 sm:mb-6">
-                            Start adding products you love
-                          </p>
-
-                          {/* CTA Button */}
-                          <Link
-                            to="/product"
-                            className="inline-flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 bg-primary/20 text-primary rounded-lg hover:bg-primary/30 transition-colors text-sm sm:text-base"
-                          >
-                            <Plus className="w-4 h-4 sm:w-5 sm:h-5" />
-                            Browse Products
-                          </Link>
-                        </div>
-                      </div>
-                    )}
-              </div>
+            <p className="font-semibold text-slate-800">{user.username}</p>
+            <p className="text-sm text-slate-500">{user.email}</p>
             </div>
-          </div>
-        </section>
-        <dialog className="rounded-lg shadow-lg bg-background w-full max-w-md m-auto text-text">
-          <form method="dialog" className="p-4">
-            <h3 className="text-lg font-semibold mb-4">Add New Address</h3>
+        </div>
+        <nav className="flex-1 px-4 py-6 space-y-2">
+            {navItems.map((item) => (
+            <button
+                key={item.id}
+                onClick={() => handleItemClick(item.id)}
+                className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-colors ${
+                activeTab === item.id
+                    ? "bg-primary/10 text-primary font-semibold"
+                    : "text-slate-600 hover:bg-slate-100"
+                }`}
+            >
+                <item.icon size={20} />
+                <span>{item.label}</span>
+            </button>
+            ))}
+        </nav>
+        <div className="p-4 border-t border-slate-200">
+            <button
+            onClick={() => Logout(navigate, dispatch)}
+            className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-100 transition-colors"
+            >
+            <LogOut size={20} />
+            <span>Logout</span>
+            </button>
+        </div>
+    </div>
+  );
 
-            {/* Name Fields */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <InputField
-                label="First Name"
-                name="firstname"
-                value={newAddress.firstname}
-                onChange={(e) =>
-                  setnewAddress({ ...newAddress, firstname: e.target.value })
-                }
-                inputClassName="bg-background text-text border border-text/30 focus:ring-2 focus:ring-primary focus:outline-none"
-              />
-              <InputField
-                label="Last Name"
-                name="lastname"
-                value={newAddress.lastname}
-                onChange={(e) =>
-                  setnewAddress({ ...newAddress, lastname: e.target.value })
-                }
-                inputClassName="bg-background text-text border border-text/30 focus:ring-2 focus:ring-primary focus:outline-none"
-              />
-            </div>
+  return (
+    <>
+        {/* Desktop Sidebar */}
+        <aside className="w-64 h-screen shadow-md flex-col sticky top-0 hidden md:flex">
+            <SidebarContent />
+        </aside>
 
-            {/* Phone Field */}
-            <div className="grid grid-cols-1 gap-4 mt-4">
-              <InputField
-                label="Phone Number"
-                name="phone"
-                value={newAddress.phone}
-                onChange={(e) =>
-                  setnewAddress({ ...newAddress, phone: e.target.value })
-                }
-                inputClassName="bg-background text-text border border-text/30 focus:ring-2 focus:ring-primary focus:outline-none"
-              />
-            </div>
-
-            {/* Address Field */}
-            <div className="flex flex-col mt-4">
-              <label htmlFor="newAddress" className="text-sm font-medium mb-1">
-                Add New Address
-              </label>
-              <input
-                type="text"
-                id="newAddress"
-                placeholder="123 Main St, City, State, Zip"
-                value={newAddress.address}
-                onChange={(e) =>
-                  setnewAddress({ ...newAddress, address: e.target.value })
-                }
-                className="bg-background text-text border border-primary p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-              />
-
-              {/* Action Buttons */}
-              <div className="flex gap-4 mt-4">
-                <button
-                  type="button"
-                  onClick={() => {
-                    handleAddress();
-                  }}
-                  className="mt-2 w-fit cursor-pointer px-4 py-2 bg-primary text-background text-sm rounded hover:bg-primary/90 transition"
+        {/* Mobile Sidebar */}
+        <AnimatePresence>
+        {isOpen && (
+            <>
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="fixed inset-0 bg-black/60 z-40 md:hidden"
+                    onClick={() => setOpen(false)}
+                />
+                <motion.aside 
+                    initial={{ x: "-100%" }}
+                    animate={{ x: 0 }}
+                    exit={{ x: "-100%" }}
+                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                    className="fixed top-0 left-0 w-64 h-full bg-white shadow-lg z-50 md:hidden"
                 >
-                  Add Address
-                </button>
-                <button
-                  type="button"
-                  onClick={() => document.querySelector("dialog").close()}
-                  className="mt-2 w-fit cursor-pointer px-4 py-2 bg-primary text-background text-sm rounded hover:bg-primary/90 transition"
-                >
-                  Cancel
-                </button>
-              </div>
-            </div>
-          </form>
-        </dialog>
-      </main>
+                    <SidebarContent />
+                </motion.aside>
+            </>
+        )}
+        </AnimatePresence>
     </>
   );
 };
 
-const InputField = ({
-  label,
-  name,
-  type = "text",
-  value,
-  onChange,
-  // required ,
-}) => (
-  <div className="flex flex-col">
-    <label htmlFor={name} className="text-sm font-medium mb-1">
-      {label}
-    </label>
+// --- Panel Components ---
+const PanelHeader = ({ title, subtitle }) => (
+  <div className="mb-8">
+    <h1 className="text-2xl md:text-3xl font-bold text-slate-800">{title}</h1>
+    <p className="text-slate-500 mt-1">{subtitle}</p>
+  </div>
+);
+
+const OverviewPanel = ({ user, ordersCount, wishlistCount }) => (
+  <div>
+    <PanelHeader title={`Welcome, ${user.username.split(' ')[0]}!`} subtitle="Here’s a quick summary of your account." />
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <StatCard icon={ShoppingBasket} title="Total Orders" value={ordersCount} color="primary" />
+      <StatCard icon={Heart} title="Items in Wishlist" value={wishlistCount} color="primary" />
+      <StatCard icon={User} title="Member Since" value={user.member_since} color="primary" />
+    </div>
+  </div>
+);
+
+const StatCard = ({ icon: Icon, title, value, color }) => (
+    <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex items-center gap-5">
+        <div className={`p-3 bg-${color}/10 rounded-full`}><Icon className={`text-${color}`} size={24}/></div>
+        <div>
+          <p className="text-slate-500 text-sm">{title}</p>
+          <p className="text-2xl font-bold text-slate-800">{value}</p>
+        </div>
+    </div>
+);
+
+
+const OrdersPanel = ({ orders, loading }) => {
+    if (loading) return <div className="flex justify-center items-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div></div>;
+    if (orders.length === 0) return <EmptyState icon={ShoppingBasket} title="No Orders Yet" description="Your recent orders will appear here." ctaText="Start Shopping" ctaLink="/product" />;
+
+    return (
+        <div>
+            <PanelHeader title="My Orders" subtitle="View your order history and status." />
+            {/* Mobile View */}
+            <div className="md:hidden space-y-4">
+                {orders.map(order => <OrderCard key={order.id} order={order} />)}
+            </div>
+            {/* Desktop View */}
+            <div className="hidden md:block bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                <div className="overflow-x-auto">
+                    <table className="w-full text-sm">
+                        <thead className="bg-slate-50">
+                            <tr>
+                                <th className="p-4 font-semibold text-left text-slate-600">Order ID</th>
+                                <th className="p-4 font-semibold text-left text-slate-600">Date</th>
+                                <th className="p-4 font-semibold text-left text-slate-600">Total</th>
+                                <th className="p-4 font-semibold text-left text-slate-600">Status</th>
+                                <th className="p-4 font-semibold text-center text-slate-600">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {orders.map(order => (
+                                <tr key={order.id} className="border-t border-slate-200 hover:bg-slate-50 transition-colors">
+                                    <td className="p-4 text-slate-500 font-mono">#{order.id}</td>
+                                    <td className="p-4 text-slate-800">{new Date(order.created_at).toLocaleDateString()}</td>
+                                    <td className="p-4 text-slate-800 font-semibold">₹{order.order_pricing?.total ?? 'N/A'}</td>
+                                    <td className="p-4"><OrderStatus status={order.status} /></td>
+                                    <td className="p-4 text-center">
+                                        <button className="text-primary hover:underline text-sm font-semibold">View Details</button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+const OrderCard = ({ order }) => (
+    <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-200 space-y-4">
+        <div className="flex justify-between items-start">
+            <div>
+                <p className="font-semibold text-slate-800">Order #{order.id}</p>
+                <p className="text-xs text-slate-500">{new Date(order.created_at).toLocaleDateString()}</p>
+            </div>
+            <OrderStatus status={order.status} />
+        </div>
+        <div className="flex justify-between items-center">
+            <p className="text-slate-600">Total Amount</p>
+            <p className="font-bold text-lg text-slate-800">₹{order.order_pricing?.total ?? 'N/A'}</p>
+        </div>
+        <button className="w-full text-center py-2 bg-primary/10 text-primary rounded-lg font-semibold hover:bg-primary/20 transition-colors">
+            View Details
+        </button>
+    </div>
+);
+
+
+const OrderStatus = ({ status }) => {
+    const statusStyles = {
+        pending: "bg-amber-100 text-amber-700",
+        processing: "bg-blue-100 text-blue-700",
+        completed: "bg-green-100 text-green-700",
+        cancelled: "bg-red-100 text-red-700",
+    };
+    return (
+        <span className={`px-2.5 py-1 text-xs font-semibold rounded-full capitalize ${statusStyles[status] || 'bg-slate-100 text-slate-700'}`}>
+            {status}
+        </span>
+    );
+};
+
+const AddressPanel = ({ addresses, dispatch }) => {
+  const [showModal, setShowModal] = useState(false);
+
+  const handleDelete = (index) => {
+      if (window.confirm("Are you sure you want to delete this address?")) {
+        DeleteAddress(index, dispatch);
+      }
+  };
+
+  return (
+    <>
+      <div className="flex justify-between items-center mb-8">
+        <div>
+          <h1 className="text-2xl md:text-3xl font-bold text-slate-800">Address Book</h1>
+          <p className="text-slate-500 mt-1">Manage your shipping addresses.</p>
+        </div>
+        <button onClick={() => setShowModal(true)} className="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg font-semibold hover:bg-primary/90 transition-colors">
+          <Plus size={18} /> <span className="hidden sm:inline">Add New</span>
+        </button>
+      </div>
+      {addresses.length > 0 ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {addresses.map((addr, index) => (
+            <div key={index} className="bg-white p-6 rounded-xl shadow-sm border border-slate-200 relative group">
+              <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                <button onClick={() => handleDelete(index)} className="p-2 text-slate-500 hover:bg-red-100 hover:text-red-600 rounded-full">
+                  <Trash2 size={16} />
+                </button>
+              </div>
+              <p className="font-bold text-slate-800 mb-3">{addr.firstname} {addr.lastname}</p>
+              <div className="space-y-2 text-slate-600 text-sm">
+                <p className="flex items-start gap-3"><MapPin size={16} className="mt-0.5 flex-shrink-0"/><span>{addr.address}</span></p>
+                <p className="flex items-center gap-3"><Phone size={16} /><span>{addr.phone}</span></p>
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <EmptyState icon={Home} title="No Saved Addresses" description="Add an address to make checkout faster." ctaText="Add Address" onCtaClick={() => setShowModal(true)} />
+      )}
+      <AnimatePresence>
+        {showModal && <AddressModal onClose={() => setShowModal(false)} dispatch={dispatch} />}
+      </AnimatePresence>
+    </>
+  );
+};
+
+const WishlistPanel = ({ wishlist }) => (
+  <div>
+    <PanelHeader title="My Wishlist" subtitle="The products you love, all in one place." />
+    {wishlist.length > 0 ? (
+      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        {wishlist.map((item) => (
+          <ProductCard key={item.id} product={item} />
+        ))}
+      </div>
+    ) : (
+      <EmptyState icon={Heart} title="Your Wishlist is Empty" description="Add items you love to your wishlist to see them here." ctaText="Browse Products" ctaLink="/product" />
+    )}
+  </div>
+);
+
+const EmptyState = ({ icon: Icon, title, description, ctaText, ctaLink, onCtaClick }) => (
+    <div className="text-center bg-white p-12 rounded-xl border-2 border-dashed border-slate-200">
+        <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <Icon className="text-slate-500" size={32} />
+        </div>
+        <h3 className="text-xl font-semibold text-slate-800 mb-1">{title}</h3>
+        <p className="text-slate-500 mb-6">{description}</p>
+        {ctaLink ? (
+            <Link to={ctaLink} className="inline-flex items-center gap-2 bg-primary text-white px-5 py-2.5 rounded-lg font-semibold hover:bg-primary/90 transition-colors">
+                <Plus size={18} /> {ctaText}
+            </Link>
+        ) : (
+            <button onClick={onCtaClick} className="inline-flex items-center gap-2 bg-primary text-white px-5 py-2.5 rounded-lg font-semibold hover:bg-primary/90 transition-colors">
+                <Plus size={18} /> {ctaText}
+            </button>
+        )}
+    </div>
+);
+
+// --- Address Modal ---
+const AddressModal = ({ onClose, dispatch }) => {
+    const [newAddress, setNewAddress] = useState({ firstname: "", lastname: "", phone: "", address: "" });
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setNewAddress(prev => ({ ...prev, [name]: value }));
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        if (Object.values(newAddress).some(field => field === "")) {
+            return toast.error("Please fill all fields.");
+        }
+        setIsSubmitting(true);
+        await AddAddress(newAddress.address, newAddress.phone, newAddress.firstname, newAddress.lastname, dispatch);
+        setIsSubmitting(false);
+        onClose();
+    };
+
+    return (
+        <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
+            onClick={onClose}
+        >
+            <motion.div
+                initial={{ scale: 0.9, y: 20 }}
+                animate={{ scale: 1, y: 0 }}
+                exit={{ scale: 0.9, y: 20 }}
+                className="bg-white rounded-2xl shadow-xl w-full max-w-lg"
+                onClick={e => e.stopPropagation()}
+            >
+                <form onSubmit={handleSubmit}>
+                    <div className="p-6 border-b border-slate-200 flex justify-between items-center">
+                        <h3 className="text-xl font-semibold text-slate-800">Add New Address</h3>
+                        <button type="button" onClick={onClose} className="p-2 text-slate-500 hover:bg-slate-100 rounded-full">
+                            <X size={20} />
+                        </button>
+                    </div>
+                    <div className="p-6 space-y-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <InputField label="First Name" name="firstname" value={newAddress.firstname} onChange={handleChange} />
+                            <InputField label="Last Name" name="lastname" value={newAddress.lastname} onChange={handleChange} />
+                        </div>
+                        <InputField label="Phone Number" name="phone" type="tel" value={newAddress.phone} onChange={handleChange} />
+                        <InputField label="Full Address" name="address" value={newAddress.address} onChange={handleChange} placeholder="Street, City, State, ZIP Code" />
+                    </div>
+                    <div className="p-6 bg-slate-50 rounded-b-2xl flex justify-end gap-4">
+                        <button type="button" onClick={onClose} className="px-5 py-2.5 rounded-lg text-slate-600 font-semibold hover:bg-slate-200 transition-colors">Cancel</button>
+                        <button type="submit" disabled={isSubmitting} className="px-5 py-2.5 rounded-lg bg-primary text-white font-semibold hover:bg-primary/90 transition-colors disabled:bg-primary/70 flex items-center gap-2">
+                            {isSubmitting && <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>}
+                            Save Address
+                        </button>
+                    </div>
+                </form>
+            </motion.div>
+        </motion.div>
+    );
+};
+
+const InputField = ({ label, name, type = "text", value, onChange, placeholder }) => (
+  <div>
+    <label htmlFor={name} className="block text-sm font-medium text-slate-700 mb-1">{label}</label>
     <input
       type={type}
-      name={name}
       id={name}
-      placeholder={label}
+      name={name}
       value={value}
       onChange={onChange}
-      required={true}
-      className="border mb-3 border-primary p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+      placeholder={placeholder || label}
+      required
+      className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition"
     />
   </div>
 );

@@ -66,7 +66,6 @@ const Navbar = () => {
           <Link to="/contact" className="relative  py-0  group">Contact
           <span className={`absolute left-0 bottom-0 w-0 h-[2px] ${hoverColorClass} transition-all duration-300 group-hover:w-full`}></span>
           </Link>
-          {/* <Link to="/contact" className="hover:underline">Contact</Link> */}
         </nav>
 
         {/* Desktop Session Actions */}
