@@ -49,35 +49,76 @@ const Contact = () => {
     }));
   };
 
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+
+  //   const { fullName, email, subject, message } = formData;
+
+  //   const { error } = await supabase.from("inquiries").insert([
+  //     {
+  //       full_name: fullName,
+  //       email,
+  //       subject,
+  //       message,
+  //     },
+  //   ]);
+
+  //   if (error) {
+  //     console.error("Supabase insert error:", error.message);
+  //     alert("Failed to send inquiry. Please try again.");
+  //     return;
+  //   }
+
+  //   setFormData({
+  //     fullName: "",
+  //     email: "",
+  //     subject: "",
+  //     message: "",
+  //   });
+
+  //   alert("Inquiry sent!");
+  // };
+  
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    const { fullName, email, subject, message } = formData;
+  const { fullName, email, subject, message } = formData;
 
-    const { error } = await supabase.from("inquiries").insert([
-      {
-        full_name: fullName,
-        email,
-        subject,
-        message,
-      },
-    ]);
+  const { error } = await supabase.from("inquiries").insert([
+    {
+      full_name: fullName,
+      email,
+      subject,
+      message,
+    },
+  ]);
 
-    if (error) {
-      console.error("Supabase insert error:", error.message);
-      alert("Failed to send inquiry. Please try again.");
-      return;
-    }
+  if (error) {
+    alert("Failed to send inquiry. Please try again.");
+    return;
+  }
 
-    setFormData({
-      fullName: "",
-      email: "",
-      subject: "",
-      message: "",
-    });
+  setFormData({
+    fullName: "",
+    email: "",
+    subject: "",
+    message: "",
+  });
 
-    alert("Inquiry sent!");
-  };
+  alert("Inquiry saved! Redirecting to Gmail...");
+
+  const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1
+    &to=${encodeURIComponent("info@legacygifts.com")}
+    &cc=${encodeURIComponent(email)}
+    &su=${encodeURIComponent(subject)}
+    &body=${encodeURIComponent(`Name: ${fullName}\nEmail: ${email}\n\n${message}`)}`;
+
+  window.location.href = gmailUrl;
+};
+
+
+
+  
 
 
 
@@ -91,7 +132,7 @@ const Contact = () => {
           <img
             src="src/images/1752942401268.jpg"
             alt="Background"
-            className="w-full h-full object-cover opacity-40"
+            className="w-full h-full object-cover opacity-40 blur-sm"
           />
           <div className="absolute inset-0 bg-black opacity-40"></div>
         </div>
