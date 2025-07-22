@@ -2,7 +2,7 @@ import { Mail, MapPin, Phone, PhoneIcon } from "lucide-react";
 import { useState } from "react";
 import { motion, useInView } from "framer-motion";
 import { supabase } from "../../utils/Contactusbase.js";
-
+import { Toaster, toast } from "react-hot-toast";
 
 const ContactInfoItem = ({ iconText, title, subtitle }) => (
   <div className="flex items-start gap-4">
@@ -49,81 +49,76 @@ const Contact = () => {
     }));
   };
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-
-  //   const { fullName, email, subject, message } = formData;
-
-  //   const { error } = await supabase.from("inquiries").insert([
-  //     {
-  //       full_name: fullName,
-  //       email,
-  //       subject,
-  //       message,
-  //     },
-  //   ]);
-
-  //   if (error) {
-  //     console.error("Supabase insert error:", error.message);
-  //     alert("Failed to send inquiry. Please try again.");
-  //     return;
-  //   }
-
-  //   setFormData({
-  //     fullName: "",
-  //     email: "",
-  //     subject: "",
-  //     message: "",
-  //   });
-
-  //   alert("Inquiry sent!");
-  // };
-  
   const handleSubmit = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  const { fullName, email, subject, message } = formData;
+    const { fullName, email, subject, message } = formData;
 
-  const { error } = await supabase.from("inquiries").insert([
-    {
-      full_name: fullName,
-      email,
-      subject,
-      message,
-    },
-  ]);
+    const { error } = await supabase.from("inquiries").insert([
+      {
+        full_name: fullName,
+        email,
+        subject,
+        message,
+      },
+    ]);
 
-  if (error) {
-    alert("Failed to send inquiry. Please try again.");
-    return;
-  }
+    if (error) {
+      console.error("Supabase insert error:", error.message);
+      toast.error("Failed to send inquiry. Please try again.");
+      return;
+    }
 
-  setFormData({
-    fullName: "",
-    email: "",
-    subject: "",
-    message: "",
-  });
+    setFormData({
+      fullName: "",
+      email: "",
+      subject: "",
+      message: "",
+    });
 
-  alert("Inquiry saved! Redirecting to Gmail...");
-
-  const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1
-    &to=${encodeURIComponent("info@legacygifts.com")}
-    &cc=${encodeURIComponent(email)}
-    &su=${encodeURIComponent(subject)}
-    &body=${encodeURIComponent(`Name: ${fullName}\nEmail: ${email}\n\n${message}`)}`;
-
-  window.location.href = gmailUrl;
-};
-
-
-
+    toast.success("Inquiry sent successfully!");
+  };
   
+//   const handleSubmit = async (e) => {
+//   e.preventDefault();
 
+//   const { fullName, email, subject, message } = formData;
 
+//   const { error } = await supabase.from("inquiries").insert([
+//     {
+//       full_name: fullName,
+//       email,
+//       subject,
+//       message,
+//     },
+//   ]);
+
+//   if (error) {
+//     alert("Failed to send inquiry. Please try again.");
+//     return;
+//   }
+
+//   setFormData({
+//     fullName: "",
+//     email: "",
+//     subject: "",
+//     message: "",
+//   });
+
+//   alert("Inquiry saved! Redirecting to Gmail...");
+
+//   const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1
+//     &to=${encodeURIComponent("info@legacygifts.com")}
+//     &cc=${encodeURIComponent(email)}
+//     &su=${encodeURIComponent(subject)}
+//     &body=${encodeURIComponent(`Name: ${fullName}\nEmail: ${email}\n\n${message}`)}`;
+
+//   window.location.href = gmailUrl;
+// };
 
   return (
     <>
+      {/* <Toaster position="top-center" reverseOrder={false} /> */}
       <section
         className="relative bg-black text-white py-55 px-4 overflow-hidden"
         id="hero"
