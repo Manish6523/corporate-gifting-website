@@ -120,133 +120,115 @@ const Contact = () => {
     <>
       {/* <Toaster position="top-center" reverseOrder={false} /> */}
       <section
-        className="relative bg-black text-white py-55 px-4 overflow-hidden"
-        id="hero"
-      >
-        <div className="absolute inset-0 z-0">
-          <img
-            src="src/images/1752942401268.jpg"
-            alt="Background"
-            className="w-full h-full object-cover opacity-40 blur-sm"
-          />
-          <div className="absolute inset-0 bg-black opacity-40"></div>
-        </div>
+  className="relative bg-black text-white py-20 px-4 overflow-hidden"
+  id="hero"
+>
+  <div className="absolute inset-0 z-0">
+    <img
+      src="src/images/1752942401268.jpg" // Make sure the path is public/static
+      alt="Background"
+      className="w-full h-full object-cover opacity-40 blur-sm"
+    />
+    <div className="absolute inset-0 bg-black opacity-40"></div>
+  </div>
 
-        <div className="max-w-5xl mx-auto text-center relative z-10">
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-4xl md:text-5xl lg:text-6xl font-bold  flex flex-col gap-2"
-          >
-            <div className="text-primary">
-              Contact <span className="text-primary">Us</span>
-            </div>
-            <p className="mt-4 text-lg md:text-2xl text-gray-300 font-light">
-              We’re here to help! Whether you have a question, need support, or just want to say hello, feel free to reach out.
-              You can contact us by sending us an email, or giving us a call.
-              Our team will get back to you as soon as possible.            
-            </p>
-          </motion.h1>
+  <div className="max-w-5xl mx-auto text-center relative z-10 px-4 sm:px-6">
+    <motion.h1
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6 }}
+      className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-snug"
+    >
+      <span className="text-primary">Contact Us</span>
+      <p className="mt-4 text-base sm:text-lg md:text-xl text-gray-300 font-light">
+        We’re here to help! Whether you have a question or just want to say hello, feel free to reach out.
+      </p>
+    </motion.h1>
+  </div>
+</section>
 
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="mt-4 text-xl text-gray-300"
-          ></motion.p>
+      <div className="bg-gray-100 py-10 px-4 flex justify-center">
+  <div className="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-2 gap-10 bg-white p-6 sm:p-10 rounded-lg shadow-md">
+    
+    {/* Contact Info Section */}
+    <div className="space-y-8">
+      <h2 className="text-xl font-semibold text-gray-800">Contact Information</h2>
+      <ContactInfoItem
+        iconText={<PhoneIcon />}
+        title="Phone"
+        subtitle="+91 98765 43210"
+      />
+      <ContactInfoItem
+        iconText={<Mail />}
+        title="Email"
+        subtitle="info@legacygifts.com"
+      />
+      <ContactInfoItem
+        iconText={<MapPin />}
+        title="Office"
+        subtitle={`123 Builder Avenue\nLos Angeles, LA 10001`}
+      />
+    </div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="mt-8 flex justify-center gap-4 flex-wrap"
-          ></motion.div>
-        </div>
-      </section>
-      <div className="bg-gray-100 min-h-screen p-10 flex justify-center items-start">
-        <div className="max-w-6xl w-full grid grid-cols-1 md:grid-cols-2 gap-10 bg-gray-50 p-10 rounded-lg shadow-md">
-          {/* Contact Info */}
-          <div className="space-y-10">
-            <h2 className="text-xl font-semibold text-gray-800 mb-6">
-              Contact Information
-            </h2>
-
-            <ContactInfoItem
-              iconText=<PhoneIcon />
-              title="Phone"
-              subtitle="+91 98765 43210"
-            />
-            <ContactInfoItem
-              iconText=<Mail />
-              title="Email"
-              subtitle="info@legacygifts.com"
-            />
-            <ContactInfoItem
-              iconText=<MapPin />
-              title="Office"
-              subtitle={`123 Builder Avenue\nLos Angeles, LA 10001`}
-            />
-          </div>
-
-          {/* Contact Form */}
-          <form
-            className="bg-white p-8 rounded-lg shadow-md space-y-5"
-            onSubmit={handleSubmit}
-          >
-            <div className="flex gap-5">
-              <InputField
-                id="fullName"
-                label="Full Name"
-                placeholder="John Doe"
-                value={formData.fullName}
-                onChange={handleChange}
-              />
-              <InputField
-                id="email"
-                label="Email Address"
-                placeholder="john@example.com"
-                type="email"
-                value={formData.email}
-                onChange={handleChange}
-              />
-            </div>
-
-            <InputField
-              id="subject"
-              label="Subject"
-              placeholder="Product Inquiry"
-              value={formData.subject}
-              onChange={handleChange}
-            />
-
-            <div>
-              <label
-                htmlFor="message"
-                className="block mb-1 text-gray-700 font-medium"
-              >
-                Your Message
-              </label>
-              <textarea
-                id="message"
-                placeholder="Tell us about your issue or inquiry..."
-                rows="5"
-                value={formData.message}
-                onChange={handleChange}
-                className="height-250 resize-none w-full border border-gray-300 rounded-md px-3 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary"
-                required
-              ></textarea>
-            </div>
-
-            <button
-              type="submit"
-              className="w-full bg-primary hover:bg-primary transition-colors text-white font-semibold py-3 rounded-md"
-            >
-              Send Inquiry →
-            </button>
-          </form>
-        </div>
+    {/* Contact Form */}
+    <form className="space-y-6" onSubmit={handleSubmit}>
+      <div className="flex flex-col sm:flex-row gap-5">
+        <InputField
+          id="fullName"
+          label="Full Name"
+          placeholder="John Doe"
+          value={formData.fullName}
+          onChange={handleChange}
+        />
+        <InputField
+          id="email"
+          label="Email Address"
+          placeholder="john@example.com"
+          type="email"
+          value={formData.email}
+          onChange={handleChange}
+        />
       </div>
+
+      <InputField
+        id="subject"
+        label="Subject"
+        placeholder="Product Inquiry"
+        value={formData.subject}
+        onChange={handleChange}
+      />
+
+      <div>
+        <label htmlFor="message" className="block mb-1 text-gray-700 font-medium">
+          Your Message
+        </label>
+        <textarea
+          id="message"
+          rows="5"
+          placeholder="Tell us about your issue or inquiry..."
+          value={formData.message}
+          onChange={handleChange}
+          className="w-full border border-gray-300 rounded-md px-3 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary resize-none"
+          required
+        ></textarea>
+      </div>
+
+      {/* <button
+        type="submit"
+        className="w-full bg-primary hover:bg-primary-dark transition-colors text-white font-semibold py-3 rounded-md"
+      >
+        Send Inquiry →
+      </button> */}
+        <button type = "submit" className=" w-full relative text-[#bc8f14] font-bold py-2 px-6 border-2 border-[#bc8f14] overflow-hidden group rounded-lg">
+              <span className="relative z-10 group-hover:text-white">
+                Send Enquiry →
+              </span>
+              <span className="absolute inset-0 bg-[#bc8f14] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
+            </button>
+    </form>
+  </div>
+</div>
+
     </>
   );
 };
