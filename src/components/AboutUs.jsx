@@ -191,12 +191,12 @@ const AboutUs = () => {
             </button>
           </div> */}
 
-            <button className="relative text-[#bc8f14] font-bold py-2 px-6 border-2 border-[#bc8f14] overflow-hidden group rounded-lg">
+            <Link to={"/contact"}  className="relative text-[#bc8f14] font-bold py-2 px-6 border-2 border-[#bc8f14] overflow-hidden group rounded-lg">
               <span className="relative z-10 group-hover:text-white">
                 Enquiry Now
               </span>
               <span className="absolute inset-0 bg-[#bc8f14] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
-            </button>
+            </Link>
           </motion.div>
         </div>
       </section>
